@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tickrix™ — Live Market Display. Built for Serious Traders.</title>
+<meta name="description" content="The WiFi-connected desk display showing live crypto, stocks, gold and oil prices. Always on your desk. Always live.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#000;--white:#fff;--gold:#f5a623;--green:#00e676;--red:#ff1744;
+  --g1:#0a0a0a;--g2:#111;--g3:#1a1a1a;--g4:#222;--muted:#444;--dim:#777;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Unbounded',sans-serif;overflow-x:hidden;cursor:crosshair;}
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-thumb{background:var(--gold);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--g4);}
+.logo{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:4px;color:var(--white);text-decoration:none;}
+.logo sup{color:var(--gold);font-size:9px;vertical-align:super;}
+.nav-mid{display:flex;gap:40px;}
+.nav-mid a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-mid a:hover{color:var(--white);}
+.nav-right{display:flex;align-items:center;gap:20px;}
+.nav-live{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;}
+.nav-btn{background:var(--gold);color:var(--black);padding:8px 20px;font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-decoration:none;transition:opacity .2s;}
+.nav-btn:hover{opacity:.85;}
+
+/* TICKER */
+.ticker-bar{position:fixed;top:64px;left:0;right:0;z-index:999;height:30px;background:var(--g2);border-bottom:1px solid var(--g4);overflow:hidden;display:flex;align-items:center;}
+.ticker-inner{display:flex;animation:tick 35s linear infinite;white-space:nowrap;}
+.tick-i{font-family:'Space Mono',monospace;font-size:10px;padding:0 20px;border-right:1px solid var(--g4);height:30px;display:flex;align-items:center;gap:8px;}
+.ts{color:var(--gold);}
+.tu{color:var(--green);}
+.td{color:var(--red);}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* HERO */
+.hero{min-height:100vh;padding:120px 60px 80px;display:flex;align-items:center;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 75% 50%,rgba(245,166,35,.07) 0%,transparent 70%),radial-gradient(ellipse 40% 80% at 10% 90%,rgba(0,230,118,.04) 0%,transparent 60%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);background-size:80px 80px;}
+.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none;}
+
+.hero-inner{position:relative;z-index:2;max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;}
+
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.eyebrow::before{content:'';width:40px;height:1px;background:var(--gold);}
+
+h1{font-size:clamp(52px,5.5vw,90px);font-weight:900;line-height:.95;letter-spacing:-4px;margin-bottom:32px;}
+h1 .acc{color:var(--gold);}
+h1 .out{-webkit-text-stroke:1px var(--white);color:transparent;}
+
+.hero-sub{font-family:'Space Mono',monospace;font-size:13px;line-height:2;color:var(--dim);margin-bottom:48px;max-width:480px;}
+.hero-btns{display:flex;gap:16px;align-items:center;}
+.btn-g{background:var(--gold);color:var(--black);padding:16px 40px;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:3px;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-g:hover{background:#ffc043;}
+.btn-o{border:1px solid var(--g4);color:var(--dim);padding:16px 40px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-o:hover{border-color:var(--white);color:var(--white);}
+
+.hero-stats{display:flex;gap:40px;margin-top:60px;padding-top:40px;border-top:1px solid var(--g4);}
+.sn{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--gold);display:block;}
+.sl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-top:4px;display:block;}
+
+/* DEVICE */
+.device-scene{position:relative;display:flex;justify-content:center;align-items:center;height:520px;}
+.device-float{animation:dfloat 5s ease-in-out infinite;position:relative;}
+@keyframes dfloat{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-20px) rotate(-4deg);}}
+
+.device-body{width:220px;height:380px;background:linear-gradient(160deg,#1a1a1a,#0d0d0d);border-radius:24px;border:1px solid #2a2a2a;position:relative;overflow:hidden;box-shadow:0 0 0 1px #333,inset 0 1px 0 rgba(255,255,255,.05),0 60px 120px rgba(0,0,0,.9),0 0 80px rgba(245,166,35,.12),0 0 160px rgba(245,166,35,.06);}
+.device-scr{position:absolute;top:14px;left:14px;right:14px;bottom:14px;background:#000;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.scr-asset{position:absolute;text-align:center;padding:20px;width:100%;opacity:0;transform:translateY(10px);transition:all .5s;}
+.scr-asset.active{opacity:1;transform:translateY(0);}
+.scr-name{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:#555;margin-bottom:8px;}
+.scr-price{font-family:'Space Mono',monospace;font-size:34px;font-weight:700;line-height:1;}
+.scr-chg{font-family:'Space Mono',monospace;font-size:10px;margin-top:6px;}
+.scr-brand{position:absolute;bottom:10px;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:3px;color:#1a1a1a;}
+.device-shine{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);border-radius:24px 24px 0 0;pointer-events:none;}
+
+/* Floating pills */
+.pill{position:absolute;background:var(--g2);border:1px solid var(--g4);padding:10px 16px;font-family:'Space Mono',monospace;font-size:10px;white-space:nowrap;animation:pfloat 4s ease-in-out infinite;}
+.p1{top:15%;right:-50px;animation-delay:0s;}
+.p2{top:42%;left:-60px;animation-delay:1.5s;}
+.p3{bottom:18%;right:-40px;animation-delay:.8s;}
+@keyframes pfloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.ps{color:var(--gold);margin-right:6px;}
+.pu{color:var(--green);margin-left:6px;}
+.pd{color:var(--red);margin-left:6px;}
+
+/* Glow rings */
+.gring{position:absolute;border-radius:50%;border:1px solid rgba(245,166,35,.08);top:50%;left:50%;animation:gpulse 4s ease-in-out infinite;}
+.gr1{width:420px;height:420px;transform:translate(-50%,-50%);}
+.gr2{width:310px;height:310px;border-color:rgba(245,166,35,.12);transform:translate(-50%,-50%);animation-delay:1s;}
+@keyframes gpulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05);}}
+
+/* MARQUEE */
+.marquee{border-top:1px solid var(--g4);border-bottom:1px solid var(--g4);padding:18px 0;background:var(--g1);overflow:hidden;}
+.mq-inner{display:flex;animation:mq 20s linear infinite;white-space:nowrap;}
+.mq-i{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);padding:0 36px;display:flex;align-items:center;gap:12px;}
+.mq-i::after{content:'●';color:var(--gold);font-size:6px;}
+@keyframes mq{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* SECTIONS */
+.sec{padding:140px 60px;max-width:1400px;margin:0 auto;}
+.sec-full{padding:140px 60px;border-top:1px solid var(--g4);}
+.sec-full-inner{max-width:1400px;margin:0 auto;}
+.sec-bg{background:var(--g1);}
+
+.sec-hdr{margin-bottom:80px;}
+.sec-ey{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.sec-ey::before{content:'';width:40px;height:1px;background:var(--gold);}
+h2{font-size:clamp(40px,4vw,72px);font-weight:900;letter-spacing:-3px;line-height:.95;}
+
+/* FEATURES GRID */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--g4);border:1px solid var(--g4);}
+.feat{background:var(--black);padding:50px 40px;position:relative;overflow:hidden;transition:background .3s;}
+.feat:hover{background:var(--g1);}
+.feat::before{content:attr(data-n);position:absolute;top:20px;right:30px;font-family:'Space Mono',monospace;font-size:60px;font-weight:700;color:var(--g3);line-height:1;}
+.feat-ico{font-size:28px;margin-bottom:24px;display:block;}
+.feat-t{font-size:18px;font-weight:700;letter-spacing:-.5px;margin-bottom:14px;}
+.feat-d{font-family:'Space Mono',monospace;font-size:12px;line-height:2;color:var(--dim);}
+
+/* ASSETS */
+.asset-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:1px;background:var(--g4);border:1px solid var(--g4);margin-top:80px;}
+.a-tile{background:var(--black);padding:30px 10px;text-align:center;transition:background .2s;}
+.a-tile:hover{background:var(--g3);}
+.a-ico{font-size:24px;margin-bottom:10px;display:block;}
+.a-sym{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--gold);display:block;margin-bottom:4px;}
+.a-nm{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);}
+
+/* STEPS */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--g4);border:1px solid var(--g4);margin-top:80px;}
+.step{background:var(--black);padding:60px 50px;}
+.step-n{font-family:'Space Mono',monospace;font-size:80px;font-weight:700;color:var(--g3);line-height:1;margin-bottom:30px;display:block;}
+.step-t{font-size:22px;font-weight:700;letter-spacing:-1px;margin-bottom:16px;}
+.step-d{font-family:'Space Mono',monospace;font-size:12px;line-height:2;color:var(--dim);}
+.step-acc{color:var(--gold);}
+
+/* QUOTE */
+.quote-sec{padding:120px 60px;text-align:center;border-top:1px solid var(--g4);}
+.big-q{font-size:clamp(28px,3vw,52px);font-weight:700;letter-spacing:-2px;line-height:1.2;max-width:900px;margin:0 auto 32px;}
+.big-q .hl{color:var(--gold);}
+.q-src{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);}
+
+/* PRICING */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--g4);border:1px solid var(--g4);margin-top:80px;}
+.pc{background:var(--black);padding:60px 50px;position:relative;transition:background .3s;}
+.pc:hover{background:var(--g1);}
+.pc.feat-pc{background:var(--g1);border:1px solid var(--gold);margin:-1px;z-index:1;}
+.pc-badge{position:absolute;top:-1px;right:40px;background:var(--gold);color:var(--black);font-family:'Space Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;padding:6px 14px;}
+.pc-tier{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);margin-bottom:28px;}
+.pc-amt{font-size:64px;font-weight:900;letter-spacing:-4px;line-height:1;margin-bottom:6px;}
+.pc-cur{font-size:24px;color:var(--muted);font-weight:300;}
+.pc-desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:40px;line-height:1.9;}
+.pc-list{list-style:none;margin-bottom:50px;}
+.pc-list li{font-family:'Space Mono',monospace;font-size:11px;color:var(--dim);padding:10px 0;border-bottom:1px solid var(--g4);display:flex;align-items:center;gap:12px;}
+.pc-list li::before{content:'—';color:var(--gold);font-weight:700;}
+.pc-btn{display:block;text-align:center;padding:16px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;font-weight:700;text-decoration:none;transition:all .2s;border:1px solid var(--g4);color:var(--dim);}
+.pc-btn:hover{border-color:var(--white);color:var(--white);}
+.pc-btn-g{background:var(--gold);color:var(--black);border-color:var(--gold);}
+.pc-btn-g:hover{background:#ffc043;border-color:#ffc043;color:var(--black);}
+
+/* SPECS */
+.specs-inner{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;}
+.spec-list{margin-top:60px;}
+.spec-row{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--g4);}
+.sk{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}
+.sv{font-family:'Space Mono',monospace;font-size:11px;color:var(--white);font-weight:700;}
+.sv-g{color:var(--gold);}
+
+/* Device spec */
+.spec-dev-wrap{display:flex;justify-content:center;}
+.spec-dev{width:180px;height:310px;background:linear-gradient(160deg,#1a1a1a,#0d0d0d);border-radius:20px;border:1px solid #2a2a2a;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.8),0 0 60px rgba(245,166,35,.1);}
+.annots{position:absolute;right:-160px;top:0;height:100%;display:flex;flex-direction:column;justify-content:space-around;}
+.ann{display:flex;align-items:center;gap:12px;}
+.ann-line{width:50px;height:1px;background:var(--g4);}
+.ann-txt{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;white-space:nowrap;}
+
+/* CTA */
+.cta-sec{padding:140px 60px;text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--g4);}
+.cta-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(245,166,35,.06) 0%,transparent 70%);}
+.cta-in{position:relative;z-index:2;max-width:800px;margin:0 auto;}
+.cta-ey{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--gold);margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:12px;}
+.cta-ey::before,.cta-ey::after{content:'';flex:1;max-width:60px;height:1px;background:var(--gold);}
+.cta-h{font-size:clamp(48px,6vw,100px);font-weight:900;letter-spacing:-5px;line-height:.9;margin-bottom:32px;}
+.cta-sub{font-family:'Space Mono',monospace;font-size:13px;color:var(--dim);line-height:2;margin-bottom:60px;}
+.cta-btns{display:flex;justify-content:center;gap:16px;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--g4);padding:50px 60px;background:var(--black);}
+.ft-in{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.ft-logo{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:4px;}
+.ft-logo span{color:var(--gold);}
+.ft-links{display:flex;gap:32px;}
+.ft-links a{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ft-links a:hover{color:var(--white);}
+.ft-copy{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1);}
+.reveal.vis{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-mid{display:none;}
+  .hero{padding:110px 20px 60px;}
+  .hero-inner,.specs-inner{grid-template-columns:1fr;gap:60px;}
+  .feat-grid,.steps-grid,.price-grid{grid-template-columns:1fr;}
+  .asset-grid{grid-template-columns:repeat(3,1fr);}
+  .sec,.sec-full{padding:80px 20px;}
+  .quote-sec,.cta-sec{padding:80px 20px;}
+  .pill,.annots{display:none;}
+  .hero-stats{flex-wrap:wrap;gap:20px;}
+  .ft-in{flex-direction:column;gap:24px;text-align:center;}
+  .ft-links{flex-wrap:wrap;justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">TICKRIX<sup>™</sup></a>
+  <div class="nav-mid">
+    <a href="#features">FEATURES</a>
+    <a href="#markets">MARKETS</a>
+    <a href="#pricing">PRICING</a>
+    <a href="#specs">SPECS</a>
+  </div>
+  <div class="nav-right">
+    <span class="nav-live">● LIVE</span>
+    <a href="#pricing" class="nav-btn">ORDER NOW</a>
+  </div>
+</nav>
+
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker">
+    <span class="tick-i"><span class="ts">BTC</span><span>$84,220</span><span class="tu">▲2.4%</span></span>
+    <span class="tick-i"><span class="ts">ETH</span><span>$3,180</span><span class="tu">▲1.8%</span></span>
+    <span class="tick-i"><span class="ts">SOL</span><span>$142.50</span><span class="td">▼0.9%</span></span>
+    <span class="tick-i"><span class="ts">BNB</span><span>$568.20</span><span class="tu">▲0.7%</span></span>
+    <span class="tick-i"><span class="ts">XRP</span><span>$0.614</span><span class="tu">▲3.2%</span></span>
+    <span class="tick-i"><span class="ts">DOGE</span><span>$0.182</span><span class="tu">▲5.6%</span></span>
+    <span class="tick-i"><span class="ts">GOLD</span><span>$3,240</span><span class="tu">▲0.4%</span></span>
+    <span class="tick-i"><span class="ts">OIL</span><span>$89.40</span><span class="td">▼1.1%</span></span>
+    <span class="tick-i"><span class="ts">AAPL</span><span>$198.30</span><span class="tu">▲0.6%</span></span>
+    <span class="tick-i"><span class="ts">TSLA</span><span>$248.70</span><span class="td">▼2.3%</span></span>
+    <span class="tick-i"><span class="ts">NVDA</span><span>$842.10</span><span class="tu">▲4.1%</span></span>
+    <span class="tick-i"><span class="ts">EUR/USD</span><span>$1.0842</span><span class="td">▼0.2%</span></span>
+    <span class="tick-i"><span class="ts">BTC</span><span>$84,220</span><span class="tu">▲2.4%</span></span>
+    <span class="tick-i"><span class="ts">ETH</span><span>$3,180</span><span class="tu">▲1.8%</span></span>
+    <span class="tick-i"><span class="ts">SOL</span><span>$142.50</span><span class="td">▼0.9%</span></span>
+    <span class="tick-i"><span class="ts">BNB</span><span>$568.20</span><span class="tu">▲0.7%</span></span>
+    <span class="tick-i"><span class="ts">XRP</span><span>$0.614</span><span class="tu">▲3.2%</span></span>
+    <span class="tick-i"><span class="ts">DOGE</span><span>$0.182</span><span class="tu">▲5.6%</span></span>
+    <span class="tick-i"><span class="ts">GOLD</span><span>$3,240</span><span class="tu">▲0.4%</span></span>
+    <span class="tick-i"><span class="ts">OIL</span><span>$89.40</span><span class="td">▼1.1%</span></span>
+    <span class="tick-i"><span class="ts">AAPL</span><span>$198.30</span><span class="tu">▲0.6%</span></span>
+    <span class="tick-i"><span class="ts">TSLA</span><span>$248.70</span><span class="td">▼2.3%</span></span>
+    <span class="tick-i"><span class="ts">NVDA</span><span>$842.10</span><span class="tu">▲4.1%</span></span>
+    <span class="tick-i"><span class="ts">EUR/USD</span><span>$1.0842</span><span class="td">▼0.2%</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="scanlines"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">HARDWARE FOR TRADERS</div>
+      <h1>THE MARKET<br><span class="out">NEVER</span><br><span class="acc">STOPS.</span></h1>
+      <p class="hero-sub">Tickrix is a WiFi-connected AMOLED desk display showing live prices for crypto, stocks, gold and oil. Plug in. Connect. Watch the markets move.</p>
+      <div class="hero-btns">
+        <a href="#pricing" class="btn-g">ORDER NOW</a>
+        <a href="#features" class="btn-o">SEE FEATURES</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="sn">9+</span><span class="sl">LIVE ASSETS</span></div>
+        <div><span class="sn">5s</span><span class="sl">UPDATE SPEED</span></div>
+        <div><span class="sn">24/7</span><span class="sl">LIVE DATA</span></div>
+        <div><span class="sn">€0</span><span class="sl">MONTHLY FEE</span></div>
+      </div>
+    </div>
+    <div class="device-scene">
+      <div class="gring gr1"></div>
+      <div class="gring gr2"></div>
+      <div class="pill p1"><span class="ps">BTC</span><span>$84,220</span><span class="pu">▲2.4%</span></div>
+      <div class="pill p2"><span class="ps">GOLD</span><span>$3,240</span><span class="pu">▲0.4%</span></div>
+      <div class="pill p3"><span class="ps">OIL</span><span>$89.40</span><span class="pd">▼1.1%</span></div>
+      <div class="device-float">
+        <div class="device-body">
+          <div class="device-scr">
+            <div class="scr-asset active" id="sa0">
+              <div class="scr-name">BTC / USD</div>
+              <div class="scr-price" style="color:#f5a623">$84,220</div>
+              <div class="scr-chg" style="color:#00e676">▲ +2.4%</div>
+            </div>
+            <div class="scr-asset" id="sa1">
+              <div class="scr-name">ETH / USD</div>
+              <div class="scr-price" style="color:#6496ff">$3,180</div>
+              <div class="scr-chg" style="color:#00e676">▲ +1.8%</div>
+            </div>
+            <div class="scr-asset" id="sa2">
+              <div class="scr-name">XAU / USD</div>
+              <div class="scr-price" style="color:#ffd700">$3,240</div>
+              <div class="scr-chg" style="color:#00e676">▲ +0.4%</div>
+            </div>
+            <div class="scr-asset" id="sa3">
+              <div class="scr-name">WTI / USD</div>
+              <div class="scr-price" style="color:#ff6b6b">$89.40</div>
+              <div class="scr-chg" style="color:#ff1744">▼ -1.1%</div>
+            </div>
+            <div class="scr-brand">TICKRIX™ LIVE</div>
+          </div>
+          <div class="device-shine"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="mq-inner">
+    <span class="mq-i">LIVE MARKET DATA</span><span class="mq-i">CRYPTO PRICES</span><span class="mq-i">STOCK PRICES</span><span class="mq-i">GOLD & OIL</span><span class="mq-i">FOREX RATES</span><span class="mq-i">WIFI CONNECTED</span><span class="mq-i">AMOLED DISPLAY</span><span class="mq-i">ESP32-S3</span><span class="mq-i">NO SUBSCRIPTION</span><span class="mq-i">PLUG & PLAY</span><span class="mq-i">BUILT FOR TRADERS</span><span class="mq-i">ROTTERDAM</span>
+    <span class="mq-i">LIVE MARKET DATA</span><span class="mq-i">CRYPTO PRICES</span><span class="mq-i">STOCK PRICES</span><span class="mq-i">GOLD & OIL</span><span class="mq-i">FOREX RATES</span><span class="mq-i">WIFI CONNECTED</span><span class="mq-i">AMOLED DISPLAY</span><span class="mq-i">ESP32-S3</span><span class="mq-i">NO SUBSCRIPTION</span><span class="mq-i">PLUG & PLAY</span><span class="mq-i">BUILT FOR TRADERS</span><span class="mq-i">ROTTERDAM</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="sec" id="features">
+  <div class="sec-hdr reveal">
+    <div class="sec-ey">WHY TICKRIX</div>
+    <h2>EVERY FEATURE<br>MATTERS.</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat reveal" data-n="01"><span class="feat-ico">⚡</span><div class="feat-t">Live Prices. Every 5 Seconds.</div><p class="feat-d">Prices update every 5 seconds from institutional-grade data sources. Never miss a move.</p></div>
+    <div class="feat reveal" data-n="02"><span class="feat-ico">📡</span><div class="feat-t">WiFi Setup in 60 Seconds.</div><p class="feat-d">Connect your phone to the Tickrix hotspot. Enter your WiFi. Done. Remembered forever.</p></div>
+    <div class="feat reveal" data-n="03"><span class="feat-ico">🎯</span><div class="feat-t">Your Markets. Your Choice.</div><p class="feat-d">Pick exactly which assets rotate. Crypto, stocks, gold, oil, forex — your desk, your data.</p></div>
+    <div class="feat reveal" data-n="04"><span class="feat-ico">🖥️</span><div class="feat-t">1.91" AMOLED. Pure Black.</div><p class="feat-d">The same display technology in flagship smartphones. True blacks, vivid colors, every angle.</p></div>
+    <div class="feat reveal" data-n="05"><span class="feat-ico">🔌</span><div class="feat-t">USB Powered. Always On.</div><p class="feat-d">Plug into any USB charger or power bank. No battery anxiety. Always on, always live.</p></div>
+    <div class="feat reveal" data-n="06"><span class="feat-ico">💰</span><div class="feat-t">No Monthly Fees. Ever.</div><p class="feat-d">One price. No subscription. No hidden costs. The device is yours. The data is yours.</p></div>
+  </div>
+</section>
+
+<!-- ASSETS -->
+<div class="sec-full sec-bg" id="markets">
+  <div class="sec-full-inner">
+    <div class="sec-hdr reveal">
+      <div class="sec-ey">LIVE MARKETS</div>
+      <h2>9 ASSETS.<br>ALL LIVE.</h2>
+    </div>
+    <div class="asset-grid reveal">
+      <div class="a-tile"><span class="a-ico">🟠</span><span class="a-sym">BTC</span><span class="a-nm">BITCOIN</span></div>
+      <div class="a-tile"><span class="a-ico">🔵</span><span class="a-sym">ETH</span><span class="a-nm">ETHEREUM</span></div>
+      <div class="a-tile"><span class="a-ico">🟣</span><span class="a-sym">SOL</span><span class="a-nm">SOLANA</span></div>
+      <div class="a-tile"><span class="a-ico">🟡</span><span class="a-sym">BNB</span><span class="a-nm">BINANCE</span></div>
+      <div class="a-tile"><span class="a-ico">🩵</span><span class="a-sym">XRP</span><span class="a-nm">RIPPLE</span></div>
+      <div class="a-tile"><span class="a-ico">🟤</span><span class="a-sym">DOGE</span><span class="a-nm">DOGECOIN</span></div>
+      <div class="a-tile"><span class="a-ico">🥇</span><span class="a-sym">GOLD</span><span class="a-nm">XAU/USD</span></div>
+      <div class="a-tile"><span class="a-ico">🛢️</span><span class="a-sym">OIL</span><span class="a-nm">WTI CRUDE</span></div>
+      <div class="a-tile"><span class="a-ico">💶</span><span class="a-sym">EUR/USD</span><span class="a-nm">FOREX</span></div>
+    </div>
+    <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);text-align:center;margin-top:24px;letter-spacing:1px;">+ AAPL · TSLA · NVDA · MSFT · AMZN · MORE COMING SOON</p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="sec">
+  <div class="sec-hdr reveal">
+    <div class="sec-ey">SETUP</div>
+    <h2>THREE STEPS.<br>SIXTY SECONDS.</h2>
+  </div>
+  <div class="steps-grid">
+    <div class="step reveal"><span class="step-n">01</span><div class="step-t">Plug It In</div><p class="step-d">Connect Tickrix to any USB power source. The device boots and shows the setup screen automatically.</p></div>
+    <div class="step reveal"><span class="step-n">02</span><div class="step-t">Connect Your WiFi</div><p class="step-d">Your phone sees <span class="step-acc">Tickrix-Setup</span> WiFi. Connect, enter your password. The device remembers it forever.</p></div>
+    <div class="step reveal"><span class="step-n">03</span><div class="step-t">Watch the Markets</div><p class="step-d">Live prices start rotating immediately. Your desk is now a live trading terminal.</p></div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-sec reveal">
+  <p class="big-q">"If it works, <span class="hl">€100 is nothing</span> for that device."</p>
+  <p class="q-src">— RETIRED TRADER · 40+ YEARS EXPERIENCE · ROTTERDAM, NL</p>
+</div>
+
+<!-- PRICING -->
+<div class="sec-full sec-bg" id="pricing">
+  <div class="sec-full-inner">
+    <div class="sec-hdr reveal">
+      <div class="sec-ey">PRICING</div>
+      <h2>ONE PRICE.<br>NO SURPRISES.</h2>
+    </div>
+    <div class="price-grid">
+      <div class="pc reveal">
+        <div class="pc-tier">TICKRIX ONE</div>
+        <div class="pc-amt"><span class="pc-cur">€</span>99</div>
+        <p class="pc-desc">The essential market display. Plug in, connect WiFi, watch your markets.</p>
+        <ul class="pc-list">
+          <li>1.91" AMOLED Display</li>
+          <li>WiFi Connected</li>
+          <li>9+ Live Assets</li>
+          <li>5-Second Updates</li>
+          <li>USB Powered</li>
+          <li>No Subscription</li>
+        </ul>
+        <a href="#" class="pc-btn">NOTIFY ME</a>
+      </div>
+      <div class="pc feat-pc reveal">
+        <div class="pc-badge">MOST POPULAR</div>
+        <div class="pc-tier">TICKRIX PRO</div>
+        <div class="pc-amt"><span class="pc-cur">€</span>149</div>
+        <p class="pc-desc">Everything in One, plus a built-in 16-hour battery. No cables required.</p>
+        <ul class="pc-list">
+          <li>Everything in Tickrix One</li>
+          <li>16-Hour Battery</li>
+          <li>Portable — No Cable Needed</li>
+          <li>Custom Asset Selection</li>
+          <li>Priority Support</li>
+          <li>No Subscription</li>
+        </ul>
+        <a href="#" class="pc-btn pc-btn-g">NOTIFY ME</a>
+      </div>
+      <div class="pc reveal">
+        <div class="pc-tier">TICKRIX ULTRA</div>
+        <div class="pc-amt"><span class="pc-cur">€</span>199</div>
+        <p class="pc-desc">The complete package. 24-hour battery, touch controls, full customization.</p>
+        <ul class="pc-list">
+          <li>Everything in Tickrix Pro</li>
+          <li>24-Hour Battery</li>
+          <li>Touch Screen Controls</li>
+          <li>Custom Dashboard App</li>
+          <li>Unlimited Asset Selection</li>
+          <li>No Subscription</li>
+        </ul>
+        <a href="#" class="pc-btn">NOTIFY ME</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPECS -->
+<section class="sec-full" id="specs">
+  <div class="sec-full-inner specs-inner">
+    <div class="reveal">
+      <div class="sec-ey">TECH SPECS</div>
+      <h2>BUILT ON<br>PROVEN<br>HARDWARE.</h2>
+      <div class="spec-list">
+        <div class="spec-row"><span class="sk">DISPLAY</span><span class="sv sv-g">1.91" AMOLED</span></div>
+        <div class="spec-row"><span class="sk">PROCESSOR</span><span class="sv">ESP32-S3 DUAL CORE</span></div>
+        <div class="spec-row"><span class="sk">CONNECTIVITY</span><span class="sv">WiFi 802.11 b/g/n</span></div>
+        <div class="spec-row"><span class="sk">FLASH MEMORY</span><span class="sv">16MB</span></div>
+        <div class="spec-row"><span class="sk">PSRAM</span><span class="sv">8MB OPI</span></div>
+        <div class="spec-row"><span class="sk">DATA REFRESH</span><span class="sv sv-g">EVERY 5 SECONDS</span></div>
+        <div class="spec-row"><span class="sk">POWER</span><span class="sv">USB-C 5V</span></div>
+        <div class="spec-row"><span class="sk">DATA SOURCES</span><span class="sv">MEXC · FINNHUB · GOLD-API</span></div>
+        <div class="spec-row"><span class="sk">SETUP</span><span class="sv">WiFi Hotspot Provisioning</span></div>
+        <div class="spec-row"><span class="sk">DIMENSIONS</span><span class="sv">65mm × 40mm × 12mm</span></div>
+      </div>
+    </div>
+    <div class="spec-dev-wrap reveal">
+      <div style="position:relative">
+        <div class="spec-dev"></div>
+        <div class="annots">
+          <div class="ann"><div class="ann-line"></div><div class="ann-txt">AMOLED SCREEN</div></div>
+          <div class="ann"><div class="ann-line"></div><div class="ann-txt">ESP32-S3 CHIP</div></div>
+          <div class="ann"><div class="ann-line"></div><div class="ann-txt">WiFi ANTENNA</div></div>
+          <div class="ann"><div class="ann-line"></div><div class="ann-txt">BOOT BUTTON</div></div>
+          <div class="ann"><div class="ann-line"></div><div class="ann-txt">USB-C PORT</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec">
+  <div class="cta-in">
+    <div class="cta-ey reveal">BE THE FIRST</div>
+    <h2 class="cta-h reveal">GET<br><span style="color:var(--gold)">TICKRIX.</span></h2>
+    <p class="cta-sub reveal">The market never stops moving.<br>Neither should you.</p>
+    <div class="cta-btns reveal">
+      <a href="#pricing" class="btn-g">ORDER FROM €99</a>
+      <a href="/" class="btn-o">BACK TO HOME</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-in">
+    <div class="ft-logo">TICKRIX<span>™</span></div>
+    <div class="ft-links">
+      <a href="/">HOME</a>
+      <a href="#features">FEATURES</a>
+      <a href="#pricing">PRICING</a>
+      <a href="mailto:hello@tickrix.com">CONTACT</a>
+      <a href="https://x.com/tickrix" target="_blank">X / TWITTER</a>
+    </div>
+    <div class="ft-copy">© 2026 TICKRIX™ · NETHERLANDS</div>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){
+      setTimeout(() => e.target.classList.add('vis'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Device screen cycling
+let cur = 0;
+const assets = [0,1,2,3];
+setInterval(() => {
+  document.getElementById('sa'+cur).classList.remove('active');
+  cur = (cur+1) % assets.length;
+  document.getElementById('sa'+cur).classList.add('active');
+}, 3000);
+</script>
+</body>
+</html>
