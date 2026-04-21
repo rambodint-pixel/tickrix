@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tickrix App — Your Market Display</title>
+<meta name="theme-color" content="#0a1628">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0a1628;--navy2:#0f1f3d;--navy3:#162847;--navy4:#1e3a5f;
+  --gold:#f5a623;--gold2:#ffc043;--gold-dim:rgba(245,166,35,0.15);
+  --white:#fff;--text:#e8edf5;--muted:#6b7fa3;
+  --green:#00e676;--red:#ff4444;--border:rgba(245,166,35,0.2);
+  --card:rgba(15,31,61,0.8);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{background:var(--navy);color:var(--text);font-family:'Unbounded',sans-serif;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(245,166,35,0.08) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 100% 100%,rgba(0,100,200,0.08) 0%,transparent 60%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,166,35,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.screen.active{display:flex;}
+
+/* WELCOME */
+#welcome{align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+.logo-mark{width:80px;height:80px;background:linear-gradient(135deg,var(--gold),#ff8c00);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(245,166,35,0.4);font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--navy);}
+.logo-name{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;letter-spacing:6px;color:var(--white);}
+.logo-name span{color:var(--gold);}
+.welcome-tagline{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);margin-top:8px;}
+.welcome-logo{margin-bottom:50px;}
+.welcome-title{font-size:28px;font-weight:900;letter-spacing:-2px;line-height:1.1;margin-bottom:16px;}
+.welcome-title .hl{color:var(--gold);}
+.welcome-sub{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:2;margin-bottom:48px;max-width:300px;margin-left:auto;margin-right:auto;}
+.welcome-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;margin:0 auto 40px;}
+.welcome-version{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);}
+
+.btn-primary{background:linear-gradient(135deg,var(--gold),#ff8c00);color:var(--navy);padding:18px;border-radius:12px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;}
+.btn-primary:active{transform:scale(0.97);}
+.btn-secondary{background:var(--navy3);color:var(--text);padding:18px;border-radius:12px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;}
+.btn-secondary:active{transform:scale(0.97);}
+
+/* SETUP */
+#setup{padding:0 0 100px;}
+.app-header{padding:50px 24px 20px;background:linear-gradient(180deg,var(--navy2),transparent);position:sticky;top:0;z-index:20;backdrop-filter:blur(20px);}
+.header-top{display:flex;align-items:center;gap:16px;margin-bottom:4px;}
+.back-btn{width:36px;height:36px;background:var(--navy3);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--gold);flex-shrink:0;}
+.back-btn:active{transform:scale(0.95);}
+.header-title{font-size:18px;font-weight:700;letter-spacing:-1px;}
+.header-sub{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;padding-left:52px;}
+.steps-indicator{display:flex;gap:6px;padding:16px 24px 0;}
+.step-dot{height:3px;border-radius:2px;flex:1;background:var(--navy4);transition:background 0.3s;}
+.step-dot.active{background:var(--gold);}
+.step-dot.done{background:var(--green);}
+.setup-content{padding:24px;}
+.setup-step{display:none;}
+.setup-step.active{display:block;}
+.step-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.step-label::before{content:'';width:24px;height:1px;background:var(--gold);}
+.step-title{font-size:22px;font-weight:700;letter-spacing:-1px;margin-bottom:8px;line-height:1.2;}
+.step-desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:1.9;margin-bottom:28px;}
+.field{margin-bottom:16px;}
+.field-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px;display:block;}
+.field-input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:'Space Mono',monospace;font-size:14px;color:var(--white);outline:none;transition:all 0.2s;-webkit-appearance:none;}
+.field-input::placeholder{color:var(--muted);}
+.field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,0.1);}
+.asset-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
+.asset-tabs::-webkit-scrollbar{display:none;}
+.asset-tab{background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:8px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.asset-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
+.assets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.asset-card{background:var(--navy3);border:1px solid var(--border);border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
+.asset-card:active{transform:scale(0.96);}
+.asset-card.selected{background:var(--gold-dim);border-color:var(--gold);}
+.asset-card .check{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--gold);display:none;align-items:center;justify-content:center;font-size:9px;color:var(--navy);}
+.asset-card.selected .check{display:flex;}
+.asset-icon{font-size:22px;margin-bottom:6px;display:block;}
+.asset-sym{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:block;margin-bottom:2px;}
+.asset-nm{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.step-nav{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(0deg,var(--navy) 60%,transparent);z-index:20;}
+.connecting-anim{text-align:center;padding:40px 24px;}
+.connecting-circle{width:80px;height:80px;border-radius:50%;border:2px solid var(--gold-dim);border-top-color:var(--gold);margin:0 auto 24px;animation:spin 1.5s linear infinite;}
+.connecting-text{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;}
+.success-icon{width:80px;height:80px;background:rgba(0,230,118,0.1);border:2px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* DASHBOARD */
+#dashboard{padding:0 0 100px;}
+.dash-header{padding:50px 24px 20px;background:linear-gradient(180deg,var(--navy2),transparent);backdrop-filter:blur(20px);}
+.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.dash-logo{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:3px;}
+.dash-logo span{color:var(--gold);}
+.dash-device-status{display:flex;align-items:center;gap:8px;background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+.prices-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.prices-title::before{content:'';width:24px;height:1px;background:var(--gold);}
+.prices-scroll{overflow-x:auto;scrollbar-width:none;margin:0 -24px;padding:0 24px 16px;}
+.prices-scroll::-webkit-scrollbar{display:none;}
+.prices-row{display:flex;gap:12px;width:max-content;}
+.price-pill{background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:14px 18px;min-width:110px;}
+.price-pill-sym{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
+.price-pill-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:4px;}
+.price-pill-chg{font-family:'Space Mono',monospace;font-size:10px;}
+.price-pill-chg.up{color:var(--green);}
+.price-pill-chg.dn{color:var(--red);}
+.dash-section{padding:0 24px;margin-bottom:28px;}
+.section-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';width:24px;height:1px;background:var(--gold);}
+.device-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;backdrop-filter:blur(10px);display:flex;gap:20px;align-items:center;}
+.device-visual{width:60px;height:100px;background:linear-gradient(160deg,#1a2a4a,#0d1a30);border-radius:10px;border:1px solid #2a3a5a;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 0 20px rgba(245,166,35,0.15);}
+.device-screen-mini{position:absolute;inset:4px;background:#000;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.dsm-sym{font-family:'Space Mono',monospace;font-size:6px;color:#444;letter-spacing:1px;}
+.dsm-price{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--gold);}
+.device-info{flex:1;}
+.device-name{font-size:16px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;}
+.device-detail{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;}
+.device-actions{display:flex;gap:8px;margin-top:16px;}
+.action-btn{flex:1;background:var(--navy4);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text);cursor:pointer;text-align:center;transition:all 0.2s;}
+.action-btn:active{transform:scale(0.97);}
+.action-btn.gold{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
+.active-assets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.active-asset{background:var(--navy3);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;}
+.aa-icon{font-size:18px;margin-bottom:6px;display:block;}
+.aa-sym{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:block;margin-bottom:2px;}
+.aa-price{font-family:'Space Mono',monospace;font-size:11px;color:var(--text);}
+.shop-cards{display:flex;flex-direction:column;gap:12px;}
+.shop-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;display:flex;gap:16px;align-items:center;backdrop-filter:blur(10px);}
+.shop-icon{width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.shop-info{flex:1;}
+.shop-name{font-size:14px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;}
+.shop-desc{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
+.shop-price{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);}
+.shop-badge{background:var(--gold);color:var(--navy);font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:4px 8px;border-radius:4px;align-self:flex-start;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:12px 0 24px;z-index:50;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;padding:4px 0;}
+.nav-icon{font-size:20px;transition:transform 0.2s;}
+.nav-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);transition:color 0.2s;}
+.nav-item.active .nav-label{color:var(--gold);}
+.nav-item.active .nav-icon{transform:scale(1.1);}
+.nav-item:active{transform:scale(0.95);}
+.dash-tab-content{display:none;}
+.dash-tab-content.active{display:block;}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--navy3);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;z-index:1000;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+@media(min-width:480px){.screen{max-width:480px;margin:0 auto;}.bottom-nav{max-width:480px;left:50%;transform:translateX(-50%);}.step-nav{max-width:480px;left:50%;transform:translateX(-50%);}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- WELCOME -->
+<div class="screen active" id="welcome">
+  <div class="welcome-logo">
+    <div class="logo-mark">T</div>
+    <div class="logo-name">TICKRIX<span>™</span></div>
+    <div class="welcome-tagline">LIVE MARKET DISPLAY</div>
+  </div>
+  <h1 class="welcome-title">Your markets.<br><span class="hl">Always live.</span></h1>
+  <p class="welcome-sub">Configure your Tickrix device, select your assets and watch live prices on your desk.</p>
+  <div class="welcome-btns">
+    <button class="btn-primary" onclick="showSetup()">📡 SETUP MY DEVICE</button>
+    <button class="btn-secondary" onclick="showDashboard()">📊 VIEW DASHBOARD</button>
+  </div>
+  <p class="welcome-version">TICKRIX™ APP v1.0 · tickrix.com</p>
+</div>
+
+<!-- SETUP -->
+<div class="screen" id="setup">
+  <div class="app-header">
+    <div class="header-top">
+      <div class="back-btn" onclick="showWelcome()">←</div>
+      <div class="header-title">Device Setup</div>
+    </div>
+    <div class="header-sub">CONNECT YOUR TICKRIX DEVICE</div>
+    <div class="steps-indicator" style="margin-top:16px;">
+      <div class="step-dot active" id="dot0"></div>
+      <div class="step-dot" id="dot1"></div>
+      <div class="step-dot" id="dot2"></div>
+    </div>
+  </div>
+  <div class="setup-content">
+    <!-- Step 1: WiFi -->
+    <div class="setup-step active" id="step0">
+      <div class="step-label">STEP 1 OF 3</div>
+      <h2 class="step-title">Connect to WiFi</h2>
+      <p class="step-desc">Enter your home or office WiFi details. Your Tickrix device will connect and remember these forever.</p>
+      <div class="field">
+        <label class="field-label">WIFI NAME (SSID)</label>
+        <input type="text" class="field-input" id="wifi-ssid" placeholder="e.g. MyHomeWiFi" autocomplete="off" autocorrect="off" autocapitalize="none">
+      </div>
+      <div class="field">
+        <label class="field-label">WIFI PASSWORD</label>
+        <input type="password" class="field-input" id="wifi-pass" placeholder="Enter password">
+      </div>
+      <div style="background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:8px;">
+        <p style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;">💡 First hold the <span style="color:var(--gold)">BOOT button</span> on your device while powering on. Then connect your phone to <span style="color:var(--gold)">Tickrix-Setup</span> WiFi before entering details here.</p>
+      </div>
+    </div>
+    <!-- Step 2: Assets -->
+    <div class="setup-step" id="step1">
+      <div class="step-label">STEP 2 OF 3</div>
+      <h2 class="step-title">Choose Your Assets</h2>
+      <p class="step-desc">Select which markets rotate on your display. You can change this anytime.</p>
+      <div class="asset-tabs">
+        <div class="asset-tab active" onclick="switchTab('crypto')">CRYPTO</div>
+        <div class="asset-tab" onclick="switchTab('stocks')">STOCKS</div>
+        <div class="asset-tab" onclick="switchTab('other')">COMMODITIES</div>
+      </div>
+      <div class="tab-content active" id="tab-crypto">
+        <div class="assets-grid">
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟠</span><span class="asset-sym">BTC</span><span class="asset-nm">BITCOIN</span></div>
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🔵</span><span class="asset-sym">ETH</span><span class="asset-nm">ETHEREUM</span></div>
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟣</span><span class="asset-sym">SOL</span><span class="asset-nm">SOLANA</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟡</span><span class="asset-sym">BNB</span><span class="asset-nm">BINANCE</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🩵</span><span class="asset-sym">XRP</span><span class="asset-nm">RIPPLE</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟤</span><span class="asset-sym">DOGE</span><span class="asset-nm">DOGECOIN</span></div>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-stocks">
+        <div class="assets-grid">
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🍎</span><span class="asset-sym">AAPL</span><span class="asset-nm">APPLE</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">⚡</span><span class="asset-sym">TSLA</span><span class="asset-nm">TESLA</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🎮</span><span class="asset-sym">NVDA</span><span class="asset-nm">NVIDIA</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🪟</span><span class="asset-sym">MSFT</span><span class="asset-nm">MICROSOFT</span></div>
+          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">📦</span><span class="asset-sym">AMZN</span><span class="asset-nm">AMAZON</span></div>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-other">
+        <div class="assets-grid">
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🥇</span><span class="asset-sym">GOLD</span><span class="asset-nm">XAU/USD</span></div>
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🛢️</span><span class="asset-sym">OIL</span><span class="asset-nm">WTI CRUDE</span></div>
+          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">💶</span><span class="asset-sym">EUR/USD</span><span class="asset-nm">FOREX</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Step 3: Connecting -->
+    <div class="setup-step" id="step2">
+      <div class="step-label">STEP 3 OF 3</div>
+      <h2 class="step-title">Connecting Device</h2>
+      <p class="step-desc">Your settings are being sent to the Tickrix device. This takes a few seconds.</p>
+      <div class="connecting-anim" id="connecting-state">
+        <div class="connecting-circle"></div>
+        <p class="connecting-text">CONNECTING TO DEVICE...</p>
+      </div>
+      <div style="display:none;text-align:center;padding:40px 24px;" id="success-state">
+        <div class="success-icon">✓</div>
+        <h3 style="font-size:20px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;">Device Connected!</h3>
+        <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:1.9;margin-bottom:32px;">Your Tickrix is now live. Prices will appear on the screen in a few seconds.</p>
+        <button class="btn-primary" style="max-width:280px;margin:0 auto;" onclick="showDashboard()">📊 GO TO DASHBOARD</button>
+      </div>
+    </div>
+  </div>
+  <div class="step-nav" id="step-nav">
+    <button class="btn-primary" id="next-btn" onclick="nextStep()">NEXT STEP →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-top">
+      <div class="dash-logo">TICKRIX<span>™</span></div>
+      <div class="dash-device-status">
+        <div class="status-dot"></div>
+        <span>LIVE</span>
+      </div>
+    </div>
+    <div class="prices-title">LIVE PRICES</div>
+    <div class="prices-scroll">
+      <div class="prices-row">
+        <div class="price-pill"><div class="price-pill-sym">BTC</div><div class="price-pill-val" id="pp-btc">Loading</div><div class="price-pill-chg up">▲ live</div></div>
+        <div class="price-pill"><div class="price-pill-sym">ETH</div><div class="price-pill-val" id="pp-eth">Loading</div><div class="price-pill-chg up">▲ live</div></div>
+        <div class="price-pill"><div class="price-pill-sym">SOL</div><div class="price-pill-val" id="pp-sol">Loading</div><div class="price-pill-chg dn">▼ live</div></div>
+        <div class="price-pill"><div class="price-pill-sym">GOLD</div><div class="price-pill-val" id="pp-gold">Loading</div><div class="price-pill-chg up">▲ live</div></div>
+        <div class="price-pill"><div class="price-pill-sym">OIL</div><div class="price-pill-val" id="pp-oil">$89.40</div><div class="price-pill-chg dn">▼ live</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-tab-content active" id="tab-home">
+    <div class="dash-section">
+      <div class="section-title">MY DEVICE</div>
+      <div class="device-card">
+        <div class="device-visual">
+          <div class="device-screen-mini">
+            <div class="dsm-sym">GOLD</div>
+            <div class="dsm-price" id="dev-price">$4,822</div>
+          </div>
+        </div>
+        <div class="device-info">
+          <div class="device-name">Tickrix One</div>
+          <div class="device-detail">Status: Online ✓<br>Assets: 6 active<br>Update: every 5s</div>
+          <div class="device-actions">
+            <div class="action-btn gold" onclick="showSetup()">⚙️ SETUP</div>
+            <div class="action-btn" onclick="showToast('Restart your device manually using the RST button!')">🔄 RESTART</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dash-section">
+      <div class="section-title">ACTIVE ASSETS</div>
+      <div class="active-assets">
+        <div class="active-asset"><span class="aa-icon">🟠</span><span class="aa-sym">BTC</span><span class="aa-price" id="aa-btc">—</span></div>
+        <div class="active-asset"><span class="aa-icon">🔵</span><span class="aa-sym">ETH</span><span class="aa-price" id="aa-eth">—</span></div>
+        <div class="active-asset"><span class="aa-icon">🟣</span><span class="aa-sym">SOL</span><span class="aa-price" id="aa-sol">—</span></div>
+        <div class="active-asset"><span class="aa-icon">🥇</span><span class="aa-sym">GOLD</span><span class="aa-price" id="aa-gold">—</span></div>
+        <div class="active-asset"><span class="aa-icon">🛢️</span><span class="aa-sym">OIL</span><span class="aa-price" id="aa-oil">$89.40</span></div>
+        <div class="active-asset"><span class="aa-icon">💶</span><span class="aa-sym">EUR/USD</span><span class="aa-price" id="aa-eur">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-tab-content" id="tab-shop">
+    <div class="dash-section" style="padding-top:24px;">
+      <div class="section-title">TICKRIX STORE</div>
+      <div class="shop-cards">
+        <div class="shop-card"><div class="shop-icon">📱</div><div class="shop-info"><div class="shop-name">Tickrix One</div><div class="shop-desc">The essential market display. USB powered, 9+ live assets.</div><div class="shop-price">€99</div></div><div class="shop-badge">SOON</div></div>
+        <div class="shop-card"><div class="shop-icon">⚡</div><div class="shop-info"><div class="shop-name">Tickrix Pro</div><div class="shop-desc">16-hour battery. No cables. Trade anywhere.</div><div class="shop-price">€149</div></div><div class="shop-badge">SOON</div></div>
+        <div class="shop-card"><div class="shop-icon">💎</div><div class="shop-info"><div class="shop-name">Tickrix Ultra</div><div class="shop-desc">24-hour battery, touch screen, full customization.</div><div class="shop-price">€199</div></div><div class="shop-badge">SOON</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-tab-content" id="tab-settings">
+    <div class="dash-section" style="padding-top:24px;">
+      <div class="section-title">SETTINGS</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;">
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="showSetup()"><span style="font-family:'Space Mono',monospace;font-size:12px;">Change WiFi</span><span style="color:var(--gold);">→</span></div>
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="showSetup()"><span style="font-family:'Space Mono',monospace;font-size:12px;">Edit Assets</span><span style="color:var(--gold);">→</span></div>
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Space Mono',monospace;font-size:12px;">Update Speed</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);">5s</span></div>
+        <div style="padding:18px 20px;display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Space Mono',monospace;font-size:12px;">App Version</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);">v1.0.0</span></div>
+      </div>
+      <div style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;">
+        <p style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.9;text-align:center;">TICKRIX™ · tickrix.com<br>Made in Rotterdam, Netherlands 🇳🇱<br><span style="color:var(--gold);">hello@tickrix.com</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchDashTab('home',this)"><span class="nav-icon">📊</span><span class="nav-label">HOME</span></div>
+    <div class="nav-item" onclick="switchDashTab('shop',this)"><span class="nav-icon">🛒</span><span class="nav-label">SHOP</span></div>
+    <div class="nav-item" onclick="switchDashTab('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">SETTINGS</span></div>
+  </div>
+</div>
+
+<script>
+let currentStep = 0;
+
+function showWelcome(){switchScreen('welcome');}
+function showSetup(){currentStep=0;updateStep();switchScreen('setup');}
+function showDashboard(){switchScreen('dashboard');fetchPrices();}
+
+function switchScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function updateStep(){
+  document.querySelectorAll('.setup-step').forEach((s,i)=>s.classList.toggle('active',i===currentStep));
+  document.querySelectorAll('.step-dot').forEach((d,i)=>{
+    d.classList.remove('active','done');
+    if(i===currentStep)d.classList.add('active');
+    if(i<currentStep)d.classList.add('done');
+  });
+  const nav=document.getElementById('step-nav');
+  const btn=document.getElementById('next-btn');
+  if(currentStep===2){nav.style.display='none';startConnecting();}
+  else{nav.style.display='block';btn.innerHTML=currentStep===1?'CONNECT DEVICE 🔗':'NEXT STEP →';}
+}
+
+function nextStep(){
+  if(currentStep===0){
+    const ssid=document.getElementById('wifi-ssid').value.trim();
+    if(!ssid){showToast('Please enter your WiFi name!');return;}
+  }
+  currentStep++;
+  updateStep();
+}
+
+function startConnecting(){
+  setTimeout(()=>{
+    document.getElementById('connecting-state').style.display='none';
+    document.getElementById('success-state').style.display='block';
+  },3000);
+}
+
+function toggleAsset(el){el.classList.toggle('selected');}
+
+function switchTab(tab){
+  document.querySelectorAll('.asset-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+
+function switchDashTab(tab,el){
+  document.querySelectorAll('.dash-tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  el.classList.add('active');
+}
+
+async function fetchPrices(){
+  try{
+    const pairs=[['BTCUSDT','btc'],['ETHUSDT','eth'],['SOLUSDT','sol'],['EURUSDT','eur']];
+    for(const[sym,id]of pairs){
+      const r=await fetch(`https://api.mexc.com/api/v3/ticker/price?symbol=${sym}`);
+      const d=await r.json();
+      const p=parseFloat(d.price);
+      const f=p>=1000?`$${Math.round(p).toLocaleString()}`:p>=1?`$${p.toFixed(2)}`:`$${p.toFixed(4)}`;
+      const el=document.getElementById(`pp-${id}`);
+      const ae=document.getElementById(`aa-${id}`);
+      if(el)el.textContent=f;
+      if(ae)ae.textContent=f;
+    }
+    const gr=await fetch('https://api.gold-api.com/price/XAU');
+    const gd=await gr.json();
+    const gp=`$${Math.round(gd.price).toLocaleString()}`;
+    document.getElementById('pp-gold').textContent=gp;
+    document.getElementById('aa-gold').textContent=gp;
+    document.getElementById('dev-price').textContent=gp;
+  }catch(e){console.log('fetch error',e);}
+  setTimeout(fetchPrices,30000);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
