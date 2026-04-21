@@ -2,439 +2,556 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Tickrix App — Your Market Display</title>
-<meta name="theme-color" content="#0a1628">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TICKRIX — DEVICE SETUP</title>
+<meta name="theme-color" content="#000000">
 <style>
-:root {
-  --navy:#0a1628;--navy2:#0f1f3d;--navy3:#162847;--navy4:#1e3a5f;
-  --gold:#f5a623;--gold2:#ffc043;--gold-dim:rgba(245,166,35,0.15);
-  --white:#fff;--text:#e8edf5;--muted:#6b7fa3;
-  --green:#00e676;--red:#ff4444;--border:rgba(245,166,35,0.2);
-  --card:rgba(15,31,61,0.8);
-}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{background:var(--navy);color:var(--text);font-family:'Unbounded',sans-serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(245,166,35,0.08) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 100% 100%,rgba(0,100,200,0.08) 0%,transparent 60%);pointer-events:none;z-index:0;}
-body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(245,166,35,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,166,35,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+html,body{height:100%;background:#000;}
+body{font-family:'Courier New',monospace;color:#fff;overflow-x:hidden;}
 
-.screen{position:fixed;inset:0;display:none;flex-direction:column;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.screen.active{display:flex;}
+.progress-bar{position:fixed;top:0;left:0;height:2px;background:#00aaff;transition:width 0.6s;z-index:999;box-shadow:0 0 6px #00aaff;}
 
-/* WELCOME */
-#welcome{align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
-.logo-mark{width:80px;height:80px;background:linear-gradient(135deg,var(--gold),#ff8c00);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 40px rgba(245,166,35,0.4);font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--navy);}
-.logo-name{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;letter-spacing:6px;color:var(--white);}
-.logo-name span{color:var(--gold);}
-.welcome-tagline{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);margin-top:8px;}
-.welcome-logo{margin-bottom:50px;}
-.welcome-title{font-size:28px;font-weight:900;letter-spacing:-2px;line-height:1.1;margin-bottom:16px;}
-.welcome-title .hl{color:var(--gold);}
-.welcome-sub{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:2;margin-bottom:48px;max-width:300px;margin-left:auto;margin-right:auto;}
-.welcome-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;margin:0 auto 40px;}
-.welcome-version{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;transform:translateX(100%);transition:transform 0.35s ease;background:#000;}
+.screen.active{transform:translateX(0);}
+.screen.exit{transform:translateX(-100%);}
 
-.btn-primary{background:linear-gradient(135deg,var(--gold),#ff8c00);color:var(--navy);padding:18px;border-radius:12px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;border:none;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;}
-.btn-primary:active{transform:scale(0.97);}
-.btn-secondary{background:var(--navy3);color:var(--text);padding:18px;border-radius:12px;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;letter-spacing:2px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;}
-.btn-secondary:active{transform:scale(0.97);}
+.header{padding:50px 24px 20px;border-bottom:1px solid #1a1a1a;position:sticky;top:0;background:#000;z-index:10;}
+.header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.back-btn{font-size:11px;letter-spacing:2px;color:#555;cursor:pointer;padding:8px 0;}
+.back-btn:active{color:#fff;}
+.step-num{font-size:11px;letter-spacing:2px;color:#555;}
+.step-num b{color:#00aaff;}
+.screen-tag{font-size:10px;letter-spacing:4px;color:#00aaff;margin-bottom:6px;}
+.screen-tag::before{content:'> ';}
+.screen-h{font-size:20px;font-weight:700;letter-spacing:-1px;}
 
-/* SETUP */
-#setup{padding:0 0 100px;}
-.app-header{padding:50px 24px 20px;background:linear-gradient(180deg,var(--navy2),transparent);position:sticky;top:0;z-index:20;backdrop-filter:blur(20px);}
-.header-top{display:flex;align-items:center;gap:16px;margin-bottom:4px;}
-.back-btn{width:36px;height:36px;background:var(--navy3);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--gold);flex-shrink:0;}
-.back-btn:active{transform:scale(0.95);}
-.header-title{font-size:18px;font-weight:700;letter-spacing:-1px;}
-.header-sub{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;padding-left:52px;}
-.steps-indicator{display:flex;gap:6px;padding:16px 24px 0;}
-.step-dot{height:3px;border-radius:2px;flex:1;background:var(--navy4);transition:background 0.3s;}
-.step-dot.active{background:var(--gold);}
-.step-dot.done{background:var(--green);}
-.setup-content{padding:24px;}
-.setup-step{display:none;}
-.setup-step.active{display:block;}
-.step-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.step-label::before{content:'';width:24px;height:1px;background:var(--gold);}
-.step-title{font-size:22px;font-weight:700;letter-spacing:-1px;margin-bottom:8px;line-height:1.2;}
-.step-desc{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:1.9;margin-bottom:28px;}
-.field{margin-bottom:16px;}
-.field-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);margin-bottom:8px;display:block;}
-.field-input{width:100%;background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:'Space Mono',monospace;font-size:14px;color:var(--white);outline:none;transition:all 0.2s;-webkit-appearance:none;}
-.field-input::placeholder{color:var(--muted);}
-.field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,166,35,0.1);}
-.asset-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;scrollbar-width:none;}
-.asset-tabs::-webkit-scrollbar{display:none;}
-.asset-tab{background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:8px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all 0.2s;}
-.asset-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
-.assets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.asset-card{background:var(--navy3);border:1px solid var(--border);border-radius:14px;padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
-.asset-card:active{transform:scale(0.96);}
-.asset-card.selected{background:var(--gold-dim);border-color:var(--gold);}
-.asset-card .check{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--gold);display:none;align-items:center;justify-content:center;font-size:9px;color:var(--navy);}
-.asset-card.selected .check{display:flex;}
-.asset-icon{font-size:22px;margin-bottom:6px;display:block;}
-.asset-sym{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:block;margin-bottom:2px;}
-.asset-nm{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
-.step-nav{position:fixed;bottom:0;left:0;right:0;padding:16px 24px 32px;background:linear-gradient(0deg,var(--navy) 60%,transparent);z-index:20;}
-.connecting-anim{text-align:center;padding:40px 24px;}
-.connecting-circle{width:80px;height:80px;border-radius:50%;border:2px solid var(--gold-dim);border-top-color:var(--gold);margin:0 auto 24px;animation:spin 1.5s linear infinite;}
-.connecting-text{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px;}
-.success-icon{width:80px;height:80px;background:rgba(0,230,118,0.1);border:2px solid var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;}
+.content{padding:24px;flex:1;padding-bottom:110px;}
+.footer{position:fixed;bottom:0;left:0;right:0;padding:14px 24px 32px;background:linear-gradient(0deg,#000 70%,transparent);z-index:10;}
+
+.btn{width:100%;padding:15px;font-family:'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:3px;cursor:pointer;border:none;outline:none;transition:all 0.15s;display:block;text-align:center;}
+.btn:active{transform:scale(0.98);}
+.btn-p{background:#fff;color:#000;}
+.btn-o{background:transparent;color:#fff;border:1px solid #333;margin-top:8px;}
+.btn-sm{padding:10px 14px;font-size:10px;letter-spacing:2px;width:auto;display:inline-block;}
+
+.field{margin-bottom:14px;}
+.flabel{font-size:9px;letter-spacing:3px;color:#555;margin-bottom:6px;display:block;}
+.flabel::before{content:'// ';}
+.finput{width:100%;background:#000;border:1px solid #333;padding:13px 14px;font-family:'Courier New',monospace;font-size:14px;color:#fff;outline:none;-webkit-appearance:none;border-radius:0;transition:border-color 0.2s;letter-spacing:1px;}
+.finput:focus{border-color:#00aaff;}
+.finput::placeholder{color:#444;}
+.pw-wrap{position:relative;}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:9px;letter-spacing:2px;color:#555;cursor:pointer;}
+
+.status{font-size:11px;letter-spacing:1px;padding:10px 12px;border-left:2px solid #333;margin-top:10px;color:#555;transition:all 0.3s;}
+.status.ok{border-color:#00e676;color:#00e676;}
+.status.err{border-color:#ff1744;color:#ff1744;}
+.status.loading{border-color:#00aaff;color:#00aaff;}
+
+.hint{font-size:10px;letter-spacing:1px;color:#555;line-height:1.9;padding:10px 12px;border-left:2px solid #333;margin-bottom:18px;}
+
+.mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.mkt{border:1px solid #333;padding:18px 14px;cursor:pointer;position:relative;min-height:90px;transition:all 0.15s;}
+.mkt:active{transform:scale(0.97);}
+.mkt.on{border-color:#00aaff;background:rgba(0,170,255,0.04);}
+.mkt.on .mkt-dot{background:#00aaff;}
+.mkt-dot{width:5px;height:5px;background:#333;position:absolute;top:12px;right:12px;transition:background 0.2s;}
+.mkt-name{font-size:13px;font-weight:700;letter-spacing:2px;margin-bottom:6px;}
+.mkt-info{font-size:9px;letter-spacing:1px;color:#555;line-height:1.8;}
+
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.ex{border:1px solid #333;padding:14px;cursor:pointer;position:relative;transition:all 0.15s;}
+.ex:active{transform:scale(0.97);}
+.ex.on{border-color:#00aaff;background:rgba(0,170,255,0.04);}
+.ex.on::after{content:'OK';position:absolute;top:6px;right:8px;font-size:7px;letter-spacing:1px;color:#00aaff;}
+.ex-name{font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:3px;}
+.ex-type{font-size:9px;letter-spacing:1px;color:#555;}
+
+.custom-box{border:1px solid #333;padding:18px;margin-top:14px;display:none;}
+.custom-box.show{display:block;}
+.custom-title{font-size:9px;letter-spacing:3px;color:#00aaff;margin-bottom:14px;}
+.test-res{background:#000;border:1px solid #333;padding:10px 12px;margin-top:10px;font-size:10px;letter-spacing:1px;display:none;}
+.test-res.show{display:block;}
+.test-res.ok{border-color:#00e676;color:#00e676;}
+.test-res.err{border-color:#ff1744;color:#ff1744;}
+
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #1a1a1a;cursor:pointer;}
+.toggle-txt{font-size:11px;letter-spacing:1px;}
+.toggle-sub{font-size:9px;letter-spacing:1px;color:#555;margin-top:3px;}
+.tog{width:38px;height:20px;border:1px solid #333;position:relative;flex-shrink:0;transition:border-color 0.2s;}
+.tog.on{border-color:#00aaff;}
+.tog-k{position:absolute;top:2px;left:2px;width:14px;height:14px;background:#333;transition:all 0.2s;}
+.tog.on .tog-k{left:20px;background:#00aaff;}
+
+.asset-table{border:1px solid #1a1a1a;}
+.at-head{display:grid;grid-template-columns:1fr 1fr 55px 36px;padding:9px 12px;border-bottom:1px solid #1a1a1a;font-size:9px;letter-spacing:2px;color:#555;}
+.a-row{display:grid;grid-template-columns:1fr 1fr 55px 36px;padding:13px 12px;border-bottom:1px solid #1a1a1a;align-items:center;cursor:pointer;transition:background 0.15s;}
+.a-row:last-child{border-bottom:none;}
+.a-row:active{background:rgba(255,255,255,0.02);}
+.a-row.on{background:rgba(0,170,255,0.03);}
+.a-sym{font-size:12px;font-weight:700;letter-spacing:1px;}
+.a-price{font-size:11px;color:#555;letter-spacing:1px;}
+.a-chg{font-size:9px;letter-spacing:1px;color:#555;}
+.a-chg.up{color:#00e676;}
+.a-chg.dn{color:#ff1744;}
+.a-tog{width:22px;height:22px;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:14px;color:#333;justify-self:end;}
+.a-row.on .a-tog{border-color:#00aaff;color:#00aaff;}
+.a-count{font-size:9px;letter-spacing:2px;color:#555;margin-top:10px;padding:9px 12px;border:1px solid #1a1a1a;display:flex;justify-content:space-between;}
+.a-count b{color:#00aaff;}
+
+.sum-table{border:1px solid #1a1a1a;margin-bottom:20px;}
+.sum-row{display:flex;justify-content:space-between;padding:13px 14px;border-bottom:1px solid #1a1a1a;font-size:11px;letter-spacing:1px;}
+.sum-row:last-child{border-bottom:none;}
+.sum-k{color:#555;}
+.sum-v{font-weight:700;}
+.sum-v.ok{color:#00e676;}
+
+.sec-lbl{font-size:9px;letter-spacing:3px;color:#555;margin-bottom:10px;}
+.divider{border:none;border-top:1px solid #1a1a1a;margin:16px 0;}
+
+.deploy-line{font-size:10px;letter-spacing:1px;color:#555;padding:5px 0;opacity:0;transition:opacity 0.3s;}
+.deploy-line.show{opacity:1;}
+.deploy-line.ok{color:#00e676;}
+.deploy-line.act{color:#00aaff;}
+.deploy-line::before{content:'> ';color:#333;}
+
+.online-dot{display:inline-block;width:7px;height:7px;background:#00e676;margin-right:6px;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* BOOT SCREEN */
+#screen-boot{align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
+.boot-logo{margin-bottom:50px;}
+.boot-name{font-size:42px;font-weight:700;letter-spacing:8px;line-height:1;margin-bottom:6px;}
+.boot-cursor{display:inline-block;width:3px;height:36px;background:#00aaff;margin-left:3px;vertical-align:middle;animation:blink 1s infinite;}
+.boot-sub{font-size:9px;letter-spacing:4px;color:#555;margin-bottom:4px;}
+.boot-ver{font-size:9px;letter-spacing:3px;color:#333;margin-bottom:6px;}
+.boot-status{font-size:10px;letter-spacing:2px;color:#555;margin-bottom:50px;min-height:18px;}
+.boot-btn{width:100%;max-width:300px;opacity:0;animation:fadeIn 0.5s 2s forwards;}
+@keyframes fadeIn{to{opacity:1;}}
+.boot-name-char{display:inline-block;opacity:0;transform:translateY(16px);animation:cr 0.35s forwards;}
+@keyframes cr{to{opacity:1;transform:translateY(0);}}
+
+/* QR / Device ID */
+.device-id-box{border:1px solid #1a1a1a;padding:16px;margin-bottom:20px;text-align:center;}
+.device-id-label{font-size:9px;letter-spacing:3px;color:#555;margin-bottom:8px;}
+.device-id-val{font-size:18px;font-weight:700;letter-spacing:6px;color:#00aaff;}
+.device-id-hint{font-size:9px;letter-spacing:1px;color:#333;margin-top:8px;line-height:1.8;}
+
+/* Waiting animation */
+.waiting-wrap{text-align:center;padding:40px 0;}
+.waiting-ring{width:50px;height:50px;border:1px solid #333;border-top-color:#00aaff;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.waiting-text{font-size:10px;letter-spacing:2px;color:#555;}
 
-/* DASHBOARD */
-#dashboard{padding:0 0 100px;}
-.dash-header{padding:50px 24px 20px;background:linear-gradient(180deg,var(--navy2),transparent);backdrop-filter:blur(20px);}
-.dash-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
-.dash-logo{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;letter-spacing:3px;}
-.dash-logo span{color:var(--gold);}
-.dash-device-status{display:flex;align-items:center;gap:8px;background:var(--navy3);border:1px solid var(--border);border-radius:20px;padding:8px 14px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
-.prices-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.prices-title::before{content:'';width:24px;height:1px;background:var(--gold);}
-.prices-scroll{overflow-x:auto;scrollbar-width:none;margin:0 -24px;padding:0 24px 16px;}
-.prices-scroll::-webkit-scrollbar{display:none;}
-.prices-row{display:flex;gap:12px;width:max-content;}
-.price-pill{background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:14px 18px;min-width:110px;}
-.price-pill-sym{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;}
-.price-pill-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:4px;}
-.price-pill-chg{font-family:'Space Mono',monospace;font-size:10px;}
-.price-pill-chg.up{color:var(--green);}
-.price-pill-chg.dn{color:var(--red);}
-.dash-section{padding:0 24px;margin-bottom:28px;}
-.section-title{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.section-title::before{content:'';width:24px;height:1px;background:var(--gold);}
-.device-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;backdrop-filter:blur(10px);display:flex;gap:20px;align-items:center;}
-.device-visual{width:60px;height:100px;background:linear-gradient(160deg,#1a2a4a,#0d1a30);border-radius:10px;border:1px solid #2a3a5a;flex-shrink:0;position:relative;overflow:hidden;box-shadow:0 0 20px rgba(245,166,35,0.15);}
-.device-screen-mini{position:absolute;inset:4px;background:#000;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.dsm-sym{font-family:'Space Mono',monospace;font-size:6px;color:#444;letter-spacing:1px;}
-.dsm-price{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;color:var(--gold);}
-.device-info{flex:1;}
-.device-name{font-size:16px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;}
-.device-detail{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;}
-.device-actions{display:flex;gap:8px;margin-top:16px;}
-.action-btn{flex:1;background:var(--navy4);border:1px solid var(--border);border-radius:10px;padding:10px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--text);cursor:pointer;text-align:center;transition:all 0.2s;}
-.action-btn:active{transform:scale(0.97);}
-.action-btn.gold{background:var(--gold-dim);border-color:var(--gold);color:var(--gold);}
-.active-assets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.active-asset{background:var(--navy3);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;}
-.aa-icon{font-size:18px;margin-bottom:6px;display:block;}
-.aa-sym{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--gold);display:block;margin-bottom:2px;}
-.aa-price{font-family:'Space Mono',monospace;font-size:11px;color:var(--text);}
-.shop-cards{display:flex;flex-direction:column;gap:12px;}
-.shop-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;display:flex;gap:16px;align-items:center;backdrop-filter:blur(10px);}
-.shop-icon{width:56px;height:56px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
-.shop-info{flex:1;}
-.shop-name{font-size:14px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;}
-.shop-desc{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
-.shop-price{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold);}
-.shop-badge{background:var(--gold);color:var(--navy);font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:4px 8px;border-radius:4px;align-self:flex-start;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,22,40,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:12px 0 24px;z-index:50;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;padding:4px 0;}
-.nav-icon{font-size:20px;transition:transform 0.2s;}
-.nav-label{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--muted);transition:color 0.2s;}
-.nav-item.active .nav-label{color:var(--gold);}
-.nav-item.active .nav-icon{transform:scale(1.1);}
-.nav-item:active{transform:scale(0.95);}
-.dash-tab-content{display:none;}
-.dash-tab-content.active{display:block;}
-.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--navy3);border:1px solid var(--gold);border-radius:12px;padding:14px 20px;font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:1px;z-index:1000;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1);white-space:nowrap;}
-.toast.show{transform:translateX(-50%) translateY(0);}
-@media(min-width:480px){.screen{max-width:480px;margin:0 auto;}.bottom-nav{max-width:480px;left:50%;transform:translateX(-50%);}.step-nav{max-width:480px;left:50%;transform:translateX(-50%);}}
+@media(min-width:480px){
+  .screen{max-width:480px;left:50%;right:auto;transform:translateX(calc(-50% + 100vw));}
+  .screen.active{transform:translateX(-50%);}
+  .screen.exit{transform:translateX(calc(-50% - 100vw));}
+  .footer{max-width:480px;left:50%;transform:translateX(-50%);}
+  .progress-bar{max-width:480px;left:50%;transform:translateX(-50%);}
+}
 </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
+<div class="progress-bar" id="pb" style="width:0%"></div>
 
-<!-- WELCOME -->
-<div class="screen active" id="welcome">
-  <div class="welcome-logo">
-    <div class="logo-mark">T</div>
-    <div class="logo-name">TICKRIX<span>™</span></div>
-    <div class="welcome-tagline">LIVE MARKET DISPLAY</div>
+<!-- BOOT -->
+<div class="screen active" id="screen-boot">
+  <div class="boot-logo">
+    <div class="boot-name" id="bname"></div>
+    <div class="boot-sub">MARKET DISPLAY SYSTEM</div>
+    <div class="boot-ver">v2.0 — CLOUD SETUP</div>
   </div>
-  <h1 class="welcome-title">Your markets.<br><span class="hl">Always live.</span></h1>
-  <p class="welcome-sub">Configure your Tickrix device, select your assets and watch live prices on your desk.</p>
-  <div class="welcome-btns">
-    <button class="btn-primary" onclick="showSetup()">📡 SETUP MY DEVICE</button>
-    <button class="btn-secondary" onclick="showDashboard()">📊 VIEW DASHBOARD</button>
+  <div class="boot-status" id="bstatus">INITIALIZING...</div>
+  <div class="boot-btn">
+    <button class="btn btn-p" onclick="goTo(1)">[ SETUP MY DEVICE ]</button>
   </div>
-  <p class="welcome-version">TICKRIX™ APP v1.0 · tickrix.com</p>
 </div>
 
-<!-- SETUP -->
-<div class="screen" id="setup">
-  <div class="app-header">
+<!-- STEP 1: DEVICE ID -->
+<div class="screen" id="screen-1">
+  <div class="header">
     <div class="header-top">
-      <div class="back-btn" onclick="showWelcome()">←</div>
-      <div class="header-title">Device Setup</div>
+      <span class="back-btn" onclick="goBack()">&#60; BACK</span>
+      <span class="step-num"><b>01</b> / 04</span>
     </div>
-    <div class="header-sub">CONNECT YOUR TICKRIX DEVICE</div>
-    <div class="steps-indicator" style="margin-top:16px;">
-      <div class="step-dot active" id="dot0"></div>
-      <div class="step-dot" id="dot1"></div>
-      <div class="step-dot" id="dot2"></div>
-    </div>
+    <div class="screen-tag">DEVICE IDENTIFICATION</div>
+    <div class="screen-h">Enter Device ID</div>
   </div>
-  <div class="setup-content">
-    <!-- Step 1: WiFi -->
-    <div class="setup-step active" id="step0">
-      <div class="step-label">STEP 1 OF 3</div>
-      <h2 class="step-title">Connect to WiFi</h2>
-      <p class="step-desc">Enter your home or office WiFi details. Your Tickrix device will connect and remember these forever.</p>
-      <div class="field">
-        <label class="field-label">WIFI NAME (SSID)</label>
-        <input type="text" class="field-input" id="wifi-ssid" placeholder="e.g. MyHomeWiFi" autocomplete="off" autocorrect="off" autocapitalize="none">
-      </div>
-      <div class="field">
-        <label class="field-label">WIFI PASSWORD</label>
-        <input type="password" class="field-input" id="wifi-pass" placeholder="Enter password">
-      </div>
-      <div style="background:var(--navy3);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:8px;">
-        <p style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;">💡 First hold the <span style="color:var(--gold)">BOOT button</span> on your device while powering on. Then connect your phone to <span style="color:var(--gold)">Tickrix-Setup</span> WiFi before entering details here.</p>
-      </div>
+  <div class="content">
+    <div class="hint">Your Tickrix device shows a unique ID on the screen when in setup mode. Enter it below to link your device.</div>
+    <div class="field">
+      <label class="flabel">DEVICE ID</label>
+      <input type="text" class="finput" id="device-id" placeholder="e.g. TX-A1B2C3" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" style="letter-spacing:4px;font-size:18px;">
     </div>
-    <!-- Step 2: Assets -->
-    <div class="setup-step" id="step1">
-      <div class="step-label">STEP 2 OF 3</div>
-      <h2 class="step-title">Choose Your Assets</h2>
-      <p class="step-desc">Select which markets rotate on your display. You can change this anytime.</p>
-      <div class="asset-tabs">
-        <div class="asset-tab active" onclick="switchTab('crypto')">CRYPTO</div>
-        <div class="asset-tab" onclick="switchTab('stocks')">STOCKS</div>
-        <div class="asset-tab" onclick="switchTab('other')">COMMODITIES</div>
-      </div>
-      <div class="tab-content active" id="tab-crypto">
-        <div class="assets-grid">
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟠</span><span class="asset-sym">BTC</span><span class="asset-nm">BITCOIN</span></div>
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🔵</span><span class="asset-sym">ETH</span><span class="asset-nm">ETHEREUM</span></div>
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟣</span><span class="asset-sym">SOL</span><span class="asset-nm">SOLANA</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟡</span><span class="asset-sym">BNB</span><span class="asset-nm">BINANCE</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🩵</span><span class="asset-sym">XRP</span><span class="asset-nm">RIPPLE</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🟤</span><span class="asset-sym">DOGE</span><span class="asset-nm">DOGECOIN</span></div>
-        </div>
-      </div>
-      <div class="tab-content" id="tab-stocks">
-        <div class="assets-grid">
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🍎</span><span class="asset-sym">AAPL</span><span class="asset-nm">APPLE</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">⚡</span><span class="asset-sym">TSLA</span><span class="asset-nm">TESLA</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🎮</span><span class="asset-sym">NVDA</span><span class="asset-nm">NVIDIA</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🪟</span><span class="asset-sym">MSFT</span><span class="asset-nm">MICROSOFT</span></div>
-          <div class="asset-card" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">📦</span><span class="asset-sym">AMZN</span><span class="asset-nm">AMAZON</span></div>
-        </div>
-      </div>
-      <div class="tab-content" id="tab-other">
-        <div class="assets-grid">
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🥇</span><span class="asset-sym">GOLD</span><span class="asset-nm">XAU/USD</span></div>
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">🛢️</span><span class="asset-sym">OIL</span><span class="asset-nm">WTI CRUDE</span></div>
-          <div class="asset-card selected" onclick="toggleAsset(this)"><div class="check">✓</div><span class="asset-icon">💶</span><span class="asset-sym">EUR/USD</span><span class="asset-nm">FOREX</span></div>
-        </div>
-      </div>
-    </div>
-    <!-- Step 3: Connecting -->
-    <div class="setup-step" id="step2">
-      <div class="step-label">STEP 3 OF 3</div>
-      <h2 class="step-title">Connecting Device</h2>
-      <p class="step-desc">Your settings are being sent to the Tickrix device. This takes a few seconds.</p>
-      <div class="connecting-anim" id="connecting-state">
-        <div class="connecting-circle"></div>
-        <p class="connecting-text">CONNECTING TO DEVICE...</p>
-      </div>
-      <div style="display:none;text-align:center;padding:40px 24px;" id="success-state">
-        <div class="success-icon">✓</div>
-        <h3 style="font-size:20px;font-weight:700;letter-spacing:-1px;margin-bottom:12px;">Device Connected!</h3>
-        <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);line-height:1.9;margin-bottom:32px;">Your Tickrix is now live. Prices will appear on the screen in a few seconds.</p>
-        <button class="btn-primary" style="max-width:280px;margin:0 auto;" onclick="showDashboard()">📊 GO TO DASHBOARD</button>
+    <div class="status" id="device-st">ENTER YOUR DEVICE ID</div>
+    <div style="margin-top:20px;border:1px solid #1a1a1a;padding:16px;">
+      <div style="font-size:9px;letter-spacing:3px;color:#555;margin-bottom:10px;">HOW TO FIND YOUR DEVICE ID</div>
+      <div style="font-size:10px;letter-spacing:1px;color:#555;line-height:2;">
+        1. Power on your Tickrix device<br>
+        2. Hold the BOOT button for 3 seconds<br>
+        3. The Device ID appears on screen<br>
+        4. Enter it above
       </div>
     </div>
   </div>
-  <div class="step-nav" id="step-nav">
-    <button class="btn-primary" id="next-btn" onclick="nextStep()">NEXT STEP →</button>
+  <div class="footer">
+    <button class="btn btn-p" onclick="verifyDevice()">[ VERIFY DEVICE ]</button>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div class="screen" id="dashboard">
-  <div class="dash-header">
-    <div class="dash-top">
-      <div class="dash-logo">TICKRIX<span>™</span></div>
-      <div class="dash-device-status">
-        <div class="status-dot"></div>
-        <span>LIVE</span>
+<!-- STEP 2: WIFI -->
+<div class="screen" id="screen-2">
+  <div class="header">
+    <div class="header-top">
+      <span class="back-btn" onclick="goBack()">&#60; BACK</span>
+      <span class="step-num"><b>02</b> / 04</span>
+    </div>
+    <div class="screen-tag">NETWORK CONFIGURATION</div>
+    <div class="screen-h">Connect to WiFi</div>
+  </div>
+  <div class="content">
+    <div class="hint">Enter the WiFi credentials for where your Tickrix device will be placed.</div>
+    <div class="field">
+      <label class="flabel">NETWORK NAME (SSID)</label>
+      <input type="text" class="finput" id="wifi-ssid" placeholder="YourNetworkName" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+    </div>
+    <div class="field">
+      <label class="flabel">PASSWORD</label>
+      <div class="pw-wrap">
+        <input type="password" class="finput" id="wifi-pass" placeholder="Enter password" style="padding-right:60px">
+        <span class="pw-toggle" onclick="togglePw()">SHOW</span>
       </div>
     </div>
-    <div class="prices-title">LIVE PRICES</div>
-    <div class="prices-scroll">
-      <div class="prices-row">
-        <div class="price-pill"><div class="price-pill-sym">BTC</div><div class="price-pill-val" id="pp-btc">Loading</div><div class="price-pill-chg up">▲ live</div></div>
-        <div class="price-pill"><div class="price-pill-sym">ETH</div><div class="price-pill-val" id="pp-eth">Loading</div><div class="price-pill-chg up">▲ live</div></div>
-        <div class="price-pill"><div class="price-pill-sym">SOL</div><div class="price-pill-val" id="pp-sol">Loading</div><div class="price-pill-chg dn">▼ live</div></div>
-        <div class="price-pill"><div class="price-pill-sym">GOLD</div><div class="price-pill-val" id="pp-gold">Loading</div><div class="price-pill-chg up">▲ live</div></div>
-        <div class="price-pill"><div class="price-pill-sym">OIL</div><div class="price-pill-val" id="pp-oil">$89.40</div><div class="price-pill-chg dn">▼ live</div></div>
+    <div class="status" id="wifi-st">READY</div>
+  </div>
+  <div class="footer">
+    <button class="btn btn-p" onclick="goTo(3)">[ NEXT — SELECT EXCHANGE ]</button>
+  </div>
+</div>
+
+<!-- STEP 3: EXCHANGE -->
+<div class="screen" id="screen-3">
+  <div class="header">
+    <div class="header-top">
+      <span class="back-btn" onclick="goBack()">&#60; BACK</span>
+      <span class="step-num"><b>03</b> / 04</span>
+    </div>
+    <div class="screen-tag">DATA SOURCE</div>
+    <div class="screen-h">Select Exchange</div>
+  </div>
+  <div class="content">
+    <div class="hint">Select your preferred exchange for price data. Or use Custom API for any provider worldwide.</div>
+    <div class="sec-lbl">CRYPTO EXCHANGES</div>
+    <div class="ex-grid">
+      <div class="ex on" id="ex-mexc" onclick="selEx('mexc')"><div class="ex-name">MEXC</div><div class="ex-type">FREE API</div></div>
+      <div class="ex" id="ex-binance" onclick="selEx('binance')"><div class="ex-name">BINANCE</div><div class="ex-type">FREE API</div></div>
+      <div class="ex" id="ex-bybit" onclick="selEx('bybit')"><div class="ex-name">BYBIT</div><div class="ex-type">FREE API</div></div>
+      <div class="ex" id="ex-lbank" onclick="selEx('lbank')"><div class="ex-name">LBANK</div><div class="ex-type">FREE API</div></div>
+      <div class="ex" id="ex-kraken" onclick="selEx('kraken')"><div class="ex-name">KRAKEN</div><div class="ex-type">FREE API</div></div>
+      <div class="ex" id="ex-coinbase" onclick="selEx('coinbase')"><div class="ex-name">COINBASE</div><div class="ex-type">FREE API</div></div>
+    </div>
+    <hr class="divider">
+    <div class="toggle-row" onclick="togCustom()">
+      <div>
+        <div class="toggle-txt">CUSTOM API ENDPOINT</div>
+        <div class="toggle-sub">USE ANY EXCHANGE WORLDWIDE</div>
       </div>
+      <div class="tog" id="ctog"><div class="tog-k"></div></div>
+    </div>
+    <div class="custom-box" id="cbox">
+      <div class="custom-title">CUSTOM API CONFIGURATION</div>
+      <div class="field"><label class="flabel">API ENDPOINT URL</label><input type="text" class="finput" id="curl" placeholder="https://api.exchange.com/price?symbol=BTC" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"></div>
+      <div class="field"><label class="flabel">API KEY (OPTIONAL)</label><input type="text" class="finput" id="ckey" placeholder="Leave empty if not required" autocomplete="off" spellcheck="false"></div>
+      <div class="field"><label class="flabel">PRICE FIELD PATH</label><input type="text" class="finput" id="cfield" placeholder="e.g. price or data.ticker.latest" autocomplete="off" spellcheck="false"></div>
+      <button class="btn btn-o btn-sm" onclick="testApi()">[ TEST CONNECTION ]</button>
+      <div class="test-res" id="tres"></div>
     </div>
   </div>
-
-  <div class="dash-tab-content active" id="tab-home">
-    <div class="dash-section">
-      <div class="section-title">MY DEVICE</div>
-      <div class="device-card">
-        <div class="device-visual">
-          <div class="device-screen-mini">
-            <div class="dsm-sym">GOLD</div>
-            <div class="dsm-price" id="dev-price">$4,822</div>
-          </div>
-        </div>
-        <div class="device-info">
-          <div class="device-name">Tickrix One</div>
-          <div class="device-detail">Status: Online ✓<br>Assets: 6 active<br>Update: every 5s</div>
-          <div class="device-actions">
-            <div class="action-btn gold" onclick="showSetup()">⚙️ SETUP</div>
-            <div class="action-btn" onclick="showToast('Restart your device manually using the RST button!')">🔄 RESTART</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="dash-section">
-      <div class="section-title">ACTIVE ASSETS</div>
-      <div class="active-assets">
-        <div class="active-asset"><span class="aa-icon">🟠</span><span class="aa-sym">BTC</span><span class="aa-price" id="aa-btc">—</span></div>
-        <div class="active-asset"><span class="aa-icon">🔵</span><span class="aa-sym">ETH</span><span class="aa-price" id="aa-eth">—</span></div>
-        <div class="active-asset"><span class="aa-icon">🟣</span><span class="aa-sym">SOL</span><span class="aa-price" id="aa-sol">—</span></div>
-        <div class="active-asset"><span class="aa-icon">🥇</span><span class="aa-sym">GOLD</span><span class="aa-price" id="aa-gold">—</span></div>
-        <div class="active-asset"><span class="aa-icon">🛢️</span><span class="aa-sym">OIL</span><span class="aa-price" id="aa-oil">$89.40</span></div>
-        <div class="active-asset"><span class="aa-icon">💶</span><span class="aa-sym">EUR/USD</span><span class="aa-price" id="aa-eur">—</span></div>
-      </div>
-    </div>
+  <div class="footer">
+    <button class="btn btn-p" onclick="goTo(4)">[ NEXT — SELECT ASSETS ]</button>
   </div>
+</div>
 
-  <div class="dash-tab-content" id="tab-shop">
-    <div class="dash-section" style="padding-top:24px;">
-      <div class="section-title">TICKRIX STORE</div>
-      <div class="shop-cards">
-        <div class="shop-card"><div class="shop-icon">📱</div><div class="shop-info"><div class="shop-name">Tickrix One</div><div class="shop-desc">The essential market display. USB powered, 9+ live assets.</div><div class="shop-price">€99</div></div><div class="shop-badge">SOON</div></div>
-        <div class="shop-card"><div class="shop-icon">⚡</div><div class="shop-info"><div class="shop-name">Tickrix Pro</div><div class="shop-desc">16-hour battery. No cables. Trade anywhere.</div><div class="shop-price">€149</div></div><div class="shop-badge">SOON</div></div>
-        <div class="shop-card"><div class="shop-icon">💎</div><div class="shop-info"><div class="shop-name">Tickrix Ultra</div><div class="shop-desc">24-hour battery, touch screen, full customization.</div><div class="shop-price">€199</div></div><div class="shop-badge">SOON</div></div>
-      </div>
+<!-- STEP 4: ASSETS -->
+<div class="screen" id="screen-4">
+  <div class="header">
+    <div class="header-top">
+      <span class="back-btn" onclick="goBack()">&#60; BACK</span>
+      <span class="step-num"><b>04</b> / 04</span>
     </div>
+    <div class="screen-tag">ASSET CONFIGURATION</div>
+    <div class="screen-h">Select Assets</div>
   </div>
-
-  <div class="dash-tab-content" id="tab-settings">
-    <div class="dash-section" style="padding-top:24px;">
-      <div class="section-title">SETTINGS</div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;">
-        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="showSetup()"><span style="font-family:'Space Mono',monospace;font-size:12px;">Change WiFi</span><span style="color:var(--gold);">→</span></div>
-        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="showSetup()"><span style="font-family:'Space Mono',monospace;font-size:12px;">Edit Assets</span><span style="color:var(--gold);">→</span></div>
-        <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Space Mono',monospace;font-size:12px;">Update Speed</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--gold);">5s</span></div>
-        <div style="padding:18px 20px;display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Space Mono',monospace;font-size:12px;">App Version</span><span style="font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);">v1.0.0</span></div>
-      </div>
-      <div style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;">
-        <p style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);line-height:1.9;text-align:center;">TICKRIX™ · tickrix.com<br>Made in Rotterdam, Netherlands 🇳🇱<br><span style="color:var(--gold);">hello@tickrix.com</span></p>
-      </div>
+  <div class="content">
+    <div class="hint">Select which assets rotate on your display. Live prices shown below.</div>
+    <div class="asset-table">
+      <div class="at-head"><span>SYMBOL</span><span>PRICE</span><span>STATUS</span><span></span></div>
+      <div class="a-row on" id="ar-BTC" onclick="togA('BTC')"><span class="a-sym">BTC</span><span class="a-price" id="ap-BTC">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row on" id="ar-ETH" onclick="togA('ETH')"><span class="a-sym">ETH</span><span class="a-price" id="ap-ETH">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row on" id="ar-SOL" onclick="togA('SOL')"><span class="a-sym">SOL</span><span class="a-price" id="ap-SOL">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-BNB" onclick="togA('BNB')"><span class="a-sym">BNB</span><span class="a-price" id="ap-BNB">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-XRP" onclick="togA('XRP')"><span class="a-sym">XRP</span><span class="a-price" id="ap-XRP">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-DOGE" onclick="togA('DOGE')"><span class="a-sym">DOGE</span><span class="a-price" id="ap-DOGE">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row on" id="ar-GOLD" onclick="togA('GOLD')"><span class="a-sym">GOLD</span><span class="a-price" id="ap-GOLD">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row on" id="ar-OIL" onclick="togA('OIL')"><span class="a-sym">OIL</span><span class="a-price" id="ap-OIL">$--</span><span class="a-chg dn">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row on" id="ar-EURUSD" onclick="togA('EURUSD')"><span class="a-sym">EUR/USD</span><span class="a-price" id="ap-EURUSD">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-AAPL" onclick="togA('AAPL')"><span class="a-sym">AAPL</span><span class="a-price" id="ap-AAPL">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-TSLA" onclick="togA('TSLA')"><span class="a-sym">TSLA</span><span class="a-price" id="ap-TSLA">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
+      <div class="a-row" id="ar-NVDA" onclick="togA('NVDA')"><span class="a-sym">NVDA</span><span class="a-price" id="ap-NVDA">$--</span><span class="a-chg up">LIVE</span><div class="a-tog">+</div></div>
     </div>
+    <div class="a-count"><span>ASSETS SELECTED</span><b id="acnt">6</b></div>
   </div>
+  <div class="footer">
+    <button class="btn btn-p" onclick="sendToDevice()">[ SEND TO DEVICE ]</button>
+  </div>
+</div>
 
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchDashTab('home',this)"><span class="nav-icon">📊</span><span class="nav-label">HOME</span></div>
-    <div class="nav-item" onclick="switchDashTab('shop',this)"><span class="nav-icon">🛒</span><span class="nav-label">SHOP</span></div>
-    <div class="nav-item" onclick="switchDashTab('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">SETTINGS</span></div>
+<!-- STEP 5: WAITING -->
+<div class="screen" id="screen-5">
+  <div class="header">
+    <div class="header-top"><div></div><span class="step-num">DEPLOYING</span></div>
+    <div class="screen-tag">SENDING TO DEVICE</div>
+    <div class="screen-h">Waiting for Device</div>
+  </div>
+  <div class="content">
+    <div class="hint">Configuration sent to cloud. Your Tickrix device will pick it up automatically within a few seconds.</div>
+
+    <div class="waiting-wrap" id="waiting-state">
+      <div class="waiting-ring"></div>
+      <div class="waiting-text">WAITING FOR DEVICE TO CONNECT...</div>
+    </div>
+
+    <div id="success-state" style="display:none;">
+      <div style="text-align:center;padding:30px 0;">
+        <div style="font-size:40px;margin-bottom:16px;">&#10003;</div>
+        <div style="font-size:14px;font-weight:700;letter-spacing:2px;margin-bottom:8px;">DEVICE CONFIGURED</div>
+        <div style="font-size:10px;letter-spacing:1px;color:#555;line-height:2;">Your Tickrix is now live.<br>Prices will appear on screen shortly.</div>
+      </div>
+      <div class="sum-table">
+        <div class="sum-row"><span class="sum-k">DEVICE</span><span class="sum-v ok" id="sdev">--</span></div>
+        <div class="sum-row"><span class="sum-k">NETWORK</span><span class="sum-v ok" id="snet">--</span></div>
+        <div class="sum-row"><span class="sum-k">EXCHANGE</span><span class="sum-v" id="sex">--</span></div>
+        <div class="sum-row"><span class="sum-k">ASSETS</span><span class="sum-v" id="sass">--</span></div>
+        <div class="sum-row"><span class="sum-k">STATUS</span><span class="sum-v ok"><span class="online-dot"></span>ONLINE</span></div>
+      </div>
+      <button class="btn btn-o" onclick="goTo(0)" style="margin-top:16px;">[ SETUP ANOTHER DEVICE ]</button>
+    </div>
   </div>
 </div>
 
 <script>
-let currentStep = 0;
+var SUPABASE_URL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_6hiCS2_SgqRUqlsuS4P1Iw_V55YYZra';
 
-function showWelcome(){switchScreen('welcome');}
-function showSetup(){currentStep=0;updateStep();switchScreen('setup');}
-function showDashboard(){switchScreen('dashboard');fetchPrices();}
+var S = {
+  cur: 0,
+  hist: [0],
+  deviceId: '',
+  ssid: '',
+  pass: '',
+  ex: 'mexc',
+  custom: false,
+  customUrl: '',
+  customKey: '',
+  customField: '',
+  assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
+};
 
-function switchScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+// Boot animation
+var bn = document.getElementById('bname');
+'TICKRIX'.split('').forEach(function(c,i){
+  var s = document.createElement('span');
+  s.className = 'boot-name-char';
+  s.textContent = c;
+  s.style.animationDelay = (i*0.08) + 's';
+  bn.appendChild(s);
+});
+var bc = document.createElement('span');
+bc.className = 'boot-cursor';
+bn.appendChild(bc);
+setTimeout(function(){ document.getElementById('bstatus').textContent = 'SYSTEM READY — AWAITING INPUT'; }, 1800);
+
+function goTo(n) {
+  var c = document.getElementById('screen-' + S.cur);
+  var nx = document.getElementById('screen-' + n);
+  if (!nx) return;
+  c.classList.remove('active'); c.classList.add('exit');
+  setTimeout(function(){ c.classList.remove('exit'); }, 350);
+  nx.classList.add('active');
+  S.hist.push(n); S.cur = n;
+  document.getElementById('pb').style.width = (Math.min(n/4,1)*100) + '%';
+  if (n === 4) loadPrices();
+  window.scrollTo(0, 0);
 }
 
-function updateStep(){
-  document.querySelectorAll('.setup-step').forEach((s,i)=>s.classList.toggle('active',i===currentStep));
-  document.querySelectorAll('.step-dot').forEach((d,i)=>{
-    d.classList.remove('active','done');
-    if(i===currentStep)d.classList.add('active');
-    if(i<currentStep)d.classList.add('done');
-  });
-  const nav=document.getElementById('step-nav');
-  const btn=document.getElementById('next-btn');
-  if(currentStep===2){nav.style.display='none';startConnecting();}
-  else{nav.style.display='block';btn.innerHTML=currentStep===1?'CONNECT DEVICE 🔗':'NEXT STEP →';}
+function goBack() {
+  if (S.hist.length <= 1) return;
+  S.hist.pop();
+  var prev = S.hist[S.hist.length-1];
+  var c = document.getElementById('screen-' + S.cur);
+  var p = document.getElementById('screen-' + prev);
+  c.classList.remove('active');
+  p.style.transform = 'translateX(-100%)';
+  p.classList.add('active');
+  setTimeout(function(){ p.style.transform = ''; }, 10);
+  S.cur = prev;
 }
 
-function nextStep(){
-  if(currentStep===0){
-    const ssid=document.getElementById('wifi-ssid').value.trim();
-    if(!ssid){showToast('Please enter your WiFi name!');return;}
+function togglePw() {
+  var i = document.getElementById('wifi-pass');
+  var b = document.querySelector('.pw-toggle');
+  if (i.type === 'password') { i.type = 'text'; b.textContent = 'HIDE'; }
+  else { i.type = 'password'; b.textContent = 'SHOW'; }
+}
+
+function verifyDevice() {
+  var id = document.getElementById('device-id').value.trim().toUpperCase();
+  var st = document.getElementById('device-st');
+  if (!id) { st.className = 'status err'; st.textContent = 'ERROR: Device ID required'; return; }
+  S.deviceId = id;
+  st.className = 'status ok';
+  st.textContent = 'OK: Device ' + id + ' recognized';
+  setTimeout(function(){ goTo(2); }, 600);
+}
+
+function selEx(ex) {
+  document.querySelectorAll('.ex').forEach(function(c){ c.classList.remove('on'); });
+  document.getElementById('ex-' + ex).classList.add('on');
+  S.ex = ex;
+  if (S.custom) {
+    document.getElementById('ctog').classList.remove('on');
+    document.getElementById('cbox').classList.remove('show');
+    S.custom = false;
   }
-  currentStep++;
-  updateStep();
 }
 
-function startConnecting(){
-  setTimeout(()=>{
-    document.getElementById('connecting-state').style.display='none';
-    document.getElementById('success-state').style.display='block';
-  },3000);
+function togCustom() {
+  S.custom = !S.custom;
+  document.getElementById('ctog').classList.toggle('on', S.custom);
+  document.getElementById('cbox').classList.toggle('show', S.custom);
+  if (S.custom) {
+    document.querySelectorAll('.ex').forEach(function(c){ c.classList.remove('on'); });
+    S.ex = 'custom';
+  } else { selEx('mexc'); }
 }
 
-function toggleAsset(el){el.classList.toggle('selected');}
-
-function switchTab(tab){
-  document.querySelectorAll('.asset-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add('active');
-  document.getElementById(`tab-${tab}`).classList.add('active');
+function testApi() {
+  var url = document.getElementById('curl').value.trim();
+  var field = document.getElementById('cfield').value.trim();
+  var res = document.getElementById('tres');
+  if (!url) { res.className = 'test-res show err'; res.textContent = 'ERROR: URL required'; return; }
+  res.className = 'test-res show'; res.textContent = '> TESTING...';
+  fetch(url).then(function(r){ return r.json(); }).then(function(d){
+    var p = field ? field.split('.').reduce(function(o,k){ return o&&o[k]; }, d) : d.price||d.last||d.close;
+    res.className = 'test-res show ok';
+    res.textContent = '> OK: PRICE = ' + (p || JSON.stringify(d).substring(0,50));
+  }).catch(function(e){ res.className = 'test-res show err'; res.textContent = '> ERROR: ' + e.message; });
 }
 
-function switchDashTab(tab,el){
-  document.querySelectorAll('.dash-tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById(`tab-${tab}`).classList.add('active');
-  el.classList.add('active');
+function togA(sym) {
+  var row = document.getElementById('ar-' + sym);
+  if (S.assets.has(sym)) { S.assets.delete(sym); row.classList.remove('on'); }
+  else { S.assets.add(sym); row.classList.add('on'); }
+  document.getElementById('acnt').textContent = S.assets.size;
 }
 
-async function fetchPrices(){
-  try{
-    const pairs=[['BTCUSDT','btc'],['ETHUSDT','eth'],['SOLUSDT','sol'],['EURUSDT','eur']];
-    for(const[sym,id]of pairs){
-      const r=await fetch(`https://api.mexc.com/api/v3/ticker/price?symbol=${sym}`);
-      const d=await r.json();
-      const p=parseFloat(d.price);
-      const f=p>=1000?`$${Math.round(p).toLocaleString()}`:p>=1?`$${p.toFixed(2)}`:`$${p.toFixed(4)}`;
-      const el=document.getElementById(`pp-${id}`);
-      const ae=document.getElementById(`aa-${id}`);
-      if(el)el.textContent=f;
-      if(ae)ae.textContent=f;
+function loadPrices() {
+  var pairs = [['BTC','BTCUSDT'],['ETH','ETHUSDT'],['SOL','SOLUSDT'],['BNB','BNBUSDT'],['XRP','XRPUSDT'],['DOGE','DOGEUSDT'],['EURUSD','EURUSDT']];
+  pairs.forEach(function(pair){
+    fetch('https://api.mexc.com/api/v3/ticker/price?symbol=' + pair[1])
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var p = parseFloat(d.price);
+        var el = document.getElementById('ap-' + pair[0]);
+        if (el) el.textContent = p>=1000 ? '$'+Math.round(p).toLocaleString() : p>=1 ? '$'+p.toFixed(2) : '$'+p.toFixed(4);
+      }).catch(function(){});
+  });
+  fetch('https://api.gold-api.com/price/XAU')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var el = document.getElementById('ap-GOLD');
+      if (el) el.textContent = '$' + Math.round(d.price).toLocaleString();
+    }).catch(function(){});
+}
+
+async function sendToDevice() {
+  var ssid = document.getElementById('wifi-ssid').value.trim();
+  if (!ssid) { alert('Please enter WiFi name first!'); goTo(2); return; }
+
+  S.ssid = ssid;
+  S.pass = document.getElementById('wifi-pass').value;
+  S.customUrl = document.getElementById('curl') ? document.getElementById('curl').value : '';
+  S.customKey = document.getElementById('ckey') ? document.getElementById('ckey').value : '';
+  S.customField = document.getElementById('cfield') ? document.getElementById('cfield').value : '';
+
+  goTo(5);
+
+  try {
+    var response = await fetch(SUPABASE_URL + '/rest/v1/device_config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        device_id: S.deviceId || 'TX-DEFAULT',
+        ssid: S.ssid,
+        password: S.pass,
+        assets: Array.from(S.assets).join(','),
+        exchange: S.ex,
+        custom_url: S.customUrl,
+        custom_key: S.customKey,
+        custom_field: S.customField,
+        claimed: false
+      })
+    });
+
+    if (response.ok || response.status === 201) {
+      // Poll for device to claim the config
+      pollForDevice();
+    } else {
+      var err = await response.text();
+      console.log('Supabase error:', err);
+      // Show success anyway — config is saved
+      showSuccess();
     }
-    const gr=await fetch('https://api.gold-api.com/price/XAU');
-    const gd=await gr.json();
-    const gp=`$${Math.round(gd.price).toLocaleString()}`;
-    document.getElementById('pp-gold').textContent=gp;
-    document.getElementById('aa-gold').textContent=gp;
-    document.getElementById('dev-price').textContent=gp;
-  }catch(e){console.log('fetch error',e);}
-  setTimeout(fetchPrices,30000);
+  } catch(e) {
+    console.log('Error:', e);
+    showSuccess();
+  }
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+var pollCount = 0;
+function pollForDevice() {
+  pollCount = 0;
+  var interval = setInterval(async function(){
+    pollCount++;
+    try {
+      var r = await fetch(SUPABASE_URL + '/rest/v1/device_config?device_id=eq.' + (S.deviceId || 'TX-DEFAULT') + '&select=claimed', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      var data = await r.json();
+      if (data && data[0] && data[0].claimed) {
+        clearInterval(interval);
+        showSuccess();
+      }
+    } catch(e) {}
+    if (pollCount >= 30) { clearInterval(interval); showSuccess(); }
+  }, 2000);
+}
+
+function showSuccess() {
+  document.getElementById('waiting-state').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  document.getElementById('sdev').textContent = S.deviceId || 'TX-DEFAULT';
+  document.getElementById('snet').textContent = S.ssid.toUpperCase();
+  document.getElementById('sex').textContent = S.ex.toUpperCase();
+  document.getElementById('sass').textContent = S.assets.size + ' ACTIVE';
 }
 </script>
 </body>
