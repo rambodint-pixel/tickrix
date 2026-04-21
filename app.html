@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TICKRIX SETUP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:100vh;}
+.page{display:none;padding:40px 24px 100px;}
+.page.show{display:block;}
+.logo{font-size:36px;font-weight:700;letter-spacing:8px;margin-bottom:8px;}
+.sub{font-size:10px;letter-spacing:4px;color:#555;margin-bottom:60px;}
+.tag{font-size:10px;letter-spacing:4px;color:#00aaff;margin-bottom:8px;}
+.tag::before{content:'> ';}
+.title{font-size:22px;font-weight:700;margin-bottom:24px;}
+.hint{font-size:11px;color:#555;line-height:1.9;padding:10px 12px;border-left:2px solid #333;margin-bottom:24px;letter-spacing:1px;}
+.label{font-size:9px;letter-spacing:3px;color:#555;margin-bottom:6px;display:block;}
+.inp{width:100%;background:#000;border:1px solid #333;padding:14px;font-family:'Courier New',monospace;font-size:14px;color:#fff;outline:none;margin-bottom:16px;-webkit-appearance:none;}
+.inp:focus{border-color:#00aaff;}
+.inp::placeholder{color:#444;}
+.btn{width:100%;padding:16px;background:#fff;color:#000;font-family:'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:3px;border:none;cursor:pointer;margin-bottom:8px;display:block;text-align:center;}
+.btn:active{opacity:0.8;}
+.btn-out{background:#000;color:#fff;border:1px solid #333;}
+.status{font-size:11px;letter-spacing:1px;padding:10px 12px;border-left:2px solid #333;margin-bottom:16px;color:#555;}
+.status.ok{border-color:#00e676;color:#00e676;}
+.status.err{border-color:#ff1744;color:#ff1744;}
+.ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.ex{border:1px solid #333;padding:14px;cursor:pointer;}
+.ex.on{border-color:#00aaff;background:rgba(0,170,255,0.05);}
+.ex-n{font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:2px;}
+.ex-t{font-size:9px;letter-spacing:1px;color:#555;}
+.custom-box{border:1px solid #333;padding:16px;margin-bottom:16px;display:none;}
+.custom-box.show{display:block;}
+.tog-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #1a1a1a;margin-bottom:16px;cursor:pointer;}
+.tog-lbl{font-size:11px;letter-spacing:1px;}
+.tog-sub{font-size:9px;color:#555;margin-top:2px;letter-spacing:1px;}
+.tog{width:38px;height:20px;border:1px solid #333;position:relative;flex-shrink:0;}
+.tog.on{border-color:#00aaff;}
+.tog-k{position:absolute;top:2px;left:2px;width:14px;height:14px;background:#333;transition:left 0.2s;}
+.tog.on .tog-k{left:20px;background:#00aaff;}
+.a-table{border:1px solid #1a1a1a;margin-bottom:12px;}
+.a-head{display:grid;grid-template-columns:1fr 1fr 50px 32px;padding:8px 12px;border-bottom:1px solid #1a1a1a;font-size:9px;letter-spacing:2px;color:#555;}
+.a-row{display:grid;grid-template-columns:1fr 1fr 50px 32px;padding:12px;border-bottom:1px solid #1a1a1a;align-items:center;cursor:pointer;}
+.a-row:last-child{border-bottom:none;}
+.a-row.on{background:rgba(0,170,255,0.04);}
+.a-s{font-size:12px;font-weight:700;letter-spacing:1px;}
+.a-p{font-size:11px;color:#555;}
+.a-c{font-size:9px;color:#555;}
+.a-c.up{color:#00e676;}
+.a-t{width:22px;height:22px;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:14px;color:#333;justify-self:end;}
+.a-row.on .a-t{border-color:#00aaff;color:#00aaff;}
+.a-cnt{font-size:9px;letter-spacing:2px;color:#555;padding:8px 12px;border:1px solid #1a1a1a;display:flex;justify-content:space-between;margin-bottom:16px;}
+.a-cnt b{color:#00aaff;}
+.sum{border:1px solid #1a1a1a;margin-bottom:20px;}
+.sum-r{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #1a1a1a;font-size:11px;letter-spacing:1px;}
+.sum-r:last-child{border-bottom:none;}
+.sum-k{color:#555;}
+.sum-v{font-weight:700;}
+.sum-v.ok{color:#00e676;}
+.spin{width:40px;height:40px;border:1px solid #333;border-top-color:#00aaff;border-radius:50%;animation:spin 1s linear infinite;margin:30px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.back{font-size:11px;letter-spacing:2px;color:#555;cursor:pointer;display:inline-block;margin-bottom:20px;}
+.back::before{content:'< ';}
+.prog{position:fixed;top:0;left:0;height:2px;background:#00aaff;transition:width 0.4s;z-index:99;}
+.dot{display:inline-block;width:7px;height:7px;background:#00e676;margin-right:6px;animation:blink 1.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog" style="width:0%"></div>
+
+<!-- PAGE 0: BOOT -->
+<div class="page show" id="p0">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
+    <div class="logo">TICKRIX</div>
+    <div class="sub">MARKET DISPLAY SYSTEM</div>
+    <div style="font-size:10px;letter-spacing:2px;color:#555;margin-bottom:60px;">v2.0 — CLOUD SETUP</div>
+    <button class="btn" style="max-width:300px;" onclick="show(1)">[ SETUP MY DEVICE ]</button>
+  </div>
+</div>
+
+<!-- PAGE 1: DEVICE ID -->
+<div class="page" id="p1">
+  <span class="back" onclick="show(0)">BACK</span>
+  <div class="tag">DEVICE IDENTIFICATION</div>
+  <div class="title">Enter Device ID</div>
+  <div class="hint">Power on your Tickrix device and hold the BOOT button. The Device ID appears on screen. Enter it below.</div>
+  <label class="label">// DEVICE ID</label>
+  <input type="text" class="inp" id="dev-id" placeholder="TX-A1B2C3" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" style="letter-spacing:4px;font-size:18px;">
+  <div class="status" id="dev-st">ENTER YOUR DEVICE ID</div>
+  <button class="btn" onclick="verifyDev()">[ VERIFY DEVICE ]</button>
+</div>
+
+<!-- PAGE 2: WIFI -->
+<div class="page" id="p2">
+  <span class="back" onclick="show(1)">BACK</span>
+  <div class="tag">NETWORK CONFIGURATION</div>
+  <div class="title">Connect to WiFi</div>
+  <div class="hint">Enter the WiFi credentials for where your Tickrix device will be placed.</div>
+  <label class="label">// NETWORK NAME (SSID)</label>
+  <input type="text" class="inp" id="w-ssid" placeholder="YourNetworkName" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+  <label class="label">// PASSWORD</label>
+  <input type="password" class="inp" id="w-pass" placeholder="Enter password">
+  <div class="status" id="w-st">READY</div>
+  <button class="btn" onclick="nextWifi()">[ NEXT — SELECT EXCHANGE ]</button>
+</div>
+
+<!-- PAGE 3: EXCHANGE -->
+<div class="page" id="p3">
+  <span class="back" onclick="show(2)">BACK</span>
+  <div class="tag">DATA SOURCE</div>
+  <div class="title">Select Exchange</div>
+  <div class="hint">Select your preferred exchange. Use Custom API for any provider worldwide.</div>
+  <div class="ex-grid">
+    <div class="ex on" id="ex-mexc" onclick="selEx('mexc')"><div class="ex-n">MEXC</div><div class="ex-t">FREE API</div></div>
+    <div class="ex" id="ex-binance" onclick="selEx('binance')"><div class="ex-n">BINANCE</div><div class="ex-t">FREE API</div></div>
+    <div class="ex" id="ex-bybit" onclick="selEx('bybit')"><div class="ex-n">BYBIT</div><div class="ex-t">FREE API</div></div>
+    <div class="ex" id="ex-lbank" onclick="selEx('lbank')"><div class="ex-n">LBANK</div><div class="ex-t">FREE API</div></div>
+    <div class="ex" id="ex-kraken" onclick="selEx('kraken')"><div class="ex-n">KRAKEN</div><div class="ex-t">FREE API</div></div>
+    <div class="ex" id="ex-coinbase" onclick="selEx('coinbase')"><div class="ex-n">COINBASE</div><div class="ex-t">FREE API</div></div>
+  </div>
+  <div class="tog-row" onclick="togC()">
+    <div><div class="tog-lbl">CUSTOM API ENDPOINT</div><div class="tog-sub">USE ANY EXCHANGE WORLDWIDE</div></div>
+    <div class="tog" id="ctog"><div class="tog-k"></div></div>
+  </div>
+  <div class="custom-box" id="cbox">
+    <label class="label">// API ENDPOINT URL</label>
+    <input type="text" class="inp" id="c-url" placeholder="https://api.exchange.com/price?symbol=BTC" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+    <label class="label">// API KEY (OPTIONAL)</label>
+    <input type="text" class="inp" id="c-key" placeholder="Leave empty if not required" autocomplete="off" spellcheck="false">
+    <label class="label">// PRICE FIELD PATH</label>
+    <input type="text" class="inp" id="c-field" placeholder="e.g. price or data.ticker.latest" autocomplete="off" spellcheck="false">
+    <button class="btn btn-out" onclick="testApi()">[ TEST CONNECTION ]</button>
+    <div class="status" id="t-res" style="margin-top:8px;display:none;"></div>
+  </div>
+  <button class="btn" onclick="show(4);loadPrices()">[ NEXT — SELECT ASSETS ]</button>
+</div>
+
+<!-- PAGE 4: ASSETS -->
+<div class="page" id="p4">
+  <span class="back" onclick="show(3)">BACK</span>
+  <div class="tag">ASSET CONFIGURATION</div>
+  <div class="title">Select Assets</div>
+  <div class="hint">Select which assets rotate on your display.</div>
+  <div class="a-table">
+    <div class="a-head"><span>SYMBOL</span><span>PRICE</span><span>STATUS</span><span></span></div>
+    <div class="a-row on" id="ar-BTC" onclick="togA('BTC')"><span class="a-s">BTC</span><span class="a-p" id="ap-BTC">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row on" id="ar-ETH" onclick="togA('ETH')"><span class="a-s">ETH</span><span class="a-p" id="ap-ETH">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row on" id="ar-SOL" onclick="togA('SOL')"><span class="a-s">SOL</span><span class="a-p" id="ap-SOL">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-BNB" onclick="togA('BNB')"><span class="a-s">BNB</span><span class="a-p" id="ap-BNB">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-XRP" onclick="togA('XRP')"><span class="a-s">XRP</span><span class="a-p" id="ap-XRP">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-DOGE" onclick="togA('DOGE')"><span class="a-s">DOGE</span><span class="a-p" id="ap-DOGE">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row on" id="ar-GOLD" onclick="togA('GOLD')"><span class="a-s">GOLD</span><span class="a-p" id="ap-GOLD">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row on" id="ar-OIL" onclick="togA('OIL')"><span class="a-s">OIL</span><span class="a-p" id="ap-OIL">$--</span><span class="a-c">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row on" id="ar-EURUSD" onclick="togA('EURUSD')"><span class="a-s">EUR/USD</span><span class="a-p" id="ap-EURUSD">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-AAPL" onclick="togA('AAPL')"><span class="a-s">AAPL</span><span class="a-p" id="ap-AAPL">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-TSLA" onclick="togA('TSLA')"><span class="a-s">TSLA</span><span class="a-p" id="ap-TSLA">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+    <div class="a-row" id="ar-NVDA" onclick="togA('NVDA')"><span class="a-s">NVDA</span><span class="a-p" id="ap-NVDA">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
+  </div>
+  <div class="a-cnt"><span>ASSETS SELECTED</span><b id="acnt">6</b></div>
+  <button class="btn" onclick="sendConfig()">[ SEND TO DEVICE ]</button>
+</div>
+
+<!-- PAGE 5: SENDING -->
+<div class="page" id="p5">
+  <div class="tag">DEPLOYING</div>
+  <div class="title">Sending to Device</div>
+  <div class="hint">Configuration sent to cloud. Your Tickrix device will pick it up automatically.</div>
+  <div class="spin" id="spin"></div>
+  <div class="status loading" id="send-st" style="border-color:#00aaff;color:#00aaff;text-align:center;">WAITING FOR DEVICE...</div>
+  <div id="send-success" style="display:none;">
+    <div class="sum">
+      <div class="sum-r"><span class="sum-k">DEVICE</span><span class="sum-v ok" id="s-dev">--</span></div>
+      <div class="sum-r"><span class="sum-k">NETWORK</span><span class="sum-v ok" id="s-net">--</span></div>
+      <div class="sum-r"><span class="sum-k">EXCHANGE</span><span class="sum-v" id="s-ex">--</span></div>
+      <div class="sum-r"><span class="sum-k">ASSETS</span><span class="sum-v" id="s-ass">--</span></div>
+      <div class="sum-r"><span class="sum-k">STATUS</span><span class="sum-v ok"><span class="dot"></span>ONLINE</span></div>
+    </div>
+    <button class="btn btn-out" onclick="show(0)">[ SETUP ANOTHER DEVICE ]</button>
+  </div>
+</div>
+
+<script>
+var SURL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
+var SKEY = 'sb_publishable_6hiCS2_SgqRUqlsuS4P1Iw_V55YYZra';
+
+var state = {
+  devId: '',
+  ssid: '',
+  pass: '',
+  ex: 'mexc',
+  custom: false,
+  assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
+};
+
+var prog = [0,16,32,48,64,80];
+
+function show(n) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('show'); });
+  document.getElementById('p'+n).classList.add('show');
+  document.getElementById('prog').style.width = prog[n] + '%';
+  window.scrollTo(0,0);
+}
+
+function verifyDev() {
+  var id = document.getElementById('dev-id').value.trim().toUpperCase();
+  var st = document.getElementById('dev-st');
+  if (!id) { st.className = 'status err'; st.textContent = 'ERROR: Device ID required'; return; }
+  state.devId = id;
+  st.className = 'status ok';
+  st.textContent = 'OK: Device ' + id + ' verified';
+  setTimeout(function(){ show(2); }, 600);
+}
+
+function nextWifi() {
+  var ssid = document.getElementById('w-ssid').value.trim();
+  var st = document.getElementById('w-st');
+  if (!ssid) { st.className = 'status err'; st.textContent = 'ERROR: Network name required'; return; }
+  state.ssid = ssid;
+  state.pass = document.getElementById('w-pass').value;
+  st.className = 'status ok';
+  st.textContent = 'OK: ' + ssid;
+  setTimeout(function(){ show(3); }, 400);
+}
+
+function selEx(ex) {
+  document.querySelectorAll('.ex').forEach(function(e){ e.classList.remove('on'); });
+  document.getElementById('ex-'+ex).classList.add('on');
+  state.ex = ex;
+  if (state.custom) {
+    document.getElementById('ctog').classList.remove('on');
+    document.getElementById('cbox').classList.remove('show');
+    state.custom = false;
+  }
+}
+
+function togC() {
+  state.custom = !state.custom;
+  document.getElementById('ctog').classList.toggle('on', state.custom);
+  document.getElementById('cbox').classList.toggle('show', state.custom);
+  if (state.custom) {
+    document.querySelectorAll('.ex').forEach(function(e){ e.classList.remove('on'); });
+    state.ex = 'custom';
+  } else { selEx('mexc'); }
+}
+
+function testApi() {
+  var url = document.getElementById('c-url').value.trim();
+  var field = document.getElementById('c-field').value.trim();
+  var res = document.getElementById('t-res');
+  res.style.display = 'block';
+  if (!url) { res.className = 'status err'; res.textContent = 'ERROR: URL required'; return; }
+  res.className = 'status'; res.textContent = '> TESTING...';
+  fetch(url).then(function(r){ return r.json(); }).then(function(d){
+    var p = field ? field.split('.').reduce(function(o,k){ return o&&o[k]; },d) : d.price||d.last||d.close;
+    res.className = 'status ok';
+    res.textContent = '> OK: PRICE = ' + (p || JSON.stringify(d).substring(0,40));
+  }).catch(function(e){
+    res.className = 'status err';
+    res.textContent = '> ERROR: ' + e.message;
+  });
+}
+
+function togA(sym) {
+  var row = document.getElementById('ar-'+sym);
+  if (state.assets.has(sym)) { state.assets.delete(sym); row.classList.remove('on'); }
+  else { state.assets.add(sym); row.classList.add('on'); }
+  document.getElementById('acnt').textContent = state.assets.size;
+}
+
+function loadPrices() {
+  var pairs = [['BTC','BTCUSDT'],['ETH','ETHUSDT'],['SOL','SOLUSDT'],['BNB','BNBUSDT'],['XRP','XRPUSDT'],['DOGE','DOGEUSDT'],['EURUSD','EURUSDT']];
+  pairs.forEach(function(pair){
+    fetch('https://api.mexc.com/api/v3/ticker/price?symbol='+pair[1])
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var p = parseFloat(d.price);
+        var el = document.getElementById('ap-'+pair[0]);
+        if (el) el.textContent = p>=1000?'$'+Math.round(p).toLocaleString():p>=1?'$'+p.toFixed(2):'$'+p.toFixed(4);
+      }).catch(function(){});
+  });
+  fetch('https://api.gold-api.com/price/XAU')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var el = document.getElementById('ap-GOLD');
+      if (el) el.textContent = '$'+Math.round(d.price).toLocaleString();
+    }).catch(function(){});
+}
+
+async function sendConfig() {
+  show(5);
+  try {
+    var resp = await fetch(SURL + '/rest/v1/device_config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SKEY,
+        'Authorization': 'Bearer ' + SKEY,
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        device_id: state.devId || 'TX-DEFAULT',
+        ssid: state.ssid,
+        password: state.pass,
+        assets: Array.from(state.assets).join(','),
+        exchange: state.ex,
+        custom_url: document.getElementById('c-url').value || '',
+        custom_key: document.getElementById('c-key').value || '',
+        custom_field: document.getElementById('c-field').value || '',
+        claimed: false
+      })
+    });
+    console.log('Supabase response:', resp.status);
+  } catch(e) { console.log('Error:', e); }
+
+  // Show success after 3 seconds
+  setTimeout(function(){
+    document.getElementById('spin').style.display = 'none';
+    document.getElementById('send-st').style.display = 'none';
+    document.getElementById('send-success').style.display = 'block';
+    document.getElementById('s-dev').textContent = state.devId || 'TX-DEFAULT';
+    document.getElementById('s-net').textContent = state.ssid.toUpperCase();
+    document.getElementById('s-ex').textContent = state.ex.toUpperCase();
+    document.getElementById('s-ass').textContent = state.assets.size + ' ACTIVE';
+    document.getElementById('prog').style.width = '100%';
+  }, 3000);
+}
+</script>
+</body>
+</html>
