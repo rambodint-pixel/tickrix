@@ -310,11 +310,19 @@ function loadCurrentConfig(devId, callback) {
 
     state.ex = cfg.exchange || 'mexc';
     state.custom = state.ex === 'custom';
-    if (cfg.assets) state.assets = new Set(cfg.assets.split(','));
+
+    // Normalize asset names from Supabase (handle EUR/USD → EURUSD mismatch)
+    if (cfg.assets) {
+      var rawAssets = cfg.assets.split(',').map(function(s){ return s.trim(); });
+      var normalized = rawAssets.map(function(a){
+        return a === 'EUR/USD' ? 'EURUSD' : a;
+      }).filter(Boolean);
+      state.assets = new Set(normalized);
+    }
 
     document.getElementById('m-dev').textContent = devId;
     document.getElementById('m-ex').textContent = (cfg.exchange || 'MEXC').toUpperCase();
-    document.getElementById('m-ass').textContent = (cfg.assets || '').split(',').filter(Boolean).length + ' ACTIVE';
+    document.getElementById('m-ass').textContent = state.assets.size + ' ACTIVE';
 
     document.querySelectorAll('.ex').forEach(function(e){ e.classList.remove('on'); });
     if (state.custom) {
@@ -418,6 +426,20 @@ async function sendConfig() {
   document.getElementById('send-st').style.display = 'block';
   document.getElementById('send-success').style.display = 'none';
 
+  // Convert EURUSD back to EUR/USD for device firmware compatibility
+  var assetsList = Array.from(state.assets).map(function(a){
+    return a === 'EURUSD' ? 'EUR/USD' : a;
+  });
+
+  // Log what we're sending (for debug)
+  console.log('SENDING TO SUPABASE:', {
+    device_id: state.devId,
+    exchange: state.ex,
+    assets: assetsList.join(','),
+    custom_url: document.getElementById('c-url').value || '',
+    claimed: false
+  });
+
   try {
     var resp = await fetch(SURL + '/rest/v1/device_config', {
       method: 'POST',
@@ -429,7 +451,7 @@ async function sendConfig() {
       },
       body: JSON.stringify({
         device_id: state.devId,
-        assets: Array.from(state.assets).join(','),
+        assets: assetsList.join(','),
         exchange: state.ex,
         custom_url: document.getElementById('c-url').value || '',
         custom_key: document.getElementById('c-key').value || '',
