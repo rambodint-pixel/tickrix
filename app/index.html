@@ -431,34 +431,52 @@ async function sendConfig() {
     return a === 'EURUSD' ? 'EUR/USD' : a;
   });
 
-  // Log what we're sending (for debug)
-  console.log('SENDING TO SUPABASE:', {
+  var body = {
     device_id: state.devId,
-    exchange: state.ex,
     assets: assetsList.join(','),
+    exchange: state.ex,
     custom_url: document.getElementById('c-url').value || '',
+    custom_key: document.getElementById('c-key').value || '',
+    custom_field: document.getElementById('c-field').value || '',
     claimed: false
-  });
+  };
+
+  console.log('SENDING TO SUPABASE (mode=' + state.mode + '):', body);
 
   try {
-    var resp = await fetch(SURL + '/rest/v1/device_config', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SKEY,
-        'Authorization': 'Bearer ' + SKEY,
-        'Prefer': 'resolution=merge-duplicates'
-      },
-      body: JSON.stringify({
-        device_id: state.devId,
-        assets: assetsList.join(','),
-        exchange: state.ex,
-        custom_url: document.getElementById('c-url').value || '',
-        custom_key: document.getElementById('c-key').value || '',
-        custom_field: document.getElementById('c-field').value || '',
-        claimed: false
-      })
-    });
+    var resp;
+    if (state.mode === 'manage') {
+      // UPDATE existing row using PATCH with device_id filter
+      resp = await fetch(SURL + '/rest/v1/device_config?device_id=eq.' + state.devId, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SKEY,
+          'Authorization': 'Bearer ' + SKEY,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          assets: body.assets,
+          exchange: body.exchange,
+          custom_url: body.custom_url,
+          custom_key: body.custom_key,
+          custom_field: body.custom_field,
+          claimed: false  // critical: set to false so device picks it up
+        })
+      });
+    } else {
+      // INSERT new row for fresh setup
+      resp = await fetch(SURL + '/rest/v1/device_config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SKEY,
+          'Authorization': 'Bearer ' + SKEY,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(body)
+      });
+    }
     console.log('Supabase response:', resp.status);
   } catch(e) { console.log('Error:', e); }
 
