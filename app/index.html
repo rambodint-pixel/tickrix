@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TICKRIX SETUP</title>
+<title>TICKRIX</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:100vh;}
@@ -65,51 +65,87 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .prog{position:fixed;top:0;left:0;height:2px;background:#00aaff;transition:width 0.4s;z-index:99;}
 .dot{display:inline-block;width:7px;height:7px;background:#00e676;margin-right:6px;animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+.info-box{border:1px dashed #333;padding:12px;margin-bottom:16px;font-size:10px;color:#888;letter-spacing:1px;line-height:1.7;}
+.info-box b{color:#00aaff;}
+.current-box{border:1px solid #00aaff;padding:14px;margin-bottom:20px;background:rgba(0,170,255,0.04);}
+.current-title{font-size:9px;letter-spacing:3px;color:#00aaff;margin-bottom:10px;}
+.current-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;letter-spacing:1px;}
+.current-k{color:#666;}
+.current-v{font-weight:700;color:#fff;}
+.home-btn{width:100%;padding:22px;background:#000;color:#fff;font-family:'Courier New',monospace;font-size:13px;font-weight:700;letter-spacing:4px;border:1px solid #333;cursor:pointer;margin-bottom:12px;display:block;text-align:center;transition:border-color 0.2s;}
+.home-btn:hover{border-color:#00aaff;}
+.home-btn-sub{font-size:9px;letter-spacing:2px;color:#555;margin-top:6px;font-weight:400;}
+.home-btn.primary{background:#fff;color:#000;border-color:#fff;}
+.home-btn.primary .home-btn-sub{color:#555;}
 </style>
 </head>
 <body>
 
 <div class="prog" id="prog" style="width:0%"></div>
 
-<!-- PAGE 0: BOOT -->
+<!-- PAGE 0: HOME -->
 <div class="page show" id="p0">
-  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
-    <div class="logo">TICKRIX</div>
-    <div class="sub">MARKET DISPLAY SYSTEM</div>
-    <div style="font-size:10px;letter-spacing:2px;color:#555;margin-bottom:60px;">v2.0 — CLOUD SETUP</div>
-    <button class="btn" style="max-width:300px;" onclick="show(1)">[ SETUP MY DEVICE ]</button>
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;">
+    <div style="text-align:center;margin-bottom:50px;">
+      <div class="logo">TICKRIX</div>
+      <div class="sub">MARKET DISPLAY SYSTEM</div>
+    </div>
+    <div style="width:100%;max-width:340px;">
+      <button class="home-btn primary" onclick="startNewSetup()">
+        SETUP NEW DEVICE
+        <div class="home-btn-sub">FIRST TIME CONFIGURATION</div>
+      </button>
+      <button class="home-btn" onclick="startManage()">
+        MANAGE MY DEVICE
+        <div class="home-btn-sub">CHANGE EXCHANGE / ASSETS</div>
+      </button>
+    </div>
   </div>
 </div>
 
 <!-- PAGE 1: DEVICE ID -->
 <div class="page" id="p1">
-  <span class="back" onclick="show(0)">BACK</span>
-  <div class="tag">DEVICE IDENTIFICATION</div>
+  <span class="back" onclick="goHome()">BACK</span>
+  <div class="tag" id="p1-tag">DEVICE IDENTIFICATION</div>
   <div class="title">Enter Device ID</div>
-  <div class="hint">Power on your Tickrix device and hold the BOOT button. The Device ID appears on screen. Enter it below.</div>
+  <div class="hint" id="p1-hint">Your Tickrix device must be connected to WiFi. The Device ID appears on screen when the device shows "ALMOST READY".</div>
+  <div class="info-box" id="p1-info">
+    <b>FIRST TIME?</b><br>
+    1. Plug in device<br>
+    2. Join WiFi "Tickrix-Setup" (pass: tickrix123)<br>
+    3. Open 192.168.4.1 on your phone<br>
+    4. Enter home WiFi → Save<br>
+    5. Device ID appears on screen<br>
+    6. Come back here ↓
+  </div>
   <label class="label">// DEVICE ID</label>
   <input type="text" class="inp" id="dev-id" placeholder="TX-A1B2C3" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false" style="letter-spacing:4px;font-size:18px;">
   <div class="status" id="dev-st">ENTER YOUR DEVICE ID</div>
-  <button class="btn" onclick="verifyDev()">[ VERIFY DEVICE ]</button>
+  <button class="btn" onclick="verifyDev()" id="p1-btn">[ VERIFY DEVICE ]</button>
 </div>
 
-<!-- PAGE 2: WIFI -->
+<!-- PAGE 2: MANAGE HUB (only shown in manage mode) -->
+<div class="page" id="p2m">
+  <span class="back" onclick="goHome()">BACK</span>
+  <div class="tag">DEVICE MANAGEMENT</div>
+  <div class="title">Your Device</div>
+  <div class="current-box">
+    <div class="current-title">CURRENT CONFIGURATION</div>
+    <div class="current-row"><span class="current-k">DEVICE ID</span><span class="current-v" id="m-dev">--</span></div>
+    <div class="current-row"><span class="current-k">EXCHANGE</span><span class="current-v" id="m-ex">--</span></div>
+    <div class="current-row"><span class="current-k">ASSETS</span><span class="current-v" id="m-ass">--</span></div>
+  </div>
+  <button class="btn" onclick="show(2)">[ CHANGE EXCHANGE / API ]</button>
+  <button class="btn btn-out" onclick="show(3);loadPrices()">[ CHANGE ASSETS ]</button>
+  <div class="info-box" style="margin-top:16px;">
+    <b>NEED TO CHANGE WIFI?</b><br>
+    Click the BOOT button on your device 4 times quickly, then hold for 3 seconds to reset WiFi. Your exchange and assets will be preserved.
+  </div>
+</div>
+
+<!-- PAGE 2: EXCHANGE -->
 <div class="page" id="p2">
-  <span class="back" onclick="show(1)">BACK</span>
-  <div class="tag">NETWORK CONFIGURATION</div>
-  <div class="title">Connect to WiFi</div>
-  <div class="hint">Enter the WiFi credentials for where your Tickrix device will be placed.</div>
-  <label class="label">// NETWORK NAME (SSID)</label>
-  <input type="text" class="inp" id="w-ssid" placeholder="YourNetworkName" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-  <label class="label">// PASSWORD</label>
-  <input type="password" class="inp" id="w-pass" placeholder="Enter password">
-  <div class="status" id="w-st">READY</div>
-  <button class="btn" onclick="nextWifi()">[ NEXT — SELECT EXCHANGE ]</button>
-</div>
-
-<!-- PAGE 3: EXCHANGE -->
-<div class="page" id="p3">
-  <span class="back" onclick="show(2)">BACK</span>
+  <span class="back" onclick="backFromEx()">BACK</span>
   <div class="tag">DATA SOURCE</div>
   <div class="title">Select Exchange</div>
   <div class="hint">Select your preferred exchange. Use Custom API for any provider worldwide.</div>
@@ -135,12 +171,12 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
     <button class="btn btn-out" onclick="testApi()">[ TEST CONNECTION ]</button>
     <div class="status" id="t-res" style="margin-top:8px;display:none;"></div>
   </div>
-  <button class="btn" onclick="show(4);loadPrices()">[ NEXT — SELECT ASSETS ]</button>
+  <button class="btn" id="p2-btn" onclick="nextFromEx()">[ NEXT — SELECT ASSETS ]</button>
 </div>
 
-<!-- PAGE 4: ASSETS -->
-<div class="page" id="p4">
-  <span class="back" onclick="show(3)">BACK</span>
+<!-- PAGE 3: ASSETS -->
+<div class="page" id="p3">
+  <span class="back" onclick="backFromAssets()">BACK</span>
   <div class="tag">ASSET CONFIGURATION</div>
   <div class="title">Select Assets</div>
   <div class="hint">Select which assets rotate on your display.</div>
@@ -163,67 +199,154 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
   <button class="btn" onclick="sendConfig()">[ SEND TO DEVICE ]</button>
 </div>
 
-<!-- PAGE 5: SENDING -->
-<div class="page" id="p5">
+<!-- PAGE 4: SENDING -->
+<div class="page" id="p4">
   <div class="tag">DEPLOYING</div>
   <div class="title">Sending to Device</div>
-  <div class="hint">Configuration sent to cloud. Your Tickrix device will pick it up automatically.</div>
+  <div class="hint">Configuration sent to cloud. Your Tickrix device will pick it up within 5 seconds.</div>
   <div class="spin" id="spin"></div>
   <div class="status loading" id="send-st" style="border-color:#00aaff;color:#00aaff;text-align:center;">WAITING FOR DEVICE...</div>
   <div id="send-success" style="display:none;">
     <div class="sum">
       <div class="sum-r"><span class="sum-k">DEVICE</span><span class="sum-v ok" id="s-dev">--</span></div>
-      <div class="sum-r"><span class="sum-k">NETWORK</span><span class="sum-v ok" id="s-net">--</span></div>
       <div class="sum-r"><span class="sum-k">EXCHANGE</span><span class="sum-v" id="s-ex">--</span></div>
       <div class="sum-r"><span class="sum-k">ASSETS</span><span class="sum-v" id="s-ass">--</span></div>
       <div class="sum-r"><span class="sum-k">STATUS</span><span class="sum-v ok"><span class="dot"></span>ONLINE</span></div>
     </div>
-    <button class="btn btn-out" onclick="show(0)">[ SETUP ANOTHER DEVICE ]</button>
+    <button class="btn btn-out" onclick="goHome()">[ DONE ]</button>
   </div>
 </div>
 
 <script>
 var SURL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
-var SKEY = 'sb_publishable_6hiCS2_SgqRUqlsuS4P1Iw_V55YYZra';
+var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZ3J3cWhtc25xZ3F1c3ZtbW53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTI0MDMsImV4cCI6MjA5MjM2ODQwM30.K_y6m2FrNcGn6qM2voOUEzft8T9f_KwbCpNXZRFDpx8';
 
 var state = {
+  mode: 'new',
   devId: '',
-  ssid: '',
-  pass: '',
   ex: 'mexc',
   custom: false,
   assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
 };
 
-var prog = [0,16,32,48,64,80];
+var progMap = {p0:0, p1:20, p2m:50, p2:60, p3:80, p4:100};
 
 function show(n) {
+  var pageId = (typeof n === 'string') ? n : 'p'+n;
   document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('show'); });
-  document.getElementById('p'+n).classList.add('show');
-  document.getElementById('prog').style.width = prog[n] + '%';
+  document.getElementById(pageId).classList.add('show');
+  document.getElementById('prog').style.width = (progMap[pageId] || 0) + '%';
   window.scrollTo(0,0);
+}
+
+function goHome() {
+  state = {
+    mode: 'new',
+    devId: '',
+    ex: 'mexc',
+    custom: false,
+    assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
+  };
+  document.getElementById('dev-id').value = '';
+  document.getElementById('prog').style.width = '0%';
+  show('p0');
+}
+
+function startNewSetup() {
+  state.mode = 'new';
+  document.getElementById('p1-tag').textContent = 'DEVICE IDENTIFICATION';
+  document.getElementById('p1-info').style.display = 'block';
+  document.getElementById('p1-btn').textContent = '[ VERIFY DEVICE ]';
+  show('p1');
+}
+
+function startManage() {
+  state.mode = 'manage';
+  document.getElementById('p1-tag').textContent = 'DEVICE MANAGEMENT';
+  document.getElementById('p1-info').style.display = 'none';
+  document.getElementById('p1-btn').textContent = '[ LOAD MY DEVICE ]';
+  show('p1');
 }
 
 function verifyDev() {
   var id = document.getElementById('dev-id').value.trim().toUpperCase();
   var st = document.getElementById('dev-st');
   if (!id) { st.className = 'status err'; st.textContent = 'ERROR: Device ID required'; return; }
+  if (!/^TX-[A-F0-9]{6}$/.test(id)) {
+    st.className = 'status err';
+    st.textContent = 'ERROR: Format must be TX-XXXXXX (hex, like TX-32BE74)';
+    return;
+  }
   state.devId = id;
-  st.className = 'status ok';
-  st.textContent = 'OK: Device ' + id + ' verified';
-  setTimeout(function(){ show(2); }, 600);
+
+  if (state.mode === 'manage') {
+    st.className = 'status';
+    st.textContent = '> LOADING CURRENT CONFIG...';
+    loadCurrentConfig(id, function(success) {
+      if (success) {
+        st.className = 'status ok';
+        st.textContent = 'OK: Device ' + id + ' loaded';
+        setTimeout(function(){ show('p2m'); }, 400);
+      } else {
+        st.className = 'status err';
+        st.textContent = 'ERROR: Device not found. Use "Setup New Device" first.';
+      }
+    });
+  } else {
+    st.className = 'status ok';
+    st.textContent = 'OK: Device ' + id + ' verified';
+    setTimeout(function(){ show('p2'); }, 400);
+  }
 }
 
-function nextWifi() {
-  var ssid = document.getElementById('w-ssid').value.trim();
-  var st = document.getElementById('w-st');
-  if (!ssid) { st.className = 'status err'; st.textContent = 'ERROR: Network name required'; return; }
-  state.ssid = ssid;
-  state.pass = document.getElementById('w-pass').value;
-  st.className = 'status ok';
-  st.textContent = 'OK: ' + ssid;
-  setTimeout(function(){ show(3); }, 400);
+function loadCurrentConfig(devId, callback) {
+  fetch(SURL + '/rest/v1/device_config?device_id=eq.' + devId + '&select=*', {
+    headers: { 'apikey': SKEY, 'Authorization': 'Bearer ' + SKEY }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if (!data || data.length === 0) { callback(false); return; }
+    var cfg = data[0];
+
+    state.ex = cfg.exchange || 'mexc';
+    state.custom = state.ex === 'custom';
+    if (cfg.assets) state.assets = new Set(cfg.assets.split(','));
+
+    document.getElementById('m-dev').textContent = devId;
+    document.getElementById('m-ex').textContent = (cfg.exchange || 'MEXC').toUpperCase();
+    document.getElementById('m-ass').textContent = (cfg.assets || '').split(',').filter(Boolean).length + ' ACTIVE';
+
+    document.querySelectorAll('.ex').forEach(function(e){ e.classList.remove('on'); });
+    if (state.custom) {
+      document.getElementById('ctog').classList.add('on');
+      document.getElementById('cbox').classList.add('show');
+      document.getElementById('c-url').value = cfg.custom_url || '';
+      document.getElementById('c-key').value = cfg.custom_key || '';
+      document.getElementById('c-field').value = cfg.custom_field || '';
+    } else {
+      var exEl = document.getElementById('ex-' + state.ex);
+      if (exEl) exEl.classList.add('on');
+    }
+
+    document.querySelectorAll('.a-row').forEach(function(r){ r.classList.remove('on'); });
+    state.assets.forEach(function(sym){
+      var row = document.getElementById('ar-' + sym);
+      if (row) row.classList.add('on');
+    });
+    document.getElementById('acnt').textContent = state.assets.size;
+
+    callback(true);
+  })
+  .catch(function(e){ console.log('Load error:', e); callback(false); });
 }
+
+function backFromEx() {
+  if (state.mode === 'manage') show('p2m'); else show('p1');
+}
+function backFromAssets() {
+  if (state.mode === 'manage') show('p2m'); else show('p2');
+}
+function nextFromEx() { show('p3'); loadPrices(); }
 
 function selEx(ex) {
   document.querySelectorAll('.ex').forEach(function(e){ e.classList.remove('on'); });
@@ -290,7 +413,11 @@ function loadPrices() {
 }
 
 async function sendConfig() {
-  show(5);
+  show('p4');
+  document.getElementById('spin').style.display = 'block';
+  document.getElementById('send-st').style.display = 'block';
+  document.getElementById('send-success').style.display = 'none';
+
   try {
     var resp = await fetch(SURL + '/rest/v1/device_config', {
       method: 'POST',
@@ -301,9 +428,7 @@ async function sendConfig() {
         'Prefer': 'resolution=merge-duplicates'
       },
       body: JSON.stringify({
-        device_id: state.devId || 'TX-DEFAULT',
-        ssid: state.ssid,
-        password: state.pass,
+        device_id: state.devId,
         assets: Array.from(state.assets).join(','),
         exchange: state.ex,
         custom_url: document.getElementById('c-url').value || '',
@@ -315,13 +440,11 @@ async function sendConfig() {
     console.log('Supabase response:', resp.status);
   } catch(e) { console.log('Error:', e); }
 
-  // Show success after 3 seconds
   setTimeout(function(){
     document.getElementById('spin').style.display = 'none';
     document.getElementById('send-st').style.display = 'none';
     document.getElementById('send-success').style.display = 'block';
-    document.getElementById('s-dev').textContent = state.devId || 'TX-DEFAULT';
-    document.getElementById('s-net').textContent = state.ssid.toUpperCase();
+    document.getElementById('s-dev').textContent = state.devId;
     document.getElementById('s-ex').textContent = state.ex.toUpperCase();
     document.getElementById('s-ass').textContent = state.assets.size + ' ACTIVE';
     document.getElementById('prog').style.width = '100%';
