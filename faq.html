@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Tickrix</title>
+<meta name="description" content="Common questions about Tickrix — pricing, shipping, technical specs, support.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   TICKRIX SHARED STYLES
+   Used by all pages for consistency
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  --bg: #0a0a0c;
+  --bg-deep: #050506;
+  --bg-card: #131316;
+  --bg-elevated: #1a1a1d;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --champagne: #c9a96e;
+  --champagne-dim: #8c754c;
+  --champagne-bright: #e6c894;
+  --text: #ffffff;
+  --text-soft: #d4d4d8;
+  --text-dim: #8a8a92;
+  --text-faint: #525258;
+  --green: #34d399;
+  --red: #f87171;
+  --display: 'Fraunces', Georgia, serif;
+  --sans: 'Geist', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-weight: 400;
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em;
+  overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.025; z-index: 9999; mix-blend-mode: overlay;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 18px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 99;
+  background: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.logo {
+  font-family: var(--sans); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.02em; text-decoration: none; color: var(--text);
+  display: flex; align-items: baseline; gap: 4px;
+}
+.logo sup { font-size: 9px; font-weight: 400; color: var(--text-dim); vertical-align: super; }
+nav ul { display: flex; gap: 36px; list-style: none; align-items: center; }
+nav a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; font-weight: 500; transition: color 0.2s;
+  letter-spacing: 0.01em;
+}
+nav a:hover, nav a.active { color: var(--text); }
+nav a.active::after {
+  content: ''; display: block;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--champagne); margin: 4px auto 0;
+}
+.nav-cta {
+  padding: 9px 20px; background: var(--champagne); color: var(--bg) !important;
+  border-radius: 100px; font-weight: 600 !important;
+  font-size: 12px !important; letter-spacing: 0.02em !important;
+  transition: all 0.2s ease;
+}
+.nav-cta:hover { background: var(--champagne-bright); transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+
+/* PAGE HEADER */
+.page-header {
+  padding: 200px 48px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute;
+  top: -200px; left: 50%; transform: translateX(-50%);
+  width: 1200px; height: 800px;
+  background: radial-gradient(ellipse, rgba(201,169,110,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.page-header-meta {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--champagne); margin-bottom: 24px;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.page-header-meta::before, .page-header-meta::after {
+  content: ''; width: 24px; height: 1px; background: var(--champagne-dim);
+}
+.page-header h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.96; letter-spacing: -0.035em;
+  margin-bottom: 32px;
+  font-variation-settings: 'opsz' 144;
+}
+.page-header h1 em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.page-header-sub {
+  font-size: 18px; color: var(--text-dim);
+  max-width: 540px; margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* BUTTONS */
+.btn-primary {
+  padding: 14px 28px; background: var(--champagne);
+  color: var(--bg); border-radius: 100px;
+  font-family: var(--sans); font-weight: 600; font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  display: inline-block;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover { background: var(--champagne-bright); transform: translateY(-1px); }
+.btn-secondary {
+  padding: 14px 28px; background: transparent;
+  color: var(--text); border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  font-family: var(--sans); font-weight: 500; font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+.btn-secondary:hover { border-color: var(--champagne); color: var(--champagne); }
+
+/* FOOTER */
+footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px solid var(--line); }
+.footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 56px; }
+.footer-tagline { font-family: var(--display); font-style: italic; color: var(--text-dim); font-size: 16px; max-width: 280px; line-height: 1.4; margin-top: 16px; }
+.footer-col h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--champagne); margin-bottom: 20px; font-weight: 500; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-col a { color: var(--text-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--champagne); }
+.footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 32px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-faint); flex-wrap: wrap; gap: 16px; }
+
+/* SECTION HELPERS */
+.section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--champagne);
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.section-label::before, .section-label::after {
+  content: ''; width: 24px; height: 1px; background: var(--champagne-dim);
+}
+
+/* RESPONSIVE NAV/FOOTER */
+@media (max-width: 1024px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  nav { padding: 16px 24px; }
+  nav ul { gap: 16px; }
+  nav ul li:not(.has-cta):not(:last-child) { display: none; }
+  .page-header { padding: 140px 24px 60px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  footer { padding: 40px 24px 32px; }
+}
+
+
+.faq-doc { max-width: 780px; margin: 0 auto; padding: 0 48px 80px; }
+.faq-section { margin-bottom: 60px; }
+.faq-section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--champagne); margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.faq-section-label::before { content: ''; width: 24px; height: 1px; background: var(--champagne-dim); }
+.faq-item {
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0;
+}
+.faq-item:first-child { border-top: 1px solid var(--line); }
+.faq-question {
+  font-family: var(--display); font-weight: 400;
+  font-size: 22px; line-height: 1.3; letter-spacing: -0.015em;
+  cursor: pointer;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 24px;
+  user-select: none;
+}
+.faq-question::after {
+  content: '+';
+  font-family: var(--sans); font-weight: 300;
+  font-size: 28px; color: var(--champagne);
+  transition: transform 0.3s; flex-shrink: 0;
+  line-height: 0.8;
+}
+.faq-item.open .faq-question::after { transform: rotate(45deg); }
+.faq-answer {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.faq-item.open .faq-answer { max-height: 500px; }
+.faq-answer p {
+  font-size: 16px; line-height: 1.7;
+  color: var(--text-dim);
+  padding-top: 20px;
+  margin-bottom: 12px;
+}
+.faq-answer p:last-child { margin-bottom: 0; }
+.faq-answer p strong { color: var(--text); font-weight: 600; }
+.faq-answer p em { font-style: italic; color: var(--champagne); }
+
+@media (max-width: 640px) {
+  .faq-doc { padding: 0 24px 60px; }
+  .faq-question { font-size: 18px; }
+}
+
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Tickrix<sup>®</sup></a>
+  <ul>
+    <li><a href="/device">The Device</a></li>
+    <li><a href="/specs">Specs</a></li>
+    <li><a href="/story">Story</a></li>
+    <li><a href="/faq" class="active">FAQ</a></li>
+    <li class="has-cta"><a href="/#reserve" class="nav-cta">Get Notified</a></li>
+  </ul>
+</nav>
+<section class="page-header">
+  <div class="page-header-meta">FAQ</div>
+  <h1>Common<br><em>questions.</em></h1>
+  <p class="page-header-sub">Everything we get asked the most. Don't see yours? Email <a href="mailto:hello@tickrix.com" style="color:var(--champagne);">hello@tickrix.com</a>.</p>
+</section>
+
+<div class="faq-doc">
+
+  <div class="faq-section">
+    <div class="faq-section-label">— About the product</div>
+
+    <div class="faq-item open">
+      <div class="faq-question" onclick="toggleFaq(this)">What is Tickrix, exactly?</div>
+      <div class="faq-answer">
+        <p>Tickrix is a <strong>WiFi-connected market display</strong> for traders. It's a 1.91-inch AMOLED screen housed in CNC-milled aluminum, designed to sit on your desk and show the live price of any market you care about — crypto, forex, stocks, gold, oil, indices.</p>
+        <p>Plug it in, connect to WiFi, pick your asset. That's it. <em>One device. One purpose. Beautifully done.</em></p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">How is it different from competitors?</div>
+      <div class="faq-answer">
+        <p>Three real differences:</p>
+        <p><strong>1. Build quality.</strong> Most market tickers are plastic and cheap. Tickrix is CNC-milled aluminum, built to last a decade.</p>
+        <p><strong>2. The base.</strong> No competitor includes a matching aluminum stand. Yours does, with calibrated 20° viewing angle.</p>
+        <p><strong>3. Coverage.</strong> Most show only crypto. Tickrix shows everything — including forex with real 5-decimal pip precision.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">What markets does it support?</div>
+      <div class="faq-answer">
+        <p>10,000+ instruments across all major asset classes:</p>
+        <p><strong>Crypto:</strong> BTC, ETH, SOL, and 8,000+ pairs from CoinGecko, Binance, Bybit.<br>
+        <strong>Forex:</strong> Major and minor pairs with 5-decimal pip precision (EUR/USD, GBP/USD, USD/JPY, etc.).<br>
+        <strong>Stocks:</strong> US, EU, UK exchanges.<br>
+        <strong>Commodities:</strong> Gold, Silver, Oil, Natural Gas.<br>
+        <strong>Indices:</strong> S&P 500, NASDAQ, DAX, FTSE, Nikkei.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Do I need to install an app?</div>
+      <div class="faq-answer">
+        <p>No. Setup happens through any browser via WiFi captive portal. Connect to "Tickrix-Setup", configure your assets, save. Done.</p>
+        <p><em>No App Store. No Play Store. No account required.</em></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-section-label">— Pricing & shipping</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">When does it ship?</div>
+      <div class="faq-answer">
+        <p>First batch ships in <strong>Q3 2026</strong>. Limited initial production. We'll email everyone on the waitlist when pre-orders open.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">How much will it cost?</div>
+      <div class="faq-answer">
+        <p>Final pricing will be announced when pre-orders open. Premium aluminum construction and matched aluminum base mean Tickrix sits in the higher tier of market displays — but priced for serious retail traders, not just institutions.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Do you ship internationally?</div>
+      <div class="faq-answer">
+        <p>Yes. We ship worldwide via DHL or FedEx. Customs and import duties depend on your country.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-section-label">— Technical</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Does it have a battery?</div>
+      <div class="faq-answer">
+        <p>Two configurations:</p>
+        <p><strong>Wired (default):</strong> USB-C powered, always-on, perfect for permanent desk placement.<br>
+        <strong>Battery option:</strong> 500mAh lithium polymer, 4-6 hours runtime, charges via USB-C.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">What WiFi does it need?</div>
+      <div class="faq-answer">
+        <p>Standard 2.4 GHz WiFi. Works with home routers, office WiFi, and most mobile hotspots. No 5GHz support to keep power consumption low.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">How often does the price update?</div>
+      <div class="faq-answer">
+        <p>Every 5 to 60 seconds, configurable. Default is 30 seconds — fast enough to feel real-time, slow enough to be respectful of public APIs and your battery.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Can I change what's displayed?</div>
+      <div class="faq-answer">
+        <p>Yes. Through the Tickrix dashboard (no app needed), you can swap assets anytime. Mix crypto, forex, and stocks. Set up rotating displays. Customize text colors. <em>It's your device.</em></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <div class="faq-section-label">— Support & warranty</div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">What if it breaks?</div>
+      <div class="faq-answer">
+        <p>12-month warranty against manufacturing defects. Email <a href="mailto:hello@tickrix.com" style="color:var(--champagne);">hello@tickrix.com</a> with proof of purchase and we'll repair or replace it.</p>
+        <p>Unlike some of our competitors, <em>we actually answer support emails.</em></p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Can I return it?</div>
+      <div class="faq-answer">
+        <p>14-day return policy for EU customers. International return policy will be announced at launch.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">Will firmware updates break my device?</div>
+      <div class="faq-answer">
+        <p>Never. Firmware updates are optional and pushed through the dashboard. We test extensively before release. Your device works the day you receive it and forever after.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<section class="closing-cta">
+  <div class="closing-content">
+    <div class="page-header-meta">— Still have questions?</div>
+    <h2 class="closing-title">Just<br><em>ask.</em></h2>
+    <p class="closing-sub">We answer every email. No bots. No support tickets. Just real answers.</p>
+    <div class="closing-actions">
+      <a href="mailto:hello@tickrix.com" class="btn-primary">Email us</a>
+      <a href="/#reserve" class="btn-secondary">Join the Waitlist</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+</script>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="/" class="logo">Tickrix<sup>®</sup></a>
+      <p class="footer-tagline">For traders who take it seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="/device">The Device</a></li>
+        <li><a href="/specs">Specifications</a></li>
+        <li><a href="/story">Our Story</a></li>
+        <li><a href="/faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="mailto:hello@tickrix.com">hello@tickrix.com</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Tickrix™ · Rotterdam, Netherlands</div>
+    <div>Built with care. Shipped worldwide.</div>
+  </div>
+</footer>
+</body>
+</html>

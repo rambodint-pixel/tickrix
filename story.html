@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Story — Tickrix</title>
+<meta name="description" content="Built by a trader, from scratch. The story behind Tickrix — and why it exists.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0a0a0c;
+  --bg-deep: #050506;
+  --bg-card: #131316;
+  --bg-elevated: #1a1a1d;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --champagne: #c9a96e;
+  --champagne-dim: #8c754c;
+  --champagne-bright: #e6c894;
+  --text: #ffffff;
+  --text-soft: #d4d4d8;
+  --text-dim: #8a8a92;
+  --text-faint: #525258;
+  --display: 'Fraunces', Georgia, serif;
+  --sans: 'Geist', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-weight: 400;
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.005em;
+  overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.025; z-index: 9999; mix-blend-mode: overlay;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  padding: 18px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  z-index: 99;
+  background: rgba(10, 10, 12, 0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+}
+.logo {
+  font-family: var(--sans); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.02em; text-decoration: none; color: var(--text);
+  display: flex; align-items: baseline; gap: 4px;
+}
+.logo sup { font-size: 9px; font-weight: 400; color: var(--text-dim); vertical-align: super; }
+nav ul { display: flex; gap: 36px; list-style: none; align-items: center; }
+nav a {
+  color: var(--text-dim); text-decoration: none;
+  font-size: 13px; font-weight: 500; transition: color 0.2s;
+}
+nav a:hover, nav a.active { color: var(--text); }
+nav a.active::after {
+  content: ''; display: block;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--champagne); margin: 4px auto 0;
+}
+.nav-cta {
+  padding: 9px 20px; background: var(--champagne); color: var(--bg) !important;
+  border-radius: 100px; font-weight: 600 !important;
+  font-size: 12px !important; transition: all 0.2s ease;
+}
+.nav-cta:hover { background: var(--champagne-bright); }
+.nav-cta::after { display: none !important; }
+
+/* PAGE HEADER */
+.page-header {
+  padding: 200px 48px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute;
+  top: -200px; left: 50%; transform: translateX(-50%);
+  width: 1200px; height: 800px;
+  background: radial-gradient(ellipse, rgba(201,169,110,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.page-header-meta {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--champagne); margin-bottom: 24px;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.page-header-meta::before, .page-header-meta::after {
+  content: ''; width: 24px; height: 1px; background: var(--champagne-dim);
+}
+.page-header h1 {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.96; letter-spacing: -0.035em;
+  margin-bottom: 32px;
+  font-variation-settings: 'opsz' 144;
+}
+.page-header h1 em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.page-header-sub {
+  font-size: 18px; color: var(--text-dim);
+  max-width: 540px; margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* OPENING */
+.opening {
+  padding: 80px 48px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.opening-quote {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.opening-quote em { font-style: italic; color: var(--champagne); }
+.opening-attribution {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-faint); text-align: center;
+}
+
+/* DIVIDER */
+.divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; padding: 60px 0;
+}
+.divider-line { width: 60px; height: 1px; background: var(--line-strong); }
+.divider-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--champagne); }
+
+/* STORY CHAPTERS */
+.story {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 48px 60px;
+}
+.chapter { margin-bottom: 80px; position: relative; }
+.chapter:last-child { margin-bottom: 0; }
+.chapter-num {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.2em; color: var(--champagne);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.chapter-num::before { content: ''; width: 24px; height: 1px; background: var(--champagne-dim); }
+.chapter-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.1; letter-spacing: -0.025em;
+  margin-bottom: 32px;
+}
+.chapter-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.chapter p {
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--text-soft);
+  margin-bottom: 24px;
+}
+.chapter p:last-child { margin-bottom: 0; }
+.chapter p em {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--champagne);
+  font-size: 1.05em;
+}
+.chapter p strong { color: var(--text); font-weight: 600; }
+
+/* PULL QUOTE */
+.pull-quote {
+  margin: 60px -48px;
+  padding: 60px 48px;
+  background: linear-gradient(180deg, transparent, var(--bg-deep), transparent);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.pull-quote-text {
+  font-family: var(--display);
+  font-weight: 300;
+  font-size: clamp(24px, 2.8vw, 36px);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+.pull-quote-text em { font-style: italic; color: var(--champagne); }
+.pull-quote-mark {
+  font-family: var(--display);
+  font-size: 60px;
+  color: var(--champagne);
+  font-style: italic;
+  line-height: 0;
+  margin-bottom: 32px;
+}
+
+/* PRINCIPLES */
+.principles {
+  padding: 120px 48px;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.principles-inner { max-width: 1200px; margin: 0 auto; }
+.principles-header { text-align: center; margin-bottom: 80px; }
+.principles-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--champagne); margin-bottom: 24px;
+  display: inline-flex; align-items: center; gap: 12px;
+}
+.principles-label::before, .principles-label::after {
+  content: ''; width: 24px; height: 1px; background: var(--champagne-dim);
+}
+.principles-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(36px, 4.5vw, 56px);
+  line-height: 1.05; letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.principles-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.principle {
+  background: var(--bg-deep);
+  padding: 48px 36px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.principle-num {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--champagne); letter-spacing: 0.15em;
+  margin-bottom: 16px;
+}
+.principle-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.principle-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.principle-desc {
+  font-size: 14px; line-height: 1.6;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+/* CLOSING CTA */
+.closing-cta {
+  padding: 120px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing-cta::before {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.closing-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.closing-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1; letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+.closing-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
+.closing-sub {
+  font-size: 16px; color: var(--text-dim);
+  margin-bottom: 40px;
+  max-width: 480px;
+  margin-left: auto; margin-right: auto;
+}
+.closing-actions {
+  display: flex; gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  padding: 14px 28px; background: var(--champagne);
+  color: var(--bg); border-radius: 100px;
+  font-family: var(--sans); font-weight: 600; font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover { background: var(--champagne-bright); transform: translateY(-1px); }
+.btn-secondary {
+  padding: 14px 28px; background: transparent;
+  color: var(--text); border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  font-family: var(--sans); font-weight: 500; font-size: 13px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover { border-color: var(--champagne); color: var(--champagne); }
+
+/* FOOTER */
+footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px solid var(--line); }
+.footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 56px; }
+.footer-tagline { font-family: var(--display); font-style: italic; color: var(--text-dim); font-size: 16px; max-width: 280px; line-height: 1.4; margin-top: 16px; }
+.footer-col h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--champagne); margin-bottom: 20px; font-weight: 500; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-col a { color: var(--text-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--champagne); }
+.footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 32px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-faint); flex-wrap: wrap; gap: 16px; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .principles-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  nav { padding: 16px 24px; }
+  nav ul { gap: 16px; }
+  nav ul li:not(.has-cta):not(:last-child) { display: none; }
+  .page-header { padding: 140px 24px 60px; }
+  .opening, .story { padding-left: 24px; padding-right: 24px; }
+  .pull-quote { margin-left: -24px; margin-right: -24px; padding: 40px 24px; }
+  .principles { padding: 80px 24px; }
+  .closing-cta { padding: 80px 24px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">Tickrix<sup>®</sup></a>
+  <ul>
+    <li><a href="/device">The Device</a></li>
+    <li><a href="/specs">Specs</a></li>
+    <li><a href="/story" class="active">Story</a></li>
+    <li><a href="/faq">FAQ</a></li>
+    <li class="has-cta"><a href="/#reserve" class="nav-cta">Get Notified</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-header-meta">Our Story</div>
+  <h1>Built by a trader.<br><em>From scratch.</em></h1>
+  <p class="page-header-sub">No team of designers. No focus groups. No round of funding. Just one trader, one frustration, and a long list of late nights.</p>
+</section>
+
+<!-- OPENING -->
+<section class="opening">
+  <p class="opening-quote">"We didn't build Tickrix to disrupt anything. <em>We built it because the thing we wanted didn't exist.</em>"</p>
+  <p class="opening-attribution">— The founder · Rotterdam, Netherlands</p>
+</section>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-dot"></div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- STORY -->
+<section class="story">
+
+  <div class="chapter">
+    <div class="chapter-num">— Chapter 01</div>
+    <h2 class="chapter-title">A trader's frustration.</h2>
+    <p>The idea for Tickrix didn't come from a brainstorm. It came from a screen — five of them, actually. <strong>Stacked across a desk in Rotterdam.</strong> Charts on one. Order books on another. News on the third. And somewhere in the middle, the only number that really mattered: <em>the price.</em></p>
+    <p>The frustration was simple. To check that one number — the EUR/USD pip, the BTC tick, the gold spot — you had to look at a screen built for a thousand other things. Cluttered with widgets. Filled with notifications. Hungry for attention.</p>
+    <p>There had to be something better. Something quiet. Something that did <strong>one thing, beautifully.</strong></p>
+  </div>
+
+  <div class="chapter">
+    <div class="chapter-num">— Chapter 02</div>
+    <h2 class="chapter-title">The search.</h2>
+    <p>So we went looking. We tried the cheap LED tickers from Amazon — flimsy plastic, low resolution, brittle WiFi setups. We tried the boutique ones — better, but still felt like hobby projects. <em>None of them felt serious.</em></p>
+    <p>None of them felt like something a real trader would actually keep on their desk for ten years.</p>
+    <p>That's when the obsession started.</p>
+  </div>
+
+  <div class="chapter">
+    <div class="chapter-num">— Chapter 03</div>
+    <h2 class="chapter-title">From scratch.</h2>
+    <p>What started as "I'll just make one for myself" became <strong>nine months of late nights.</strong> Sourcing AMOLED displays. Studying CNC aluminum manufacturing. Writing firmware in languages we'd never used before. Building a web dashboard. Losing weekends to soldering irons and Python errors.</p>
+    <p>Every part of Tickrix exists because we asked one question, over and over: <em>"Is this how a real trader would want it?"</em></p>
+    <p>If the answer was no, we threw it away and started again.</p>
+  </div>
+
+  <div class="pull-quote">
+    <div class="pull-quote-mark">"</div>
+    <p class="pull-quote-text">Tickrix isn't an accessory. <em>It's the smallest, most considered piece of equipment</em> on a trader's desk.</p>
+  </div>
+
+  <div class="chapter">
+    <div class="chapter-num">— Chapter 04</div>
+    <h2 class="chapter-title">Why we stayed quiet.</h2>
+    <p>We're not posting on Twitter. We're not pitching investors. We don't have a TikTok. <strong>We're builders, not personalities.</strong></p>
+    <p>Tickrix should speak for itself. The aluminum. The screen. The way it sits on a desk like it belongs there.</p>
+    <p>Other companies sell stories about their founders. <em>We'd rather sell a thing that's quietly excellent</em> — and let traders decide for themselves.</p>
+  </div>
+
+  <div class="chapter">
+    <div class="chapter-num">— Chapter 05</div>
+    <h2 class="chapter-title">What's next.</h2>
+    <p>The first batch ships <strong>Q3 2026.</strong> It's small — limited initial production. We're not trying to be the biggest. We're trying to be the one a serious trader picks once and keeps.</p>
+    <p>If you're reading this, you're already part of it. Whether you join the waitlist or just bookmark the site, <em>thank you for caring about how things are made.</em></p>
+    <p>It matters more than you know.</p>
+  </div>
+
+</section>
+
+<!-- PRINCIPLES -->
+<section class="principles">
+  <div class="principles-inner">
+    <div class="principles-header">
+      <div class="principles-label">— What we believe</div>
+      <h2 class="principles-title">Three principles.<br><em>That's it.</em></h2>
+    </div>
+    <div class="principles-grid">
+      <div class="principle">
+        <div class="principle-num">— 01</div>
+        <h3 class="principle-title">Build it like <em>it's yours.</em></h3>
+        <p class="principle-desc">Every Tickrix is built like we'd want one ourselves. No corner cutting. No "good enough." If it doesn't pass our own desk test, it doesn't ship.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">— 02</div>
+        <h3 class="principle-title">Quiet is <em>better.</em></h3>
+        <p class="principle-desc">A great instrument doesn't beg for attention. It does its job, beautifully, and lets you do yours. Tickrix is designed to be glanced at — not stared at.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">— 03</div>
+        <h3 class="principle-title">Stay <em>small.</em></h3>
+        <p class="principle-desc">We're not trying to scale to a million units. We're trying to make the best one. The first batch is limited on purpose. The second won't be much bigger.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section class="closing-cta">
+  <div class="closing-content">
+    <div class="page-header-meta">Get notified</div>
+    <h2 class="closing-title">Be there when<br><em>we ship.</em></h2>
+    <p class="closing-sub">Join the waitlist. We'll email you when Tickrix is ready — Q3 2026.</p>
+    <div class="closing-actions">
+      <a href="/#reserve" class="btn-primary">Join the Waitlist</a>
+      <a href="/device" class="btn-secondary">See the Device →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="/" class="logo">Tickrix<sup>®</sup></a>
+      <p class="footer-tagline">For traders who take it seriously.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="/device">The Device</a></li>
+        <li><a href="/specs">Specifications</a></li>
+        <li><a href="/story">Our Story</a></li>
+        <li><a href="/faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Connect</h4>
+      <ul>
+        <li><a href="mailto:hello@tickrix.com">hello@tickrix.com</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 Tickrix™ · Rotterdam, Netherlands</div>
+    <div>Built with care. Shipped worldwide.</div>
+  </div>
+</footer>
+
+</body>
+</html>
