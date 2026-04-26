@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tickrix — For traders who take it seriously.</title>
-<meta name="description" content="A WiFi-connected market display, milled from solid aluminum. Crypto, forex, stocks, gold, oil — one glance away.">
+<meta name="description" content="A WiFi-connected market display, milled from solid aluminum. Crypto, forex, stocks, ETFs, indices, commodities — every market on your desk.">
 <meta property="og:title" content="Tickrix — The market on your desk">
 <meta property="og:description" content="A WiFi-connected market display, milled from solid aluminum.">
 <meta property="og:url" content="https://tickrix.com">
@@ -488,8 +488,65 @@ nav a:hover { color: var(--text); }
 .assets-section { padding: 120px 48px; position: relative; }
 .assets-grid {
   max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
 }
+
+/* Gallery section — real product photos */
+.gallery-section {
+  padding: 120px 48px 60px;
+  position: relative;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.gallery-grid {
+  max-width: 1400px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
+}
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #050506;
+  border: 1px solid var(--line);
+  aspect-ratio: 16 / 10;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+.gallery-item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 169, 110, 0.3);
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.gallery-item:hover img { transform: scale(1.03); }
+.gallery-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 24px 28px;
+  background: linear-gradient(to top, rgba(5,5,6,0.95) 0%, rgba(5,5,6,0.7) 60%, transparent 100%);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.gallery-caption-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--champagne);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.gallery-caption-text {
+  font-family: var(--display);
+  font-size: 16px;
+  color: var(--text-soft);
+  font-weight: 400;
+  line-height: 1.4;
+}
+.gallery-large { aspect-ratio: 16 / 10; }
+.gallery-small { aspect-ratio: 4 / 5; }
 .asset-card {
   background: var(--bg-card);
   border: 1px solid var(--line);
@@ -509,6 +566,22 @@ nav a:hover { color: var(--text); }
 .asset-card-change { font-family: var(--mono); font-size: 11px; margin-top: 4px; }
 .asset-card-change.up { color: var(--green); }
 .asset-card-change.down { color: var(--red); }
+
+/* Category card variant */
+.category-card .asset-card-price {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--text-soft); font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+}
+.category-card .category-meta {
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
 
 /* ════════════ FEATURES ════════════ */
 .features-section {
@@ -609,6 +682,8 @@ footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px so
   .hero-device-stage { height: 500px; }
   .specs-grid { grid-template-columns: repeat(2, 1fr); }
   .assets-grid { grid-template-columns: repeat(3, 1fr); }
+  .gallery-grid { grid-template-columns: 1fr; gap: 16px; }
+  .gallery-large, .gallery-small { aspect-ratio: 16 / 10; }
   .features-grid { grid-template-columns: 1fr 1fr; }
   .feature.large { grid-row: span 1; grid-column: span 2; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -626,6 +701,7 @@ footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px so
   .screen-asset { font-size: 16px; }
   .device-base { width: 220px; height: 36px; bottom: 80px;}
   .specs-section, .assets-section, .features-section, .story-section, .cta-section { padding: 80px 24px; }
+  .gallery-section { padding: 80px 24px 40px; }
   .specs-grid, .features-grid { grid-template-columns: 1fr; }
   .feature.large { grid-column: span 1; }
   .assets-grid { grid-template-columns: repeat(2, 1fr); }
@@ -665,7 +741,7 @@ footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px so
         <span>Edition One · Q3 2026</span>
       </div>
       <h1>The market.<br><em>On your desk.</em></h1>
-      <p class="hero-subtitle">A WiFi-connected display, milled from solid aluminum. Crypto, forex, stocks, gold, oil — one glance away.</p>
+      <p class="hero-subtitle">A WiFi-connected display, milled from solid aluminum. Every market — crypto, forex, stocks, ETFs, indices, commodities, bonds — on your desk.</p>
       <div class="hero-cta-row">
         <form class="email-form" id="heroForm" onsubmit="handleSubmit(event, 'hero')">
           <input type="email" placeholder="your@email.com" required name="email">
@@ -721,18 +797,60 @@ footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px so
 <section class="assets-section">
   <div class="section-header">
     <div>
-      <div class="section-label">02 / Live Coverage</div>
+      <div class="section-label">02 / Markets Covered</div>
       <h2 class="section-title">Every market.<br><em>Yours to follow.</em></h2>
     </div>
     <div class="section-meta">10,000+ instruments · Updated live</div>
   </div>
   <div class="assets-grid" id="assetsGrid">
-    <div class="asset-card" data-symbol="BTC"><div class="asset-card-sym">BTC</div><div class="asset-card-name">Bitcoin</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
-    <div class="asset-card" data-symbol="ETH"><div class="asset-card-sym">ETH</div><div class="asset-card-name">Ethereum</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
-    <div class="asset-card" data-symbol="EUR/USD"><div class="asset-card-sym">EUR/USD</div><div class="asset-card-name">Euro Dollar</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
-    <div class="asset-card" data-symbol="AAPL"><div class="asset-card-sym">AAPL</div><div class="asset-card-name">Apple Inc.</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
-    <div class="asset-card" data-symbol="XAU"><div class="asset-card-sym">XAU</div><div class="asset-card-name">Gold (oz)</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
-    <div class="asset-card" data-symbol="SPX"><div class="asset-card-sym">SPX</div><div class="asset-card-name">S&P 500</div><div class="asset-card-price">—</div><div class="asset-card-change">—</div></div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">CRYPTO</div>
+      <div class="asset-card-name">Digital assets</div>
+      <div class="asset-card-price">BTC · ETH · SOL</div>
+      <div class="asset-card-change category-meta">+ 5,000 pairs</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">FOREX</div>
+      <div class="asset-card-name">Currency pairs</div>
+      <div class="asset-card-price">EUR/USD · GBP/JPY</div>
+      <div class="asset-card-change category-meta">5-decimal pip · 180+ pairs</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">STOCKS</div>
+      <div class="asset-card-name">Global equities</div>
+      <div class="asset-card-price">AAPL · TSLA · NVDA</div>
+      <div class="asset-card-change category-meta">US · EU · UK · 8,000+</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">ETFs</div>
+      <div class="asset-card-name">Exchange-traded funds</div>
+      <div class="asset-card-price">SPY · QQQ · VOO</div>
+      <div class="asset-card-change category-meta">+ 2,500 funds</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">INDICES</div>
+      <div class="asset-card-name">Market benchmarks</div>
+      <div class="asset-card-price">S&amp;P 500 · NASDAQ · DAX</div>
+      <div class="asset-card-change category-meta">Global coverage</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">COMMODITIES</div>
+      <div class="asset-card-name">Hard assets</div>
+      <div class="asset-card-price">Gold · Oil · Silver</div>
+      <div class="asset-card-change category-meta">Spot &amp; futures</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">BONDS</div>
+      <div class="asset-card-name">Fixed income</div>
+      <div class="asset-card-price">US10Y · Bund · JGB</div>
+      <div class="asset-card-change category-meta">Yields &amp; spreads</div>
+    </div>
+    <div class="asset-card category-card">
+      <div class="asset-card-sym">FUTURES</div>
+      <div class="asset-card-name">Derivatives</div>
+      <div class="asset-card-price">ES · CL · GC</div>
+      <div class="asset-card-change category-meta">Index · Energy · Metals</div>
+    </div>
   </div>
 </section>
 
