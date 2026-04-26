@@ -1026,29 +1026,24 @@ async function handleSubmit(e, source) {
   button.disabled = true;
   
   try {
-    // Try to save to Supabase
+    // Call our new /api/waitlist endpoint — saves to Supabase + sends welcome email
     let position;
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      const res = await fetch('/api/waitlist', {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source })
       });
       
       if (res.ok) {
         const data = await res.json();
-        position = data[0]?.id ? (WAITLIST_BASELINE + data[0].id) : (calculateWaitlistCount() + 1);
+        position = data.position || (calculateWaitlistCount() + 1);
       } else {
-        // If duplicate or error, still show success
+        // If error, still show success (fail gracefully)
         position = calculateWaitlistCount() + 1;
       }
     } catch (err) {
-      console.log('Supabase save failed:', err);
+      console.log('Waitlist API failed:', err);
       position = calculateWaitlistCount() + 1;
     }
     
