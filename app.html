@@ -24,7 +24,7 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .btn-out{background:#000;color:#fff;border:1px solid #333;}
 .status{font-size:11px;letter-spacing:1px;padding:10px 12px;border-left:2px solid #333;margin-bottom:16px;color:#555;}
 .status.ok{border-color:#00e676;color:#00e676;}
-.status.err{border-color:#ff1744;color:#ff1744;}
+.status.err{border-color:#ff1744;color:#ff1744;white-space:pre-line;}
 .ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 .ex{border:1px solid #333;padding:14px;cursor:pointer;}
 .ex.on{border-color:#00aaff;background:rgba(0,170,255,0.05);}
@@ -124,7 +124,7 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
   <button class="btn" onclick="verifyDev()" id="p1-btn">[ VERIFY DEVICE ]</button>
 </div>
 
-<!-- PAGE 2: MANAGE HUB (only shown in manage mode) -->
+<!-- PAGE 2: MANAGE HUB -->
 <div class="page" id="p2m">
   <span class="back" onclick="goHome()">BACK</span>
   <div class="tag">DEVICE MANAGEMENT</div>
@@ -139,7 +139,7 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
   <button class="btn btn-out" onclick="show(3);loadPrices()">[ CHANGE ASSETS ]</button>
   <div class="info-box" style="margin-top:16px;">
     <b>NEED TO CHANGE WIFI?</b><br>
-    Click the BOOT button on your device 4 times quickly, then hold for 3 seconds to reset WiFi. Your exchange and assets will be preserved.
+    Hold the BOOT button on your device for 5 seconds. The screen will show a countdown. Release before the countdown ends to cancel.
   </div>
 </div>
 
@@ -214,6 +214,10 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
       <div class="sum-r"><span class="sum-k">STATUS</span><span class="sum-v ok"><span class="dot"></span>ONLINE</span></div>
     </div>
     <button class="btn btn-out" onclick="goHome()">[ DONE ]</button>
+  </div>
+  <div id="send-error" style="display:none;">
+    <button class="btn btn-out" onclick="show(3)">[ TRY AGAIN ]</button>
+    <button class="btn btn-out" onclick="goHome()">[ HOME ]</button>
   </div>
 </div>
 
@@ -412,44 +416,112 @@ function loadPrices() {
     }).catch(function(){});
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  FIXED sendConfig() — properly checks Supabase response, PATCH-then-POST
+//  Replaces old version that always showed success even when save failed.
+// ═══════════════════════════════════════════════════════════════════════════
 async function sendConfig() {
   show('p4');
-  document.getElementById('spin').style.display = 'block';
-  document.getElementById('send-st').style.display = 'block';
-  document.getElementById('send-success').style.display = 'none';
+  var spin = document.getElementById('spin');
+  var st   = document.getElementById('send-st');
+  var ok   = document.getElementById('send-success');
+  var er   = document.getElementById('send-error');
 
+  spin.style.display = 'block';
+  st.style.display   = 'block';
+  ok.style.display   = 'none';
+  er.style.display   = 'none';
+  st.className       = 'status loading';
+  st.style.cssText   = 'border-color:#00aaff;color:#00aaff;text-align:center;';
+  st.textContent     = 'WAITING FOR DEVICE...';
+
+  var payload = {
+    device_id:    state.devId,
+    assets:       Array.from(state.assets).join(','),
+    exchange:     state.ex,
+    custom_url:   document.getElementById('c-url').value   || '',
+    custom_key:   document.getElementById('c-key').value   || '',
+    custom_field: document.getElementById('c-field').value || ''
+  };
+
+  var headers = {
+    'Content-Type':  'application/json',
+    'apikey':        SKEY,
+    'Authorization': 'Bearer ' + SKEY,
+    'Prefer':        'return=representation'
+  };
+
+  var saved = false;
+  var lastErr = '';
+
+  // ── Step 1: try PATCH (update existing row) ─────────────────────────
   try {
-    var resp = await fetch(SURL + '/rest/v1/device_config', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SKEY,
-        'Authorization': 'Bearer ' + SKEY,
-        'Prefer': 'resolution=merge-duplicates'
-      },
-      body: JSON.stringify({
-        device_id: state.devId,
-        assets: Array.from(state.assets).join(','),
-        exchange: state.ex,
-        custom_url: document.getElementById('c-url').value || '',
-        custom_key: document.getElementById('c-key').value || '',
-        custom_field: document.getElementById('c-field').value || '',
-        claimed: false
-      })
+    var patchUrl = SURL + '/rest/v1/device_config?device_id=eq.' + encodeURIComponent(state.devId);
+    var r = await fetch(patchUrl, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(payload)
     });
-    console.log('Supabase response:', resp.status);
-  } catch(e) { console.log('Error:', e); }
+    console.log('[PATCH] status:', r.status);
+    if (r.ok) {
+      var rows = await r.json();
+      console.log('[PATCH] rows:', rows);
+      if (rows && rows.length > 0) {
+        saved = true;
+      }
+    } else {
+      var errTxt = await r.text();
+      lastErr = 'PATCH ' + r.status + ': ' + errTxt;
+      console.log(lastErr);
+    }
+  } catch(e) {
+    lastErr = 'PATCH error: ' + e.message;
+    console.log(lastErr);
+  }
 
-  setTimeout(function(){
-    document.getElementById('spin').style.display = 'none';
-    document.getElementById('send-st').style.display = 'none';
-    document.getElementById('send-success').style.display = 'block';
+  // ── Step 2: if PATCH didn't update anything, POST new row ──────────
+  if (!saved) {
+    try {
+      var postUrl = SURL + '/rest/v1/device_config';
+      var r2 = await fetch(postUrl, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(payload)
+      });
+      console.log('[POST] status:', r2.status);
+      if (r2.ok) {
+        var rows2 = await r2.json();
+        console.log('[POST] rows:', rows2);
+        saved = true;
+      } else {
+        var errTxt2 = await r2.text();
+        lastErr = 'POST ' + r2.status + ': ' + errTxt2;
+        console.log(lastErr);
+      }
+    } catch(e) {
+      lastErr = 'POST error: ' + e.message;
+      console.log(lastErr);
+    }
+  }
+
+  // ── Step 3: branch on actual save result ──────────────────────────
+  spin.style.display = 'none';
+
+  if (saved) {
+    st.style.display = 'none';
+    ok.style.display = 'block';
     document.getElementById('s-dev').textContent = state.devId;
-    document.getElementById('s-ex').textContent = state.ex.toUpperCase();
+    document.getElementById('s-ex').textContent  = state.ex.toUpperCase();
     document.getElementById('s-ass').textContent = state.assets.size + ' ACTIVE';
-    document.getElementById('prog').style.width = '100%';
-  }, 3000);
+    document.getElementById('prog').style.width  = '100%';
+  } else {
+    st.className     = 'status err';
+    st.style.cssText = 'border-color:#ff1744;color:#ff1744;text-align:center;line-height:1.7;padding:14px;';
+    st.textContent   = 'ERROR: COULD NOT SAVE\n\n' + (lastErr || 'unknown error') + '\n\nOpen browser console for details.';
+    er.style.display = 'block';
+  }
 }
 </script>
+
 </body>
 </html>
