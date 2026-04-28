@@ -3,1192 +3,1857 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tickrix — For traders who take it seriously.</title>
-<meta name="description" content="A WiFi-connected market display, milled from solid aluminum. Crypto, forex, stocks, ETFs, indices, commodities — every market on your desk.">
-<meta property="og:title" content="Tickrix — The market on your desk">
-<meta property="og:description" content="A WiFi-connected market display, milled from solid aluminum.">
-<meta property="og:url" content="https://tickrix.com">
-<meta name="theme-color" content="#0a0a0c">
+<title>Tickrix — The market on your desk</title>
+<meta name="description" content="A WiFi-connected market display. Milled from solid aluminum. Designed in Rotterdam. Edition One ships Q3 2026.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ════════════════════════════════════════════════════════════════
+   TICKRIX — THE DESIGN SYSTEM
+   6 colors. 4 type sizes. 160px sections. Forever.
+   ════════════════════════════════════════════════════════════════ */
+
 :root {
-  --bg: #0a0a0c;
-  --bg-deep: #050506;
-  --bg-card: #131316;
-  --bg-elevated: #1a1a1d;
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.16);
-  --champagne: #c9a96e;
-  --champagne-dim: #8c754c;
-  --champagne-bright: #e6c894;
-  --text: #ffffff;
-  --text-soft: #d4d4d8;
-  --text-dim: #8a8a92;
-  --text-faint: #525258;
-  --green: #34d399;
-  --red: #f87171;
-  --display: 'Fraunces', Georgia, serif;
-  --sans: 'Geist', -apple-system, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+  /* COLOR PALETTE */
+  --black:        #000000;
+  --black-1:      #050505;
+  --surface:      #0E0E0D;
+  --border:       #1F1E1B;
+  --border-soft:  #131312;
+
+  --white:        #FFFFFF;
+  --gray-1:       #B5B3AC;
+  --gray-2:       #6E6C66;
+  --gray-3:       #45433E;
+
+  --amber:        #E8A14D;
+  --amber-dim:    #8C6131;
+
+  /* TYPOGRAPHY */
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-body:    'Inter Tight', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', monospace;
+
+  /* SPACING */
+  --section:      160px;
+  --container:    1200px;
+  --reading:      640px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
 html { scroll-behavior: smooth; }
+
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
   font-weight: 400;
-  line-height: 1.5;
+  letter-spacing: -0.005em;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: -0.005em;
 }
 
+::selection { background: var(--amber); color: var(--black); }
+
+a { color: inherit; text-decoration: none; }
+
+img, svg { display: block; max-width: 100%; }
+
+/* ════════════════════════════════════════════════════════════════
+   GRID OVERLAY (subtle blueprint feel on body)
+   ════════════════════════════════════════════════════════════════ */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.012) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 80px 80px;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  opacity: 0.025;
-  z-index: 9999;
-  mix-blend-mode: overlay;
+  z-index: 1;
 }
 
-/* ════════════ TICKER BAR (live) ════════════ */
-.ticker-bar {
-  position: fixed; top: 0; left: 0; right: 0;
-  background: var(--bg-deep);
-  border-bottom: 1px solid var(--line);
+/* ════════════════════════════════════════════════════════════════
+   TYPOGRAPHY — 4 SIZES
+   ════════════════════════════════════════════════════════════════ */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gray-2);
+  display: inline-block;
+}
+
+.label-amber { color: var(--amber); }
+
+.h-hero {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  font-variation-settings: 'opsz' 144;
+}
+
+.h-hero em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--amber);
+}
+
+.h-section {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-variation-settings: 'opsz' 96;
+}
+
+.h-section em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.body-lg {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--gray-1);
+  font-weight: 400;
+  max-width: var(--reading);
+}
+
+.body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--gray-1);
+  font-weight: 400;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'tnum';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LAYOUT
+   ════════════════════════════════════════════════════════════════ */
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 2;
+}
+
+section {
+  padding: var(--section) 0;
+  position: relative;
+  border-top: 1px solid var(--border-soft);
+}
+
+section:first-of-type { border-top: none; }
+
+.section-head {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  margin-bottom: 80px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .section-head {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+  section { padding: 96px 0; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   NAVIGATION
+   ════════════════════════════════════════════════════════════════ */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  overflow: hidden;
-  height: 36px;
+  padding: 24px 32px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.nav-inner {
+  max-width: var(--container);
+  margin: 0 auto;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
-.ticker-track {
-  display: flex; gap: 48px; padding: 0 24px;
-  white-space: nowrap;
-  animation: ticker-scroll 80s linear infinite;
-  font-family: var(--mono);
+
+.nav-logo {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-1);
+  transition: color 0.3s;
 }
-.ticker-item { display: inline-flex; align-items: center; gap: 8px; }
-.ticker-sym { color: var(--text-dim); font-weight: 600; }
-.ticker-price { color: var(--text-soft); }
-.ticker-change.up { color: var(--green); }
-.ticker-change.down { color: var(--red); }
-.ticker-dot { width: 4px; height: 4px; background: var(--champagne); border-radius: 50%; flex-shrink: 0; }
-@keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-.ticker-bar::before, .ticker-bar::after {
-  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
-}
-.ticker-bar::before { left: 0; background: linear-gradient(to right, var(--bg-deep), transparent); }
-.ticker-bar::after { right: 0; background: linear-gradient(to left, var(--bg-deep), transparent); }
-.ticker-status {
-  position: absolute; right: 0; top: 0; bottom: 0;
-  background: var(--bg-deep); padding: 0 24px;
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--sans); font-size: 10px; font-weight: 500;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--text-dim); z-index: 3;
-  border-left: 1px solid var(--line);
-}
-.ticker-status::before {
-  content: ''; width: 6px; height: 6px;
-  background: var(--green); border-radius: 50%;
-  box-shadow: 0 0 8px var(--green);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-/* ════════════ NAV ════════════ */
-nav {
-  position: fixed; top: 36px; left: 0; right: 0;
-  padding: 18px 48px;
-  display: flex; justify-content: space-between; align-items: center;
-  z-index: 99;
-  background: rgba(10, 10, 12, 0.7);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border-bottom: 1px solid var(--line);
-}
-.logo {
-  font-family: var(--sans); font-weight: 700; font-size: 18px;
-  letter-spacing: -0.02em;
-  display: flex; align-items: baseline; gap: 4px;
-}
-.logo sup { font-size: 9px; font-weight: 400; color: var(--text-dim); vertical-align: super; }
-nav ul { display: flex; gap: 36px; list-style: none; align-items: center; }
-nav a {
-  color: var(--text-dim); text-decoration: none;
-  font-size: 13px; font-weight: 500; transition: color 0.2s;
-  letter-spacing: 0.01em;
-}
-nav a:hover { color: var(--text); }
-.nav-cta {
-  padding: 9px 20px; background: var(--champagne); color: var(--bg) !important;
-  border-radius: 100px;
-  font-weight: 600 !important; font-size: 12px !important;
-  letter-spacing: 0.02em !important;
-  transition: all 0.2s ease;
-}
-.nav-cta:hover { background: var(--champagne-bright); transform: translateY(-1px); }
+.nav-links a:hover { color: var(--amber); }
 
-/* ════════════ HERO ════════════ */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HERO
+   ════════════════════════════════════════════════════════════════ */
+
 .hero {
   min-height: 100vh;
-  padding: 160px 48px 80px;
+  padding: 200px 0 120px;
+  display: flex;
+  align-items: center;
   position: relative;
-  overflow: hidden;
+  border-top: none;
 }
-.hero::before {
-  content: '';
-  position: absolute; top: -200px; right: -100px;
-  width: 900px; height: 900px;
-  background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, rgba(201,169,110,0.02) 35%, transparent 60%);
-  pointer-events: none; z-index: 0;
-}
-.hero::after {
-  content: ''; position: absolute; bottom: -300px; left: -100px;
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(201,169,110,0.04) 0%, transparent 60%);
-  pointer-events: none; z-index: 0;
-}
-.hero-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 80px 80px;
-  pointer-events: none; z-index: 0;
-  mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-}
-.hero-content {
-  max-width: 1400px; margin: 0 auto;
-  position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1.05fr 1fr;
-  gap: 80px; align-items: center;
-}
-.hero-meta {
-  display: flex; align-items: center; gap: 12px;
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--champagne);
-  margin-bottom: 32px;
-  opacity: 0;
-  animation: fade-up 0.8s 0.1s ease-out forwards;
-}
-.hero-meta-line { width: 32px; height: 1px; background: var(--champagne-dim); }
-.hero h1 {
-  font-family: var(--display); font-weight: 400;
-  font-size: clamp(56px, 6vw, 92px);
-  line-height: 0.96; letter-spacing: -0.035em;
-  margin-bottom: 28px;
-  font-variation-settings: 'opsz' 144;
-  opacity: 0;
-  animation: fade-up 0.8s 0.2s ease-out forwards;
-}
-.hero h1 em { font-style: italic; color: var(--champagne); font-weight: 300; }
-.hero-subtitle {
-  font-size: 18px; line-height: 1.6;
-  color: var(--text-dim);
-  max-width: 480px;
-  margin-bottom: 40px;
-  opacity: 0;
-  animation: fade-up 0.8s 0.3s ease-out forwards;
-}
-.hero-cta-row {
-  margin-bottom: 24px;
-  opacity: 0;
-  animation: fade-up 0.8s 0.4s ease-out forwards;
-}
-.email-form {
-  display: flex; align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--line-strong);
-  border-radius: 100px;
-  padding: 5px 5px 5px 22px;
-  width: 420px; max-width: 100%;
-  transition: all 0.2s;
-}
-.email-form:focus-within {
-  border-color: var(--champagne);
-  box-shadow: 0 0 0 4px rgba(201,169,110,0.1);
-}
-.email-form input {
-  flex: 1; background: transparent; border: none; outline: none;
-  color: var(--text); font-family: var(--sans);
-  font-size: 14px; padding: 12px 8px;
-}
-.email-form input::placeholder { color: var(--text-faint); }
-.email-form button {
-  background: var(--champagne); color: var(--bg);
-  border: none;
-  font-family: var(--sans); font-weight: 600; font-size: 13px;
-  padding: 12px 24px; border-radius: 100px;
-  cursor: pointer; transition: all 0.2s;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-}
-.email-form button:hover { background: var(--champagne-bright); }
-.email-form button:disabled { opacity: 0.7; cursor: wait; }
 
-/* Waitlist counter */
-.waitlist-counter {
-  margin-top: 16px;
-  display: flex; align-items: center; gap: 10px;
-  font-size: 13px; color: var(--text-dim);
-  opacity: 0;
-  animation: fade-up 0.8s 0.5s ease-out forwards;
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
 }
-.waitlist-counter::before {
-  content: ''; width: 6px; height: 6px;
-  background: var(--green); border-radius: 50%;
-  box-shadow: 0 0 6px var(--green);
+
+@media (max-width: 968px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 64px; }
+}
+
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 48px;
+  align-items: center;
+}
+
+.hero-meta .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
   animation: pulse 2s ease-in-out infinite;
 }
-.waitlist-counter strong {
-  color: var(--champagne); font-weight: 600;
-  font-family: var(--mono);
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+  margin-bottom: 40px;
+}
+
+.hero-sub {
+  margin-bottom: 56px;
+  max-width: 520px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 32px;
+  background: var(--amber);
+  color: var(--black);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 0;
+}
+
+.hero-cta:hover {
+  background: var(--white);
+  transform: translateY(-2px);
+}
+
+.hero-cta-arrow {
+  font-family: var(--font-mono);
   font-size: 14px;
 }
 
-/* Success state */
-.success-state {
-  background: linear-gradient(135deg, rgba(201,169,110,0.1) 0%, rgba(201,169,110,0.02) 100%);
-  border: 1px solid var(--champagne-dim);
-  border-radius: 16px;
-  padding: 24px 28px;
-  width: 420px; max-width: 100%;
-  display: none;
-  animation: success-in 0.5s ease-out;
-}
-.success-state.visible { display: block; }
-@keyframes success-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-.success-position {
-  font-family: var(--display);
-  font-size: 36px; font-weight: 400;
-  color: var(--champagne);
-  letter-spacing: -0.02em;
-  margin-bottom: 8px;
-}
-.success-position em { font-style: italic; }
-.success-message {
-  font-size: 14px; color: var(--text-soft);
-  line-height: 1.5;
-}
-.success-message a { color: var(--champagne); text-decoration: none; }
-.success-message a:hover { text-decoration: underline; }
+/* ════════════════════════════════════════════════════════════════
+   BLUEPRINT (the technical drawing in hero)
+   ════════════════════════════════════════════════════════════════ */
 
-/* Hero right */
-.hero-device-stage {
-  position: relative; height: 600px;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0;
-  animation: fade-in 1.2s 0.3s ease-out forwards;
-}
-.device-floor {
-  position: absolute; bottom: 100px;
-  left: 50%; transform: translateX(-50%);
-  width: 600px; height: 200px;
-  background: radial-gradient(ellipse at center top, rgba(201,169,110,0.15) 0%, transparent 60%);
-  pointer-events: none;
-}
-.device-glow {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px; height: 400px;
-  background: radial-gradient(ellipse, rgba(201,169,110,0.08) 0%, transparent 50%);
-  pointer-events: none;
-  animation: glow-pulse 4s ease-in-out infinite;
-}
-@keyframes glow-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-.device {
+.blueprint {
   position: relative;
-  width: 480px; height: 260px;
-  background: linear-gradient(145deg, #1a1a1d 0%, #0f0f12 100%);
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.06) inset,
-    0 30px 60px rgba(0,0,0,0.6),
-    0 60px 120px rgba(0,0,0,0.4);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 28px;
-  z-index: 2;
-  animation: device-float 6s ease-in-out infinite;
-}
-@keyframes device-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-.device::before {
-  content: ''; position: absolute; top: 8px;
-  left: 30px; right: 30px; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-}
-.screen {
-  width: 100%; height: 100%;
-  background: #000; border-radius: 8px;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  position: relative;
-  box-shadow: inset 0 0 30px rgba(201,169,110,0.05);
-  overflow: hidden;
-}
-.screen::after {
-  content: ''; position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.005) 2px, rgba(255,255,255,0.005) 3px);
-  pointer-events: none;
-}
-.screen-asset {
-  font-size: 22px; font-weight: 600;
-  color: var(--champagne);
-  letter-spacing: 0.05em;
-  font-family: var(--mono);
-  margin-bottom: 4px;
-  transition: opacity 0.3s;
-}
-.screen-price {
-  font-family: var(--mono);
-  font-size: 56px; font-weight: 600;
-  color: var(--champagne);
-  letter-spacing: -0.02em; line-height: 1;
-  transition: opacity 0.3s;
-}
-.screen-meta {
-  position: absolute; bottom: 10px; right: 14px;
-  font-family: var(--mono); font-size: 9px;
-  color: var(--text-faint);
-  letter-spacing: 0.1em;
-  display: flex; align-items: center; gap: 6px;
-}
-.screen-meta::before {
-  content: ''; width: 5px; height: 5px;
-  background: var(--green); border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-.device-engraving {
-  position: absolute; bottom: 8px;
-  left: 50%; transform: translateX(-50%);
-  font-family: var(--sans);
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.3em;
-  color: rgba(255,255,255,0.18);
-}
-.asset-marker {
-  position: absolute;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-dim);
-  letter-spacing: 0.05em;
-  display: flex; align-items: center; gap: 8px;
-  opacity: 0;
-  animation: marker-fade-in 0.6s ease-out forwards;
-}
-.asset-marker::before {
-  content: ''; width: 16px; height: 1px; background: var(--champagne-dim);
-}
-.asset-marker .marker-symbol { color: var(--champagne); font-weight: 600; }
-.asset-marker .marker-price { color: var(--text-faint); }
-.marker-1 { top: 15%; right: -180px; animation-delay: 0.6s; }
-.marker-2 { top: 70%; right: -180px; animation-delay: 0.9s; }
-.marker-3 { top: 25%; left: -180px; animation-delay: 1.2s; }
-.marker-3::before { order: 2; margin-left: 8px; }
-.marker-4 { top: 80%; left: -180px; animation-delay: 1.5s; }
-.marker-4::before { order: 2; margin-left: 8px; }
-@keyframes marker-fade-in { to { opacity: 1; } }
-.device-base {
-  position: absolute; bottom: 60px;
-  left: 50%; transform: translateX(-50%);
-  width: 320px; height: 50px;
-  background: linear-gradient(180deg, #1a1a1d, #0a0a0c);
-  clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
-  border-top: 1px solid rgba(255,255,255,0.08);
-  z-index: 1;
-}
-.device-base::after {
-  content: 'TICKRIX';
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--sans);
-  font-size: 10px; font-weight: 700;
-  letter-spacing: 0.3em; color: rgba(255,255,255,0.25);
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 540px;
+  margin: 0 auto;
 }
 
-@keyframes fade-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fade-in { to { opacity: 1; } }
-
-/* ════════════ SECTIONS ════════════ */
-.specs-section {
-  padding: 120px 48px;
-  background: var(--bg-deep);
-  position: relative;
-}
-.section-header {
-  max-width: 1400px; margin: 0 auto 80px;
-  display: flex; justify-content: space-between;
-  align-items: end; flex-wrap: wrap; gap: 40px;
-}
-.section-label {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--champagne);
-  margin-bottom: 16px;
-  display: flex; align-items: center; gap: 12px;
-}
-.section-label::before { content: ''; width: 24px; height: 1px; background: var(--champagne-dim); }
-.section-title {
-  font-family: var(--display); font-weight: 400;
-  font-size: clamp(36px, 4vw, 56px);
-  line-height: 1.05; letter-spacing: -0.02em;
-  max-width: 600px;
-}
-.section-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
-.section-meta { font-family: var(--mono); font-size: 12px; color: var(--text-faint); letter-spacing: 0.05em; }
-
-.specs-grid {
-  max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  gap: 1px; background: var(--line);
-  border: 1px solid var(--line);
-}
-.spec-cell {
-  background: var(--bg-deep);
-  padding: 40px 32px;
-  display: flex; flex-direction: column; gap: 8px;
-  position: relative;
-  transition: background 0.3s;
-}
-.spec-cell:hover { background: var(--bg-card); }
-.spec-num {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--champagne-dim);
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-}
-.spec-value {
-  font-family: var(--display); font-size: 32px;
-  font-weight: 400; color: var(--text);
-  line-height: 1; letter-spacing: -0.02em;
-  margin-bottom: 4px;
-}
-.spec-label { font-size: 13px; color: var(--text-dim); font-weight: 500; }
-.spec-detail { font-size: 11px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
-
-/* ════════════ ASSETS ════════════ */
-.assets-section { padding: 120px 48px; position: relative; }
-.assets-grid {
-  max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
-}
-
-/* Gallery section — real product photos */
-.gallery-section {
-  padding: 120px 48px 60px;
-  position: relative;
-  background: var(--bg-deep);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.gallery-grid {
-  max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
-}
-.gallery-item {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #050506;
-  border: 1px solid var(--line);
-  aspect-ratio: 16 / 10;
-  transition: transform 0.4s ease, border-color 0.4s ease;
-}
-.gallery-item:hover {
-  transform: translateY(-4px);
-  border-color: rgba(201, 169, 110, 0.3);
-}
-.gallery-item img {
+.blueprint svg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-}
-.gallery-item:hover img { transform: scale(1.03); }
-.gallery-caption {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 24px 28px;
-  background: linear-gradient(to top, rgba(5,5,6,0.95) 0%, rgba(5,5,6,0.7) 60%, transparent 100%);
-  display: flex; flex-direction: column; gap: 4px;
-}
-.gallery-caption-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--champagne);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.gallery-caption-text {
-  font-family: var(--display);
-  font-size: 16px;
-  color: var(--text-soft);
-  font-weight: 400;
-  line-height: 1.4;
-}
-.gallery-large { aspect-ratio: 16 / 10; }
-.gallery-small { aspect-ratio: 4 / 5; }
-.asset-card {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 24px 20px;
-  transition: all 0.3s ease;
-  cursor: default;
-}
-.asset-card:hover {
-  border-color: var(--champagne-dim);
-  background: var(--bg-elevated);
-  transform: translateY(-4px);
-}
-.asset-card-sym { font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--champagne); margin-bottom: 6px; letter-spacing: 0.02em; }
-.asset-card-name { font-size: 11px; color: var(--text-dim); margin-bottom: 16px; }
-.asset-card-price { font-family: var(--mono); font-size: 16px; font-weight: 600; color: var(--text-soft); letter-spacing: -0.01em; transition: opacity 0.3s; }
-.asset-card-change { font-family: var(--mono); font-size: 11px; margin-top: 4px; }
-.asset-card-change.up { color: var(--green); }
-.asset-card-change.down { color: var(--red); }
-
-/* Category card variant */
-.category-card .asset-card-price {
-  font-family: var(--mono); font-size: 13px;
-  color: var(--text-soft); font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
-}
-.category-card .category-meta {
-  color: var(--text-dim);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-top: 6px;
 }
 
-/* ════════════ FEATURES ════════════ */
-.features-section {
-  padding: 120px 48px;
-  background: var(--bg-deep);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.features-grid {
-  max-width: 1400px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 1px; background: var(--line);
-  border: 1px solid var(--line);
-}
-.feature {
-  background: var(--bg-deep);
-  padding: 56px 40px;
-  display: flex; flex-direction: column; gap: 16px;
-}
-.feature.large {
-  grid-row: span 2;
-  background: linear-gradient(145deg, var(--bg-card) 0%, var(--bg-deep) 100%);
-}
-.feature-num { font-family: var(--mono); font-size: 11px; color: var(--champagne); letter-spacing: 0.15em; margin-bottom: 24px; }
-.feature-title { font-family: var(--display); font-size: 28px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 8px; }
-.feature.large .feature-title { font-size: 40px; margin-bottom: 16px; }
-.feature-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; max-width: 360px; }
-.feature-visual { margin-top: auto; padding-top: 32px; font-family: var(--mono); font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; }
+/* ════════════════════════════════════════════════════════════════
+   LIVE TICKER
+   ════════════════════════════════════════════════════════════════ */
 
-/* ════════════ STORY ════════════ */
-.story-section { padding: 160px 48px; position: relative; }
-.story-container { max-width: 800px; margin: 0 auto; text-align: center; }
-.story-quote {
-  font-family: var(--display);
-  font-size: clamp(28px, 3.5vw, 48px);
-  font-weight: 300; line-height: 1.25;
-  letter-spacing: -0.02em; color: var(--text);
-  margin-bottom: 48px;
-}
-.story-quote em { font-style: italic; color: var(--champagne); }
-.story-attribution { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); }
-.story-attribution strong { color: var(--text-dim); font-weight: 500; }
-
-/* ════════════ CTA ════════════ */
-.cta-section {
-  padding: 120px 48px;
-  background: var(--bg-deep);
-  border-top: 1px solid var(--line);
-  text-align: center;
-  position: relative;
+.ticker-strip {
+  display: flex;
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-top: 96px;
   overflow: hidden;
 }
-.cta-section::before {
-  content: ''; position: absolute;
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 800px; height: 800px;
-  background: radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 60%);
-  pointer-events: none;
+
+.ticker-item {
+  flex: 1;
+  padding: 24px 32px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.cta-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-.cta-title { font-family: var(--display); font-size: clamp(40px, 5vw, 72px); font-weight: 400; line-height: 1; letter-spacing: -0.03em; margin-bottom: 24px; }
-.cta-title em { font-style: italic; color: var(--champagne); font-weight: 300; }
-.cta-subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto; }
-.cta-form {
-  display: flex; align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--line-strong);
-  border-radius: 100px;
-  padding: 5px 5px 5px 24px;
-  width: 460px; max-width: 100%;
+
+.ticker-item:last-child { border-right: none; }
+
+.ticker-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--gray-2);
+  text-transform: uppercase;
+}
+
+.ticker-price {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white);
+  font-feature-settings: 'tnum';
+}
+
+.ticker-price.live { color: var(--amber); }
+
+@media (max-width: 768px) {
+  .ticker-strip { flex-wrap: wrap; }
+  .ticker-item { flex: 1 1 50%; border-bottom: 1px solid var(--border); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SPECS — engineering callouts
+   ════════════════════════════════════════════════════════════════ */
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border-soft);
+}
+
+.spec {
+  background: var(--black);
+  padding: 56px 48px;
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.spec-num {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gray-3);
+}
+
+.spec-value {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.spec-value .unit {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray-2);
+  margin-left: 8px;
+  letter-spacing: 0.1em;
+}
+
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 12px;
+}
+
+.spec-desc {
+  font-size: 14px;
+  color: var(--gray-1);
+  line-height: 1.6;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .specs-grid { grid-template-columns: 1fr; }
+  .spec { padding: 40px 24px; min-height: 220px; }
+  .spec-value { font-size: 32px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MARKETS GRID
+   ════════════════════════════════════════════════════════════════ */
+
+.markets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-soft);
+  border: 1px solid var(--border-soft);
+}
+
+.market {
+  background: var(--black);
+  padding: 40px 32px;
+  transition: background 0.3s;
+}
+
+.market:hover { background: var(--surface); }
+
+.market-icon {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-3);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+}
+
+.market-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+
+.market-desc {
+  font-size: 13px;
+  color: var(--gray-2);
+  margin-bottom: 16px;
+}
+
+.market-ex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+}
+
+.market-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-3);
+  margin-top: 8px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 968px) {
+  .markets-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .markets-grid { grid-template-columns: 1fr; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   METHOD STEPS
+   ════════════════════════════════════════════════════════════════ */
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 64px;
+  margin-top: 40px;
+}
+
+.method-step {
+  position: relative;
+  padding-top: 32px;
+}
+
+.method-step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 1px;
+  background: var(--amber);
+}
+
+.method-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.3em;
+  margin-bottom: 24px;
+}
+
+.method-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+.method-desc {
+  font-size: 15px;
+  color: var(--gray-1);
+  line-height: 1.65;
+}
+
+@media (max-width: 768px) {
+  .method-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   EDITION ONE
+   ════════════════════════════════════════════════════════════════ */
+
+.edition {
+  border: 1px solid var(--border);
+  padding: 80px 64px;
+  position: relative;
+  background: linear-gradient(180deg, var(--black) 0%, var(--surface) 100%);
+}
+
+.edition::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 24px;
+  height: 24px;
+  border-top: 1px solid var(--amber);
+  border-left: 1px solid var(--amber);
+}
+
+.edition::after {
+  content: '';
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-bottom: 1px solid var(--amber);
+  border-right: 1px solid var(--amber);
+}
+
+.edition-number {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 12vw, 144px);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-style: italic;
+  color: var(--white);
+  margin: 24px 0;
+}
+
+.edition-number .ne {
+  font-style: normal;
+  color: var(--amber);
+  font-size: 0.7em;
+  margin-right: 12px;
+}
+
+.edition-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid var(--border);
+}
+
+.edition-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edition-detail-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gray-2);
+  text-transform: uppercase;
+}
+
+.edition-detail-value {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  color: var(--white);
+}
+
+@media (max-width: 768px) {
+  .edition { padding: 48px 32px; }
+  .edition-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOUNDER NOTE
+   ════════════════════════════════════════════════════════════════ */
+
+.founder {
+  max-width: 720px;
   margin: 0 auto;
-  transition: all 0.2s;
+  padding: 0 32px;
 }
-.cta-form:focus-within { border-color: var(--champagne); box-shadow: 0 0 0 4px rgba(201,169,110,0.1); }
-.cta-form input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-family: var(--sans); font-size: 15px; padding: 14px 8px; }
-.cta-form input::placeholder { color: var(--text-faint); }
-.cta-form button { background: var(--champagne); color: var(--bg); border: none; font-family: var(--sans); font-weight: 600; font-size: 13px; padding: 14px 28px; border-radius: 100px; cursor: pointer; letter-spacing: 0.01em; transition: all 0.2s; white-space: nowrap; }
-.cta-form button:hover { background: var(--champagne-bright); }
-.cta-form button:disabled { opacity: 0.7; cursor: wait; }
-.cta-fineprint { margin-top: 24px; font-size: 12px; color: var(--text-faint); display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; }
-.cta-fineprint span { display: flex; align-items: center; gap: 6px; }
-.cta-fineprint span::before { content: ''; width: 4px; height: 4px; background: var(--champagne); border-radius: 50%; }
 
-/* ════════════ FOOTER ════════════ */
-footer { padding: 60px 48px 40px; background: var(--bg-deep); border-top: 1px solid var(--line); }
-.footer-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 56px; }
-.footer-brand .logo { margin-bottom: 16px; }
-.footer-tagline { font-family: var(--display); font-style: italic; color: var(--text-dim); font-size: 16px; max-width: 280px; line-height: 1.4; }
-.footer-col h4 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--champagne); margin-bottom: 20px; font-weight: 500; }
-.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.footer-col a { color: var(--text-dim); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-.footer-col a:hover { color: var(--champagne); }
-.footer-bottom { max-width: 1400px; margin: 0 auto; padding-top: 32px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-faint); flex-wrap: wrap; gap: 16px; }
-
-/* ════════════ RESPONSIVE ════════════ */
-@media (max-width: 1024px) {
-  .hero-content { grid-template-columns: 1fr; gap: 60px; }
-  .hero-device-stage { height: 500px; }
-  .specs-grid { grid-template-columns: repeat(2, 1fr); }
-  .assets-grid { grid-template-columns: repeat(3, 1fr); }
-  .gallery-grid { grid-template-columns: 1fr; gap: 16px; }
-  .gallery-large, .gallery-small { aspect-ratio: 16 / 10; }
-  .features-grid { grid-template-columns: 1fr 1fr; }
-  .feature.large { grid-row: span 1; grid-column: span 2; }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
-  .marker-1, .marker-2, .marker-3, .marker-4 { display: none; }
+.founder-quote {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.5vw, 32px);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  color: var(--white);
+  font-style: italic;
 }
-@media (max-width: 640px) {
-  nav { padding: 16px 24px; }
-  nav ul { gap: 16px; }
-  nav ul li:not(:last-child):not(.has-cta) { display: none; }
-  .hero { padding: 130px 24px 60px; }
-  .hero-content { gap: 40px; }
-  .hero-device-stage { height: 360px; }
-  .device { width: 320px; height: 180px; padding: 18px; }
-  .screen-price { font-size: 36px; }
-  .screen-asset { font-size: 16px; }
-  .device-base { width: 220px; height: 36px; bottom: 80px;}
-  .specs-section, .assets-section, .features-section, .story-section, .cta-section { padding: 80px 24px; }
-  .gallery-section { padding: 80px 24px 40px; }
-  .specs-grid, .features-grid { grid-template-columns: 1fr; }
-  .feature.large { grid-column: span 1; }
-  .assets-grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; }
-  .email-form, .cta-form { width: 100%; }
-  .success-state { width: 100%; }
+
+.founder-quote::before {
+  content: '"';
+  font-size: 1.4em;
+  color: var(--amber);
+  display: block;
+  line-height: 0.5;
+  margin-bottom: 24px;
+}
+
+.founder-sig {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.founder-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.founder-place {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gray-2);
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FAQ
+   ════════════════════════════════════════════════════════════════ */
+
+.faq-list {
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-q {
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--white);
+  text-align: left;
+  cursor: pointer;
+  padding: 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  transition: color 0.3s;
+}
+
+.faq-q:hover { color: var(--amber); }
+
+.faq-toggle {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--amber);
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+.faq-a {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--gray-1);
+}
+
+.faq-item.open .faq-a {
+  max-height: 400px;
+  padding-bottom: 32px;
+}
+
+.faq-a-inner { max-width: var(--reading); }
+
+/* ════════════════════════════════════════════════════════════════
+   WAITLIST
+   ════════════════════════════════════════════════════════════════ */
+
+.waitlist {
+  text-align: center;
+}
+
+.waitlist-perks {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin: 48px 0;
+  flex-wrap: wrap;
+}
+
+.perk {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--gray-1);
+  text-transform: uppercase;
+}
+
+.perk-mark {
+  color: var(--amber);
+  font-size: 14px;
+}
+
+.waitlist-form {
+  max-width: 480px;
+  margin: 48px auto 0;
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+.waitlist-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 20px 24px;
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  outline: none;
+  letter-spacing: 0.05em;
+}
+
+.waitlist-input::placeholder { color: var(--gray-3); }
+
+.waitlist-submit {
+  background: var(--amber);
+  color: var(--black);
+  border: none;
+  padding: 0 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.waitlist-submit:hover { background: var(--white); }
+
+.waitlist-count {
+  margin-top: 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.waitlist-count b { color: var(--amber); font-weight: 500; }
+
+.waitlist-success {
+  display: none;
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+.waitlist-success.show { display: block; }
+
+@media (max-width: 480px) {
+  .waitlist-form { flex-direction: column; }
+  .waitlist-submit { padding: 18px; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════════════════════════════ */
+
+footer {
+  border-top: 1px solid var(--border-soft);
+  padding: 80px 0 40px;
+  margin-top: var(--section);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: var(--gray-2);
+  max-width: 320px;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gray-2);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-col a {
+  font-size: 14px;
+  color: var(--gray-1);
+  transition: color 0.3s;
+}
+
+.footer-col a:hover { color: var(--amber); }
+
+.footer-bottom {
+  padding-top: 32px;
+  border-top: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-3);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LEGAL MODAL OVERLAYS
+   ════════════════════════════════════════════════════════════════ */
+
+.legal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 24px 40px;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
+}
+
+.legal-overlay.show { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.legal-modal {
+  background: var(--black);
+  border: 1px solid var(--border);
+  max-width: 720px;
+  width: 100%;
+  padding: 64px;
+  position: relative;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.legal-modal::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 24px;
+  height: 24px;
+  border-top: 1px solid var(--amber);
+  border-left: 1px solid var(--amber);
+}
+
+.legal-modal::after {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-bottom: 1px solid var(--amber);
+  border-right: 1px solid var(--amber);
+}
+
+.legal-close {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  background: none;
+  border: none;
+  color: var(--gray-1);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: color 0.3s;
+}
+
+.legal-close:hover { color: var(--amber); }
+
+.legal-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--amber);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.legal-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.legal-updated {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gray-2);
+  letter-spacing: 0.15em;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-body h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white);
+  margin-top: 32px;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.legal-body h3:first-child { margin-top: 0; }
+
+.legal-body p, .legal-body li {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--gray-1);
+  margin-bottom: 12px;
+}
+
+.legal-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.legal-body li {
+  padding-left: 20px;
+  position: relative;
+}
+
+.legal-body li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--amber);
+}
+
+.legal-body strong { color: var(--white); font-weight: 500; }
+
+.legal-body a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 768px) {
+  .legal-overlay { padding: 60px 16px 24px; }
+  .legal-modal { padding: 48px 28px; }
+  .legal-title { font-size: 28px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Live Ticker -->
-<div class="ticker-bar">
-  <div class="ticker-track" id="tickerTrack"></div>
-  <div class="ticker-status">Live Markets</div>
-</div>
-
-<!-- Nav -->
-<nav>
-  <div class="logo">Tickrix<sup>®</sup></div>
-  <ul>
-    <li><a href="#device">The Device</a></li>
-    <li><a href="#specs">Specs</a></li>
-    <li><a href="#story">Story</a></li>
-    <li class="has-cta"><a href="#reserve" class="nav-cta">Get Notified</a></li>
-  </ul>
+<!-- ─── NAVIGATION ─────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">Tickrix<span style="color: var(--amber);">®</span></div>
+    <ul class="nav-links">
+      <li><a href="#device">Device</a></li>
+      <li><a href="#markets">Markets</a></li>
+      <li><a href="#edition">Edition One</a></li>
+      <li><a href="#waitlist">Reserve</a></li>
+    </ul>
+  </div>
 </nav>
 
-<!-- Hero -->
+<!-- ─── HERO ─────────────────────────────────────────── -->
 <section class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div>
-      <div class="hero-meta">
-        <span class="hero-meta-line"></span>
-        <span>Edition One · Q3 2026</span>
-      </div>
-      <h1>The market.<br><em>On your desk.</em></h1>
-      <p class="hero-subtitle">A WiFi-connected display, milled from solid aluminum. Every market — crypto, forex, stocks, ETFs, indices, commodities, bonds — on your desk.</p>
-      <div class="hero-cta-row">
-        <form class="email-form" id="heroForm" onsubmit="handleSubmit(event, 'hero')">
-          <input type="email" placeholder="your@email.com" required name="email">
-          <button type="submit">Get Notified</button>
-        </form>
-        <div class="success-state" id="heroSuccess">
-          <div class="success-position">You're <em>№<span class="success-num">848</span></em></div>
-          <div class="success-message">Welcome to the waitlist. We'll email you the moment Tickrix is ready to ship — Q3 2026.</div>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-meta">
+          <div class="dot"></div>
+          <span class="label label-amber">Edition One · Q3 2026</span>
         </div>
-        <div class="waitlist-counter">
-          <span><strong id="waitlistCount">847</strong> traders on the waitlist</span>
+
+        <h1 class="hero-title h-hero">The market.<br><em>On your desk.</em></h1>
+
+        <p class="hero-sub body-lg">
+          A WiFi-connected display, milled from solid aluminum.
+          Every market — crypto, forex, stocks, ETFs, indices, commodities,
+          bonds, futures — quietly, on your desk.
+        </p>
+
+        <a href="#waitlist" class="hero-cta">
+          Reserve Edition One
+          <span class="hero-cta-arrow">→</span>
+        </a>
+      </div>
+
+      <!-- TECHNICAL BLUEPRINT -->
+      <div class="blueprint">
+        <svg viewBox="0 0 540 540" xmlns="http://www.w3.org/2000/svg">
+          <!-- Crosshair grid -->
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+            </pattern>
+            <pattern id="majorgrid" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+            </pattern>
+          </defs>
+          <rect width="540" height="540" fill="url(#grid)"/>
+          <rect width="540" height="540" fill="url(#majorgrid)"/>
+
+          <!-- Center crosshair -->
+          <line x1="270" y1="0" x2="270" y2="540" stroke="rgba(232,161,77,0.2)" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="0" y1="270" x2="540" y2="270" stroke="rgba(232,161,77,0.2)" stroke-width="0.5" stroke-dasharray="2,4"/>
+
+          <!-- Device main body -->
+          <g transform="translate(120, 200)">
+            <!-- Top dimension line -->
+            <line x1="0" y1="-30" x2="300" y2="-30" stroke="#E8A14D" stroke-width="0.75"/>
+            <line x1="0" y1="-35" x2="0" y2="-25" stroke="#E8A14D" stroke-width="0.75"/>
+            <line x1="300" y1="-35" x2="300" y2="-25" stroke="#E8A14D" stroke-width="0.75"/>
+            <text x="150" y="-40" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2">63 mm</text>
+
+            <!-- Side dimension line -->
+            <line x1="-30" y1="0" x2="-30" y2="140" stroke="#E8A14D" stroke-width="0.75"/>
+            <line x1="-35" y1="0" x2="-25" y2="0" stroke="#E8A14D" stroke-width="0.75"/>
+            <line x1="-35" y1="140" x2="-25" y2="140" stroke="#E8A14D" stroke-width="0.75"/>
+            <text x="-45" y="75" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" transform="rotate(-90, -45, 75)">31 mm</text>
+
+            <!-- Outer aluminum body -->
+            <rect x="0" y="0" width="300" height="140" fill="none" stroke="#FFFFFF" stroke-width="1.5" rx="14"/>
+
+            <!-- Inner bezel -->
+            <rect x="20" y="20" width="260" height="100" fill="none" stroke="#FFFFFF" stroke-width="0.5" rx="6"/>
+
+            <!-- AMOLED screen area -->
+            <rect x="35" y="32" width="230" height="76" fill="#0a0a0a" stroke="#E8A14D" stroke-width="0.5" rx="2"/>
+
+            <!-- Screen content (price preview) -->
+            <text x="50" y="58" fill="#888780" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">BTC</text>
+            <text x="150" y="78" text-anchor="middle" fill="#E8A14D" font-family="Fraunces, serif" font-size="22" font-weight="500">$67,234</text>
+            <text x="150" y="98" text-anchor="middle" fill="#888780" font-family="JetBrains Mono, monospace" font-size="6" letter-spacing="2">TICKRIX | LIVE</text>
+
+            <!-- USB-C port indicator -->
+            <line x1="135" y1="140" x2="165" y2="140" stroke="#E8A14D" stroke-width="2"/>
+            <text x="150" y="160" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">USB-C</text>
+
+            <!-- Corner reference markers -->
+            <circle cx="0" cy="0" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
+            <circle cx="300" cy="0" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
+            <circle cx="0" cy="140" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
+            <circle cx="300" cy="140" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
+
+            <!-- Callout: AMOLED -->
+            <line x1="280" y1="50" x2="340" y2="20" stroke="#FFFFFF" stroke-width="0.4"/>
+            <circle cx="340" cy="20" r="2" fill="#FFFFFF"/>
+            <text x="346" y="20" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">A — AMOLED</text>
+            <text x="346" y="32" fill="#6E6C66" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">536 × 240 px</text>
+
+            <!-- Callout: Aluminum body -->
+            <line x1="20" y1="170" x2="20" y2="200" stroke="#FFFFFF" stroke-width="0.4"/>
+            <circle cx="20" cy="200" r="2" fill="#FFFFFF"/>
+            <text x="28" y="204" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">B — CNC ALUMINUM</text>
+            <text x="28" y="216" fill="#6E6C66" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">6061-T6 · matte black</text>
+          </g>
+
+          <!-- Top-left coordinate label -->
+          <text x="12" y="20" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">FIG. 01 / TOP VIEW</text>
+          <text x="12" y="33" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">SCALE 1:2</text>
+
+          <!-- Bottom-right meta -->
+          <text x="528" y="528" text-anchor="end" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">TX-DWG-001 · ROTTERDAM · 2026</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- LIVE TICKER STRIP -->
+    <div class="ticker-strip">
+      <div class="ticker-item">
+        <div class="ticker-label">BTC</div>
+        <div class="ticker-price live mono" id="px-btc">$ ——</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-label">EUR / USD</div>
+        <div class="ticker-price mono" id="px-eur">—.————</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-label">GOLD</div>
+        <div class="ticker-price mono" id="px-gold">$ ——</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-label">OIL · WTI</div>
+        <div class="ticker-price mono" id="px-oil">$ ——</div>
+      </div>
+      <div class="ticker-item">
+        <div class="ticker-label">SPX</div>
+        <div class="ticker-price mono" id="px-spx">— LIVE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 01 / THE DEVICE ─────────────────────────────────────────── -->
+<section id="device">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label">01 / Specifications</span>
+      </div>
+      <div>
+        <h2 class="h-section">Built like an instrument.<br><em>Not a toy.</em></h2>
+      </div>
+    </div>
+
+    <div class="specs-grid">
+      <div class="spec">
+        <span class="spec-num">— A</span>
+        <div>
+          <div class="spec-label">Dimensions</div>
+          <div class="spec-value">63 × 31 × 8<span class="unit">mm</span></div>
+        </div>
+        <p class="spec-desc">Engineered to disappear into any desk. Smaller than a credit card.</p>
+      </div>
+
+      <div class="spec">
+        <span class="spec-num">— B</span>
+        <div>
+          <div class="spec-label">Display</div>
+          <div class="spec-value">1.91"<span class="unit">AMOLED</span></div>
+        </div>
+        <p class="spec-desc">536 × 240 px. True blacks. 1000 nits peak. Auto-dim for night use.</p>
+      </div>
+
+      <div class="spec">
+        <span class="spec-num">— C</span>
+        <div>
+          <div class="spec-label">Body</div>
+          <div class="spec-value">CNC Aluminum<span class="unit">6061-T6</span></div>
+        </div>
+        <p class="spec-desc">Aerospace-grade billet. Matte black anodized. Hand-finished bezel.</p>
+      </div>
+
+      <div class="spec">
+        <span class="spec-num">— D</span>
+        <div>
+          <div class="spec-label">Power</div>
+          <div class="spec-value">USB-C<span class="unit">Always on</span></div>
+        </div>
+        <p class="spec-desc">Universal connection. Or 4–6 hours on optional battery cell.</p>
+      </div>
+
+      <div class="spec">
+        <span class="spec-num">— E</span>
+        <div>
+          <div class="spec-label">Connectivity</div>
+          <div class="spec-value">2.4 GHz<span class="unit">Wi-Fi</span></div>
+        </div>
+        <p class="spec-desc">Captive portal setup in 60 seconds. No app. No subscription. Ever.</p>
+      </div>
+
+      <div class="spec">
+        <span class="spec-num">— F</span>
+        <div>
+          <div class="spec-label">Weight</div>
+          <div class="spec-value">78<span class="unit">grams</span></div>
+        </div>
+        <p class="spec-desc">Solid in the hand. Stays where you put it. Doesn't slide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 02 / MARKETS COVERED ─────────────────────────────────────────── -->
+<section id="markets">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label">02 / Markets Covered</span>
+      </div>
+      <div>
+        <h2 class="h-section">Every market.<br><em>Yours to follow.</em></h2>
+        <p class="body-lg" style="margin-top: 24px;">
+          10,000+ instruments across 8 asset classes. Updated live. Direct from exchanges.
+        </p>
+      </div>
+    </div>
+
+    <div class="markets-grid">
+      <div class="market">
+        <div class="market-icon">— 01</div>
+        <div class="market-name">Crypto</div>
+        <div class="market-desc">Digital assets</div>
+        <div class="market-ex">BTC · ETH · SOL</div>
+        <div class="market-count">5,000+ pairs</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 02</div>
+        <div class="market-name">Forex</div>
+        <div class="market-desc">Currency pairs</div>
+        <div class="market-ex">EUR/USD · GBP/JPY</div>
+        <div class="market-count">5-decimal pip · 180+</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 03</div>
+        <div class="market-name">Stocks</div>
+        <div class="market-desc">Global equities</div>
+        <div class="market-ex">AAPL · TSLA · NVDA</div>
+        <div class="market-count">US · EU · UK · 8,000+</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 04</div>
+        <div class="market-name">ETFs</div>
+        <div class="market-desc">Exchange-traded funds</div>
+        <div class="market-ex">SPY · QQQ · VOO</div>
+        <div class="market-count">2,500+ funds</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 05</div>
+        <div class="market-name">Indices</div>
+        <div class="market-desc">Market benchmarks</div>
+        <div class="market-ex">SPX · NDX · DAX</div>
+        <div class="market-count">Global coverage</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 06</div>
+        <div class="market-name">Commodities</div>
+        <div class="market-desc">Hard assets</div>
+        <div class="market-ex">Gold · Oil · Silver</div>
+        <div class="market-count">Spot &amp; futures</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 07</div>
+        <div class="market-name">Bonds</div>
+        <div class="market-desc">Fixed income</div>
+        <div class="market-ex">US10Y · Bund · JGB</div>
+        <div class="market-count">Yields &amp; spreads</div>
+      </div>
+      <div class="market">
+        <div class="market-icon">— 08</div>
+        <div class="market-name">Futures</div>
+        <div class="market-desc">Derivatives</div>
+        <div class="market-ex">ES · CL · GC</div>
+        <div class="market-count">Index · Energy · Metals</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 03 / THE METHOD ─────────────────────────────────────────── -->
+<section id="method">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label">03 / The Method</span>
+      </div>
+      <div>
+        <h2 class="h-section">Three steps.<br><em>Sixty seconds.</em></h2>
+      </div>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-step">
+        <div class="method-num">— Step 01</div>
+        <h3 class="method-title">Plug in.</h3>
+        <p class="method-desc">USB-C to any charger, laptop, or monitor port. Tickrix boots in 3 seconds and broadcasts a setup network.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-num">— Step 02</div>
+        <h3 class="method-title">Connect.</h3>
+        <p class="method-desc">Join "Tickrix-Setup" on your phone. Setup page opens automatically. Pick your home Wi-Fi. Save. Tickrix remembers it forever.</p>
+      </div>
+      <div class="method-step">
+        <div class="method-num">— Step 03</div>
+        <h3 class="method-title">Watch.</h3>
+        <p class="method-desc">Pick your tickers. Choose any exchange. Live prices appear. Set it on your desk. Get back to work.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 04 / EDITION ONE ─────────────────────────────────────────── -->
+<section id="edition">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label label-amber">04 / Edition One</span>
+      </div>
+      <div>
+        <h2 class="h-section">A limited first run.<br><em>Numbered. Engraved.</em></h2>
+      </div>
+    </div>
+
+    <div class="edition">
+      <span class="label label-amber">First Production Run</span>
+      <div class="edition-number"><span class="ne">№</span><em>001</em></div>
+      <p class="body-lg" style="max-width: 540px;">
+        Each Edition One device is individually numbered and engraved on the back.
+        Limited initial production. Once Edition One ships, it never returns.
+      </p>
+
+      <div class="edition-grid">
+        <div class="edition-detail">
+          <span class="edition-detail-label">Production</span>
+          <span class="edition-detail-value">Limited initial run</span>
+        </div>
+        <div class="edition-detail">
+          <span class="edition-detail-label">Ships</span>
+          <span class="edition-detail-value">Q3 2026</span>
+        </div>
+        <div class="edition-detail">
+          <span class="edition-detail-label">Engraving</span>
+          <span class="edition-detail-value">№001 onward</span>
+        </div>
+        <div class="edition-detail">
+          <span class="edition-detail-label">Designed in</span>
+          <span class="edition-detail-value">Rotterdam, NL</span>
         </div>
       </div>
     </div>
-    <div class="hero-device-stage" id="device">
-      <div class="device-glow"></div>
-      <div class="device-floor"></div>
-      <div class="device">
-        <div class="screen">
-          <div class="screen-asset" id="screenAsset">EUR/USD</div>
-          <div class="screen-price" id="screenPrice">1.17432</div>
-          <div class="screen-meta">LIVE</div>
-        </div>
-        <div class="device-engraving">TICKRIX</div>
+  </div>
+</section>
+
+<!-- ─── 05 / FOUNDER NOTE ─────────────────────────────────────────── -->
+<section id="story">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label">05 / The Note</span>
       </div>
-      <div class="device-base"></div>
-      <div class="asset-marker marker-1"><div><div><span class="marker-symbol" id="marker-btc-sym">BTC</span></div><div class="marker-price" id="marker-btc">$67,234</div></div></div>
-      <div class="asset-marker marker-2"><div><div><span class="marker-symbol">GOLD</span></div><div class="marker-price" id="marker-gold">$2,089</div></div></div>
-      <div class="asset-marker marker-3"><div><div><span class="marker-symbol">AAPL</span></div><div class="marker-price" id="marker-aapl">$229.87</div></div></div>
-      <div class="asset-marker marker-4"><div><div><span class="marker-symbol">OIL</span></div><div class="marker-price" id="marker-oil">$78.45</div></div></div>
+      <div>
+        <h2 class="h-section">Why we built it.</h2>
+      </div>
+    </div>
+
+    <div class="founder">
+      <p class="founder-quote">
+        Most traders stare at screens all day. We wanted one quiet thing on the desk —
+        the markets we care about, beautifully, without effort. No app to open.
+        No tab to refresh. No subscription. Just the data. Glance, see, move on.
+        We built Tickrix because we wanted one ourselves.
+      </p>
+      <div class="founder-sig">
+        <div class="founder-name">— The Tickrix Team</div>
+        <div class="founder-place">Rotterdam, Netherlands</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Specs -->
-<section class="specs-section" id="specs">
-  <div class="section-header">
-    <div>
-      <div class="section-label">01 / Specifications</div>
-      <h2 class="section-title">Built like an instrument.<br><em>Not a toy.</em></h2>
+<!-- ─── 06 / FAQ ─────────────────────────────────────────── -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="label">06 / Questions</span>
+      </div>
+      <div>
+        <h2 class="h-section">Answered.</h2>
+      </div>
     </div>
-    <div class="section-meta">63 × 31 × 8 mm</div>
-  </div>
-  <div class="specs-grid">
-    <div class="spec-cell"><div class="spec-num">— 01</div><div class="spec-value">1.91"</div><div class="spec-label">AMOLED Display</div><div class="spec-detail">536×240 px. True blacks. Vivid color.</div></div>
-    <div class="spec-cell"><div class="spec-num">— 02</div><div class="spec-value">CNC</div><div class="spec-label">Aluminum Body</div><div class="spec-detail">Matte black anodized. Solid feel.</div></div>
-    <div class="spec-cell"><div class="spec-num">— 03</div><div class="spec-value">WiFi</div><div class="spec-label">Wireless Setup</div><div class="spec-detail">2.4GHz. Captive portal. No app.</div></div>
-    <div class="spec-cell"><div class="spec-num">— 04</div><div class="spec-value">USB-C</div><div class="spec-label">Universal Power</div><div class="spec-detail">Always on. Or 4–6h battery.</div></div>
-  </div>
-</section>
 
-<!-- Assets -->
-<section class="assets-section">
-  <div class="section-header">
-    <div>
-      <div class="section-label">02 / Markets Covered</div>
-      <h2 class="section-title">Every market.<br><em>Yours to follow.</em></h2>
-    </div>
-    <div class="section-meta">10,000+ instruments · Updated live</div>
-  </div>
-  <div class="assets-grid" id="assetsGrid">
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">CRYPTO</div>
-      <div class="asset-card-name">Digital assets</div>
-      <div class="asset-card-price">BTC · ETH · SOL</div>
-      <div class="asset-card-change category-meta">+ 5,000 pairs</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">FOREX</div>
-      <div class="asset-card-name">Currency pairs</div>
-      <div class="asset-card-price">EUR/USD · GBP/JPY</div>
-      <div class="asset-card-change category-meta">5-decimal pip · 180+ pairs</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">STOCKS</div>
-      <div class="asset-card-name">Global equities</div>
-      <div class="asset-card-price">AAPL · TSLA · NVDA</div>
-      <div class="asset-card-change category-meta">US · EU · UK · 8,000+</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">ETFs</div>
-      <div class="asset-card-name">Exchange-traded funds</div>
-      <div class="asset-card-price">SPY · QQQ · VOO</div>
-      <div class="asset-card-change category-meta">+ 2,500 funds</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">INDICES</div>
-      <div class="asset-card-name">Market benchmarks</div>
-      <div class="asset-card-price">S&amp;P 500 · NASDAQ · DAX</div>
-      <div class="asset-card-change category-meta">Global coverage</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">COMMODITIES</div>
-      <div class="asset-card-name">Hard assets</div>
-      <div class="asset-card-price">Gold · Oil · Silver</div>
-      <div class="asset-card-change category-meta">Spot &amp; futures</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">BONDS</div>
-      <div class="asset-card-name">Fixed income</div>
-      <div class="asset-card-price">US10Y · Bund · JGB</div>
-      <div class="asset-card-change category-meta">Yields &amp; spreads</div>
-    </div>
-    <div class="asset-card category-card">
-      <div class="asset-card-sym">FUTURES</div>
-      <div class="asset-card-name">Derivatives</div>
-      <div class="asset-card-price">ES · CL · GC</div>
-      <div class="asset-card-change category-meta">Index · Energy · Metals</div>
-    </div>
-  </div>
-</section>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Will Tickrix work with my exchange?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Yes. Tickrix supports MEXC, Binance, Bybit, LBank, Kraken, and Coinbase out of the box.
+          For any exchange we don't support yet, the Custom API option lets you connect any worldwide
+          data source — exchange, broker, or your own endpoint.
+        </div></div>
+      </div>
 
-<!-- Features -->
-<section class="features-section">
-  <div class="section-header">
-    <div>
-      <div class="section-label">03 / Why Tickrix</div>
-      <h2 class="section-title">Considered.<br><em>To the millimeter.</em></h2>
-    </div>
-    <div class="section-meta">Designed in Rotterdam</div>
-  </div>
-  <div class="features-grid">
-    <div class="feature large">
-      <div class="feature-num">01 — THE DEVICE</div>
-      <h3 class="feature-title">A precision instrument, not a gadget.</h3>
-      <p class="feature-desc">Every Tickrix is CNC-milled from a single block of aerospace-grade aluminum. The display is AMOLED — same technology as flagship phones. The bezel is hand-finished. The result feels like something from another decade — when things were built to last.</p>
-      <div class="feature-visual">63 × 31 × 8 mm · 78g · CNC aluminum</div>
-    </div>
-    <div class="feature">
-      <div class="feature-num">02 — THE STAND</div>
-      <h3 class="feature-title">Matched aluminum base.</h3>
-      <p class="feature-desc">Same finish. Same weight class. 20° viewing angle, calibrated for desk height.</p>
-      <div class="feature-visual">Included with every unit</div>
-    </div>
-    <div class="feature">
-      <div class="feature-num">03 — THE DATA</div>
-      <h3 class="feature-title">Real-time. Always.</h3>
-      <p class="feature-desc">Direct from exchanges. No app. No subscription. WiFi setup in 60 seconds.</p>
-      <div class="feature-visual">10,000+ instruments supported</div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>What if my Wi-Fi password changes?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Hold the BOOT button on the back for 5 seconds. The screen counts down 5 → 4 → 3 → 2 → 1.
+          Tickrix wipes the saved Wi-Fi and restarts in setup mode. Reconnect in 60 seconds.
+          Your tickers and exchange settings are preserved.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Can I change which tickers it shows?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Anytime. Open the dashboard at tickrix.com/app from any browser, enter your Device ID,
+          pick what you want to track. Changes appear on your Tickrix within 5 seconds — no app required.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Why is there no app?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Because apps are how distraction wins. Tickrix is the opposite — a quiet object on your desk.
+          Setup happens once in your browser. After that, you just look at the device.
+          That's the whole point.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Does it work outside the EU?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Yes. Tickrix ships worldwide. The hardware is Wi-Fi standard (2.4 GHz universal),
+          USB-C universal power. Works on any home or office network globally.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>When does Edition One ship?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Q3 2026. Waitlist members get priority — first production run goes out before
+          general availability. Reserve your unit to lock in launch pricing.
+        </div></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>What if it breaks?</span>
+          <span class="faq-toggle">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
+          Every Tickrix ships with a 2-year hardware warranty. Firmware updates are free for life,
+          delivered over Wi-Fi. We handle returns through our Rotterdam workshop.
+        </div></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Story -->
-<section class="story-section" id="story">
-  <div class="story-container">
-    <div class="section-label" style="justify-content:center;">— Why we built it</div>
-    <p class="story-quote">"Most traders stare at screens all day. <em>Tickrix gives them one quiet thing.</em> The data they care about — beautifully, without effort."</p>
-    <div class="story-attribution"><strong>— Tickrix</strong> · Rotterdam, Netherlands</div>
+<!-- ─── 07 / WAITLIST ─────────────────────────────────────────── -->
+<section id="waitlist">
+  <div class="container">
+    <div class="waitlist">
+      <span class="label label-amber">07 / Reserve</span>
+      <h2 class="h-section" style="margin-top: 24px;">Be first.<br><em>When we ship.</em></h2>
+
+      <div class="waitlist-perks">
+        <div class="perk"><span class="perk-mark">→</span> 5% off launch price</div>
+        <div class="perk"><span class="perk-mark">→</span> Price locked forever</div>
+        <div class="perk"><span class="perk-mark">→</span> First production batch</div>
+      </div>
+
+      <p class="body" style="max-width: 520px; margin: 0 auto;">
+        Reserve your Tickrix Edition One. Waitlist members get the launch price —
+        and that price never goes up, even after we ship. Free to join. Unsubscribe anytime.
+      </p>
+
+      <form class="waitlist-form" onsubmit="submitWaitlist(event)">
+        <input type="email" class="waitlist-input" placeholder="your@email.com" required id="email-input">
+        <button type="submit" class="waitlist-submit">Reserve</button>
+      </form>
+
+      <div class="waitlist-success" id="waitlist-success">
+        Reserved. You're locked in at launch price. We'll email you Q3 2026.
+      </div>
+
+      <div class="waitlist-count">
+        <b id="waitlist-num">847</b> traders on the waitlist
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- Final CTA -->
-<section class="cta-section" id="reserve">
-  <div class="cta-content">
-    <div class="section-label" style="justify-content:center;">— Get notified</div>
-    <h2 class="cta-title">Be first.<br><em>When we ship.</em></h2>
-    <p class="cta-subtitle">First batch ships Q3 2026. Limited initial production. Join <strong style="color:var(--champagne)" id="ctaCount">847</strong> traders on the waitlist.</p>
-    <form class="cta-form" id="ctaForm" onsubmit="handleSubmit(event, 'cta')">
-      <input type="email" placeholder="your@email.com" required name="email">
-      <button type="submit">Notify Me</button>
-    </form>
-    <div class="success-state" id="ctaSuccess" style="margin: 24px auto 0;">
-      <div class="success-position">You're <em>№<span class="success-num">848</span></em></div>
-      <div class="success-message">Welcome to the waitlist. We'll email you when Tickrix is ready to ship — Q3 2026.</div>
-    </div>
-    <div class="cta-fineprint">
-      <span>No spam, ever</span>
-      <span>Unsubscribe anytime</span>
-      <span>Q3 2026 launch</span>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
+<!-- ─── FOOTER ─────────────────────────────────────────── -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <div class="logo">Tickrix<sup>®</sup></div>
-      <p class="footer-tagline">For traders who take it seriously.</p>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Tickrix<span style="color: var(--amber);">®</span></div>
+        <p class="footer-tagline">For traders who take it seriously. Designed and assembled in Rotterdam, Netherlands.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#device">The Device</a></li>
+          <li><a href="#markets">Markets Covered</a></li>
+          <li><a href="#edition">Edition One</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="mailto:hello@tickrix.com">hello@tickrix.com</a></li>
+          <li><a href="https://instagram.com/tickrix" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://x.com/tickrix" target="_blank" rel="noopener">X / Twitter</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#" onclick="openLegal('privacy'); return false;">Privacy Policy</a></li>
+          <li><a href="#" onclick="openLegal('terms'); return false;">Terms of Service</a></li>
+          <li><a href="#" onclick="openLegal('cookies'); return false;">Cookies</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="footer-col">
-      <h4>Product</h4>
-      <ul>
-        <li><a href="#device">The Device</a></li>
-        <li><a href="#specs">Specifications</a></li>
-        <li><a href="#story">Our Story</a></li>
-      </ul>
+
+    <div class="footer-bottom">
+      <div>© 2026 Tickrix® · Rotterdam, Netherlands</div>
+      <div>Built with care · Shipped worldwide</div>
     </div>
-    <div class="footer-col">
-      <h4>Connect</h4>
-      <ul>
-        <li><a href="mailto:hello@tickrix.com">hello@tickrix.com</a></li>
-        <li><a href="#">Twitter / X</a></li>
-        <li><a href="#">Instagram</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Legal</h4>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Service</a></li>
-        <li><a href="#">Cookies</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div>© 2026 Tickrix™ · Rotterdam, Netherlands</div>
-    <div>Built with care. Shipped worldwide.</div>
   </div>
 </footer>
 
-<script>
-// ════════════ CONFIG ════════════
-const SUPABASE_URL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZ3J3cWhtc25xZ3F1c3ZtbW53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTI0MDMsImV4cCI6MjA5MjM2ODQwM30.K_y6m2FrNcGn6qM2voOUEzft8T9f_KwbCpNXZRFDpx8'; // Replaced at deployment
-const WAITLIST_BASELINE = 800; // Real waitlist starts visually at #800
+<!-- ─── LEGAL MODALS ─────────────────────────────────────────── -->
+<div class="legal-overlay" id="legal-privacy" onclick="if(event.target===this) closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()">Close ×</button>
+    <span class="legal-label">— Legal · 01</span>
+    <h2 class="legal-title">Privacy Policy</h2>
+    <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
 
-// ════════════ LIVE TICKER FALLBACK ════════════
-const tickerFallback = [
-  { sym: 'BTC',     price: '$67,234', change: '+1.24%', dir: 'up' },
-  { sym: 'ETH',     price: '$3,789',  change: '+0.87%', dir: 'up' },
-  { sym: 'SOL',     price: '$178.45', change: '+2.15%', dir: 'up' },
-  { sym: 'EUR/USD', price: '1.1743',  change: '-0.12%', dir: 'down' },
-  { sym: 'GBP/USD', price: '1.3219',  change: '+0.04%', dir: 'up' },
-  { sym: 'GOLD',    price: '$2,089',  change: '+0.31%', dir: 'up' },
-  { sym: 'OIL',     price: '$78.45',  change: '-0.21%', dir: 'down' },
-  { sym: 'AAPL',    price: '$229.87', change: '+0.45%', dir: 'up' },
-  { sym: 'TSLA',    price: '$248.13', change: '+1.87%', dir: 'up' },
-  { sym: 'NVDA',    price: '$876.54', change: '+2.34%', dir: 'up' },
-  { sym: 'S&P 500', price: '5,892',   change: '+0.57%', dir: 'up' },
-];
+    <div class="legal-body">
+      <p>This Privacy Policy explains what data Tickrix® B.V. ("Tickrix", "we", "us") collects when you visit tickrix.com, join our waitlist, or use a Tickrix device. We are based in Rotterdam, Netherlands and comply with the EU General Data Protection Regulation (GDPR).</p>
 
-let livePrices = {};
+      <h3>What we collect</h3>
+      <ul>
+        <li><strong>Email address</strong> — only if you join the waitlist or contact us. Used to notify you about Edition One launch and product updates.</li>
+        <li><strong>Device configuration</strong> — your selected exchange and tickers, stored under a random Device ID. This is the only data your Tickrix sends to our servers.</li>
+        <li><strong>Anonymous analytics</strong> — page views, country (not city), browser type. No personal identifiers, no tracking across sites.</li>
+      </ul>
 
-// Build ticker bar (initial render with fallback data)
-function renderTicker(data) {
-  const track = document.getElementById('tickerTrack');
-  const items = [...data, ...data]; // duplicate for seamless loop
-  track.innerHTML = items.map(d => `
-    <div class="ticker-item">
-      <span class="ticker-dot"></span>
-      <span class="ticker-sym">${d.sym}</span>
-      <span class="ticker-price">${d.price}</span>
-      <span class="ticker-change ${d.dir}">${d.change}</span>
+      <h3>What we never collect</h3>
+      <ul>
+        <li>Your Wi-Fi password — it stays on the device, never on our servers.</li>
+        <li>Your trading account credentials, wallets, or balances.</li>
+        <li>Your real name, address, or location data unless you explicitly provide it.</li>
+      </ul>
+
+      <h3>Your rights under GDPR</h3>
+      <p>You have the right to access, correct, export, or delete any personal data we hold about you. To exercise these rights, email <a href="mailto:hello@tickrix.com">hello@tickrix.com</a>. We respond within 30 days.</p>
+
+      <h3>Data sharing</h3>
+      <p>We do not sell your data. We do not share it with third parties for advertising. We use Supabase (EU servers) for backend storage and Vercel for hosting — both GDPR-compliant. We do not use Google Analytics, Meta Pixel, or similar tracking tools.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about your data: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
     </div>
-  `).join('');
-}
-renderTicker(tickerFallback);
+  </div>
+</div>
 
-// ════════════ FETCH LIVE PRICES ════════════
-async function fetchLivePrices() {
+<div class="legal-overlay" id="legal-terms" onclick="if(event.target===this) closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()">Close ×</button>
+    <span class="legal-label">— Legal · 02</span>
+    <h2 class="legal-title">Terms of Service</h2>
+    <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
+
+    <div class="legal-body">
+      <p>By using tickrix.com, joining our waitlist, or operating a Tickrix device, you agree to these Terms. They apply to everyone who interacts with Tickrix products and services.</p>
+
+      <h3>The Tickrix device</h3>
+      <p>Tickrix is a Wi-Fi connected market display intended for personal informational use. Prices shown are sourced from public exchanges (MEXC, Binance, Bybit, LBank, Kraken, Coinbase, Yahoo Finance, and others). Data may be delayed or incorrect — Tickrix is not a financial instrument and must not be used as the sole basis for trading decisions.</p>
+
+      <h3>Waitlist</h3>
+      <p>Joining the waitlist secures your place in line for Edition One — it does not guarantee a unit, as production is limited. Waitlist members get 5% off launch price, locked in even if pricing rises later. You can unsubscribe at any time.</p>
+
+      <h3>Warranty</h3>
+      <p>Edition One ships with a 2-year hardware warranty against manufacturing defects. Firmware updates are free for life. Damage from misuse, water, or unauthorized modification is not covered.</p>
+
+      <h3>Returns</h3>
+      <p>Under EU consumer law, you have a 14-day right of withdrawal from delivery date for any reason. The device must be returned in original condition. Original shipping costs are non-refundable; return shipping is the customer's responsibility.</p>
+
+      <h3>Liability</h3>
+      <p>Tickrix is provided "as is" for informational purposes. We are not liable for trading losses, missed opportunities, or financial decisions based on data displayed by the device. Maximum liability is limited to the purchase price of the device.</p>
+
+      <h3>Governing law</h3>
+      <p>These Terms are governed by the laws of the Netherlands. Disputes will be resolved by courts in Rotterdam.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about these terms: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
+    </div>
+  </div>
+</div>
+
+<div class="legal-overlay" id="legal-cookies" onclick="if(event.target===this) closeLegal()">
+  <div class="legal-modal">
+    <button class="legal-close" onclick="closeLegal()">Close ×</button>
+    <span class="legal-label">— Legal · 03</span>
+    <h2 class="legal-title">Cookies Policy</h2>
+    <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
+
+    <div class="legal-body">
+      <p>Tickrix uses cookies sparingly. We do not use advertising cookies, tracking pixels, or third-party analytics that profile you across the web.</p>
+
+      <h3>What cookies we use</h3>
+      <ul>
+        <li><strong>Strictly necessary</strong> — session cookies to remember your waitlist status during your visit. Cannot be disabled.</li>
+        <li><strong>Functional</strong> — remembers your selected tickers in the dashboard so you don't re-enter them. Stored in your browser only.</li>
+      </ul>
+
+      <h3>What we don't use</h3>
+      <ul>
+        <li>Google Analytics</li>
+        <li>Meta Pixel / Facebook tracking</li>
+        <li>Advertising or remarketing cookies</li>
+        <li>Cross-site tracking of any kind</li>
+      </ul>
+
+      <h3>Your control</h3>
+      <p>You can clear cookies anytime through your browser settings. The site will continue to work — you'll just need to re-enter your Device ID in the dashboard next visit.</p>
+
+      <h3>Contact</h3>
+      <p>Questions about cookies: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Live ticker prices ───────────────────────────
+async function loadTicker() {
   try {
-    // Crypto via CoinGecko
-    const cryptoRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd&include_24hr_change=true');
-    const crypto = await cryptoRes.json();
-    
-    livePrices.BTC = { price: crypto.bitcoin.usd, change: crypto.bitcoin.usd_24h_change };
-    livePrices.ETH = { price: crypto.ethereum.usd, change: crypto.ethereum.usd_24h_change };
-    livePrices.SOL = { price: crypto.solana.usd, change: crypto.solana.usd_24h_change };
+    // BTC from MEXC
+    const btc = await fetch('https://api.mexc.com/api/v3/ticker/price?symbol=BTCUSDT').then(r => r.json());
+    if (btc.price) document.getElementById('px-btc').textContent = '$' + Math.round(parseFloat(btc.price)).toLocaleString();
+  } catch(e) {}
 
-    // Forex via Frankfurter (no key)
-    const fxRes = await fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD,GBP,JPY');
-    const fx = await fxRes.json();
-    
-    livePrices['EUR/USD'] = { price: fx.rates.USD, change: 0 }; // Frankfurter doesn't give change
-    
-    // Update UI
-    updateLivePricesUI();
-  } catch (err) {
-    console.log('Live price fetch failed, using fallback:', err);
+  try {
+    // EUR/USD via MEXC stablecoin pair
+    const eur = await fetch('https://api.mexc.com/api/v3/ticker/price?symbol=EURUSDT').then(r => r.json());
+    if (eur.price) document.getElementById('px-eur').textContent = parseFloat(eur.price).toFixed(5);
+  } catch(e) {}
+
+  try {
+    // GOLD
+    const gold = await fetch('https://api.gold-api.com/price/XAU').then(r => r.json());
+    if (gold.price) document.getElementById('px-gold').textContent = '$' + Math.round(gold.price).toLocaleString();
+  } catch(e) {}
+
+  try {
+    // OIL — Yahoo Finance WTI
+    const oil = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/CL=F?interval=1m&range=1d').then(r => r.json());
+    const oilPrice = oil?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (oilPrice) document.getElementById('px-oil').textContent = '$' + oilPrice.toFixed(2);
+  } catch(e) {
+    document.getElementById('px-oil').textContent = '$98.97';
   }
+
+  // SPX placeholder
+  document.getElementById('px-spx').textContent = 'LIVE';
 }
 
-function formatPrice(value, type) {
-  if (type === 'crypto-large') return '$' + value.toLocaleString(undefined, { maximumFractionDigits: 0 });
-  if (type === 'crypto-small') return '$' + value.toFixed(2);
-  if (type === 'forex') return value.toFixed(5);
-  if (type === 'stock') return '$' + value.toFixed(2);
-  return value.toString();
+loadTicker();
+setInterval(loadTicker, 30000); // refresh every 30s
+
+// ─── FAQ toggle ───────────────────────────
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  item.classList.toggle('open');
 }
 
-function formatChange(change) {
-  const sign = change >= 0 ? '+' : '';
-  return sign + change.toFixed(2) + '%';
-}
-
-function updateLivePricesUI() {
-  // Update ticker bar with live prices
-  const ticker = [];
-  if (livePrices.BTC) ticker.push({ sym: 'BTC', price: formatPrice(livePrices.BTC.price, 'crypto-large'), change: formatChange(livePrices.BTC.change), dir: livePrices.BTC.change >= 0 ? 'up' : 'down' });
-  if (livePrices.ETH) ticker.push({ sym: 'ETH', price: formatPrice(livePrices.ETH.price, 'crypto-large'), change: formatChange(livePrices.ETH.change), dir: livePrices.ETH.change >= 0 ? 'up' : 'down' });
-  if (livePrices.SOL) ticker.push({ sym: 'SOL', price: formatPrice(livePrices.SOL.price, 'crypto-small'), change: formatChange(livePrices.SOL.change), dir: livePrices.SOL.change >= 0 ? 'up' : 'down' });
-  if (livePrices['EUR/USD']) ticker.push({ sym: 'EUR/USD', price: formatPrice(livePrices['EUR/USD'].price, 'forex'), change: '—', dir: 'up' });
-  
-  // Add fallback items for stocks/commodities
-  ticker.push({ sym: 'GOLD', price: '$2,089', change: '+0.31%', dir: 'up' });
-  ticker.push({ sym: 'OIL', price: '$78.45', change: '-0.21%', dir: 'down' });
-  ticker.push({ sym: 'AAPL', price: '$229.87', change: '+0.45%', dir: 'up' });
-  ticker.push({ sym: 'TSLA', price: '$248.13', change: '+1.87%', dir: 'up' });
-  ticker.push({ sym: 'NVDA', price: '$876.54', change: '+2.34%', dir: 'up' });
-  ticker.push({ sym: 'S&P 500', price: '5,892', change: '+0.57%', dir: 'up' });
-  
-  if (ticker.length > 0) renderTicker(ticker);
-  
-  // Update asset cards
-  document.querySelectorAll('.asset-card').forEach(card => {
-    const sym = card.dataset.symbol;
-    const data = livePrices[sym];
-    if (!data) return;
-    const priceEl = card.querySelector('.asset-card-price');
-    const changeEl = card.querySelector('.asset-card-change');
-    
-    let priceText = '';
-    if (sym === 'BTC' || sym === 'ETH') priceText = formatPrice(data.price, 'crypto-large');
-    else if (sym === 'EUR/USD') priceText = formatPrice(data.price, 'forex');
-    else priceText = formatPrice(data.price, 'stock');
-    
-    priceEl.textContent = priceText;
-    if (data.change !== undefined && data.change !== 0) {
-      changeEl.textContent = formatChange(data.change);
-      changeEl.className = 'asset-card-change ' + (data.change >= 0 ? 'up' : 'down');
-    }
-  });
-  
-  // Update floating markers
-  if (livePrices.BTC) document.getElementById('marker-btc').textContent = formatPrice(livePrices.BTC.price, 'crypto-large');
-}
-
-// ════════════ ROTATING SCREEN PRICES ════════════
-const screenAssets = ['EUR/USD', 'BTC', 'ETH', 'SOL'];
-let priceIndex = 0;
-
-function rotatePrice() {
-  const assetEl = document.getElementById('screenAsset');
-  const priceEl = document.getElementById('screenPrice');
-  
-  assetEl.style.opacity = '0';
-  priceEl.style.opacity = '0';
-  
-  setTimeout(() => {
-    priceIndex = (priceIndex + 1) % screenAssets.length;
-    const asset = screenAssets[priceIndex];
-    
-    assetEl.textContent = asset;
-    
-    let priceText = '—';
-    if (livePrices[asset]) {
-      if (asset === 'EUR/USD') priceText = formatPrice(livePrices[asset].price, 'forex');
-      else if (asset === 'SOL') priceText = formatPrice(livePrices[asset].price, 'crypto-small');
-      else priceText = formatPrice(livePrices[asset].price, 'crypto-large');
-    } else {
-      // Fallback static
-      const fallback = { 'EUR/USD': '1.17432', 'BTC': '67,234', 'ETH': '3,789', 'SOL': '178.45' };
-      priceText = fallback[asset];
-    }
-    
-    priceEl.textContent = priceText;
-    assetEl.style.opacity = '1';
-    priceEl.style.opacity = '1';
-  }, 300);
-}
-setInterval(rotatePrice, 4000);
-
-// ════════════ AUTO-INCREMENTING WAITLIST COUNTER ════════════
-function calculateWaitlistCount() {
-  // Base seed of 847, slowly increments based on time
-  // ~1-2 new signups per day average
-  const baseDate = new Date('2026-04-25T00:00:00Z').getTime();
-  const now = Date.now();
-  const hoursSinceBase = (now - baseDate) / (1000 * 60 * 60);
-  
-  // Add 1 every 12-24h randomly (stable per day)
-  const dayOfYear = Math.floor((now - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-  const seed = dayOfYear * 7919; // prime
-  const randIncrement = (seed % 31) / 31; // 0-1
-  
-  const totalIncrements = Math.floor(hoursSinceBase / (12 + randIncrement * 12));
-  return 847 + totalIncrements;
-}
-
-function updateWaitlistCounter() {
-  const count = calculateWaitlistCount();
-  document.getElementById('waitlistCount').textContent = count.toLocaleString();
-  document.getElementById('ctaCount').textContent = count.toLocaleString();
-  return count;
-}
-
-// ════════════ FORM SUBMISSION ════════════
-async function handleSubmit(e, source) {
+// ─── Waitlist submit ───────────────────────────
+function submitWaitlist(e) {
   e.preventDefault();
-  const form = e.target;
-  const input = form.querySelector('input');
-  const button = form.querySelector('button');
-  const email = input.value.trim();
-  
-  if (!email || !email.includes('@')) return;
-  
-  button.textContent = 'Joining...';
-  button.disabled = true;
-  
-  try {
-    // Call our new /api/waitlist endpoint — saves to Supabase + sends welcome email
-    let position;
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source })
-      });
-      
-      if (res.ok) {
-        const data = await res.json();
-        position = data.position || (calculateWaitlistCount() + 1);
-      } else {
-        // If error, still show success (fail gracefully)
-        position = calculateWaitlistCount() + 1;
-      }
-    } catch (err) {
-      console.log('Waitlist API failed:', err);
-      position = calculateWaitlistCount() + 1;
-    }
-    
-    // Show success state
-    const successId = source === 'hero' ? 'heroSuccess' : 'ctaSuccess';
-    const successEl = document.getElementById(successId);
-    successEl.querySelector('.success-num').textContent = position.toLocaleString();
-    
-    // Hide form, show success
-    form.style.display = 'none';
-    successEl.classList.add('visible');
-    
-    // Update counters
-    document.getElementById('waitlistCount').textContent = position.toLocaleString();
-    document.getElementById('ctaCount').textContent = position.toLocaleString();
-    
-  } catch (err) {
-    console.error('Submission error:', err);
-    button.textContent = 'Try again';
-    button.disabled = false;
+  const email = document.getElementById('email-input').value;
+  if (!email) return;
+
+  // Increment counter visually
+  const counter = document.getElementById('waitlist-num');
+  counter.textContent = (parseInt(counter.textContent) + 1).toString();
+
+  // Show success, hide form
+  document.querySelector('.waitlist-form').style.display = 'none';
+  document.getElementById('waitlist-success').classList.add('show');
+
+  // TODO: Send to backend (Supabase or Mailchimp)
+  console.log('Waitlist signup:', email);
+}
+
+// ─── Legal modals ───────────────────────────
+function openLegal(type) {
+  const overlay = document.getElementById('legal-' + type);
+  if (overlay) {
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
   }
 }
 
-// ════════════ INITIALIZE ════════════
-updateWaitlistCounter();
-fetchLivePrices();
-setInterval(fetchLivePrices, 60000); // refresh every 60s
+function closeLegal() {
+  document.querySelectorAll('.legal-overlay').forEach(o => o.classList.remove('show'));
+  document.body.style.overflow = '';
+}
+
+// Close legal modal on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLegal();
+});
 </script>
 
 </body>
