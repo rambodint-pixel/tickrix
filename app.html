@@ -11,13 +11,13 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .page.show{display:block;}
 .logo{font-size:36px;font-weight:700;letter-spacing:8px;margin-bottom:8px;}
 .sub{font-size:10px;letter-spacing:4px;color:#555;margin-bottom:60px;}
-.tag{font-size:10px;letter-spacing:4px;color:#00aaff;margin-bottom:8px;}
+.tag{font-size:10px;letter-spacing:4px;color:#E8A14D;margin-bottom:8px;}
 .tag::before{content:'> ';}
 .title{font-size:22px;font-weight:700;margin-bottom:24px;}
 .hint{font-size:11px;color:#555;line-height:1.9;padding:10px 12px;border-left:2px solid #333;margin-bottom:24px;letter-spacing:1px;}
 .label{font-size:9px;letter-spacing:3px;color:#555;margin-bottom:6px;display:block;}
 .inp{width:100%;background:#000;border:1px solid #333;padding:14px;font-family:'Courier New',monospace;font-size:14px;color:#fff;outline:none;margin-bottom:16px;-webkit-appearance:none;}
-.inp:focus{border-color:#00aaff;}
+.inp:focus{border-color:#E8A14D;}
 .inp::placeholder{color:#444;}
 .btn{width:100%;padding:16px;background:#fff;color:#000;font-family:'Courier New',monospace;font-size:12px;font-weight:700;letter-spacing:3px;border:none;cursor:pointer;margin-bottom:8px;display:block;text-align:center;}
 .btn:active{opacity:0.8;}
@@ -27,7 +27,7 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .status.err{border-color:#ff1744;color:#ff1744;white-space:pre-line;}
 .ex-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
 .ex{border:1px solid #333;padding:14px;cursor:pointer;}
-.ex.on{border-color:#00aaff;background:rgba(0,170,255,0.05);}
+.ex.on{border-color:#E8A14D;background:rgba(232,161,77,0.05);}
 .ex-n{font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:2px;}
 .ex-t{font-size:9px;letter-spacing:1px;color:#555;}
 .custom-box{border:1px solid #333;padding:16px;margin-bottom:16px;display:none;}
@@ -36,44 +36,44 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .tog-lbl{font-size:11px;letter-spacing:1px;}
 .tog-sub{font-size:9px;color:#555;margin-top:2px;letter-spacing:1px;}
 .tog{width:38px;height:20px;border:1px solid #333;position:relative;flex-shrink:0;}
-.tog.on{border-color:#00aaff;}
+.tog.on{border-color:#E8A14D;}
 .tog-k{position:absolute;top:2px;left:2px;width:14px;height:14px;background:#333;transition:left 0.2s;}
-.tog.on .tog-k{left:20px;background:#00aaff;}
+.tog.on .tog-k{left:20px;background:#E8A14D;}
 .a-table{border:1px solid #1a1a1a;margin-bottom:12px;}
 .a-head{display:grid;grid-template-columns:1fr 1fr 50px 32px;padding:8px 12px;border-bottom:1px solid #1a1a1a;font-size:9px;letter-spacing:2px;color:#555;}
 .a-row{display:grid;grid-template-columns:1fr 1fr 50px 32px;padding:12px;border-bottom:1px solid #1a1a1a;align-items:center;cursor:pointer;}
 .a-row:last-child{border-bottom:none;}
-.a-row.on{background:rgba(0,170,255,0.04);}
+.a-row.on{background:rgba(232,161,77,0.04);}
 .a-s{font-size:12px;font-weight:700;letter-spacing:1px;}
 .a-p{font-size:11px;color:#555;}
 .a-c{font-size:9px;color:#555;}
 .a-c.up{color:#00e676;}
 .a-t{width:22px;height:22px;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:14px;color:#333;justify-self:end;}
-.a-row.on .a-t{border-color:#00aaff;color:#00aaff;}
+.a-row.on .a-t{border-color:#E8A14D;color:#E8A14D;}
 .a-cnt{font-size:9px;letter-spacing:2px;color:#555;padding:8px 12px;border:1px solid #1a1a1a;display:flex;justify-content:space-between;margin-bottom:16px;}
-.a-cnt b{color:#00aaff;}
+.a-cnt b{color:#E8A14D;}
 .sum{border:1px solid #1a1a1a;margin-bottom:20px;}
 .sum-r{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #1a1a1a;font-size:11px;letter-spacing:1px;}
 .sum-r:last-child{border-bottom:none;}
 .sum-k{color:#555;}
 .sum-v{font-weight:700;}
 .sum-v.ok{color:#00e676;}
-.spin{width:40px;height:40px;border:1px solid #333;border-top-color:#00aaff;border-radius:50%;animation:spin 1s linear infinite;margin:30px auto;}
+.spin{width:40px;height:40px;border:1px solid #333;border-top-color:#E8A14D;border-radius:50%;animation:spin 1s linear infinite;margin:30px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .back{font-size:11px;letter-spacing:2px;color:#555;cursor:pointer;display:inline-block;margin-bottom:20px;}
 .back::before{content:'< ';}
-.prog{position:fixed;top:0;left:0;height:2px;background:#00aaff;transition:width 0.4s;z-index:99;}
+.prog{position:fixed;top:0;left:0;height:2px;background:#E8A14D;transition:width 0.4s;z-index:99;}
 .dot{display:inline-block;width:7px;height:7px;background:#00e676;margin-right:6px;animation:blink 1.5s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 .info-box{border:1px dashed #333;padding:12px;margin-bottom:16px;font-size:10px;color:#888;letter-spacing:1px;line-height:1.7;}
-.info-box b{color:#00aaff;}
-.current-box{border:1px solid #00aaff;padding:14px;margin-bottom:20px;background:rgba(0,170,255,0.04);}
-.current-title{font-size:9px;letter-spacing:3px;color:#00aaff;margin-bottom:10px;}
+.info-box b{color:#E8A14D;}
+.current-box{border:1px solid #E8A14D;padding:14px;margin-bottom:20px;background:rgba(232,161,77,0.04);}
+.current-title{font-size:9px;letter-spacing:3px;color:#E8A14D;margin-bottom:10px;}
 .current-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;letter-spacing:1px;}
 .current-k{color:#666;}
 .current-v{font-weight:700;color:#fff;}
 .home-btn{width:100%;padding:22px;background:#000;color:#fff;font-family:'Courier New',monospace;font-size:13px;font-weight:700;letter-spacing:4px;border:1px solid #333;cursor:pointer;margin-bottom:12px;display:block;text-align:center;transition:border-color 0.2s;}
-.home-btn:hover{border-color:#00aaff;}
+.home-btn:hover{border-color:#E8A14D;}
 .home-btn-sub{font-size:9px;letter-spacing:2px;color:#555;margin-top:6px;font-weight:400;}
 .home-btn.primary{background:#fff;color:#000;border-color:#fff;}
 .home-btn.primary .home-btn-sub{color:#555;}
@@ -205,7 +205,7 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
   <div class="title">Sending to Device</div>
   <div class="hint">Configuration sent to cloud. Your Tickrix device will pick it up within 5 seconds.</div>
   <div class="spin" id="spin"></div>
-  <div class="status loading" id="send-st" style="border-color:#00aaff;color:#00aaff;text-align:center;">WAITING FOR DEVICE...</div>
+  <div class="status loading" id="send-st" style="border-color:#E8A14D;color:#E8A14D;text-align:center;">WAITING FOR DEVICE...</div>
   <div id="send-success" style="display:none;">
     <div class="sum">
       <div class="sum-r"><span class="sum-k">DEVICE</span><span class="sum-v ok" id="s-dev">--</span></div>
@@ -432,7 +432,7 @@ async function sendConfig() {
   ok.style.display   = 'none';
   er.style.display   = 'none';
   st.className       = 'status loading';
-  st.style.cssText   = 'border-color:#00aaff;color:#00aaff;text-align:center;';
+  st.style.cssText   = 'border-color:#E8A14D;color:#E8A14D;text-align:center;';
   st.textContent     = 'WAITING FOR DEVICE...';
 
   var payload = {
