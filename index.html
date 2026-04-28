@@ -2514,14 +2514,17 @@ body.secret-mode .crosshair { display: none; }
 </div>
 
 <script>
-// ─── Live ticker prices (CORS-friendly APIs) ───────────────────────────
+// ─── Live ticker prices (all via allorigins CORS proxy where needed) ────────
 async function loadTicker() {
-  // BTC — CoinGecko (CORS-enabled, no API key)
+  // BTC — Yahoo Finance BTC-USD via allorigins proxy
   try {
-    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
-    const d = await r.json();
-    if (d.bitcoin?.usd) {
-      document.getElementById('px-btc').textContent = '$' + Math.round(d.bitcoin.usd).toLocaleString();
+    const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/BTC-USD?interval=1m&range=1d');
+    const r = await fetch('https://api.allorigins.win/get?url=' + yahooUrl);
+    const wrapper = await r.json();
+    const d = JSON.parse(wrapper.contents);
+    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price) {
+      document.getElementById('px-btc').textContent = '$' + Math.round(price).toLocaleString();
     }
   } catch(e) { console.log('BTC fetch failed', e); }
 
