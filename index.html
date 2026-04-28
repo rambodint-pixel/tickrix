@@ -1823,11 +1823,11 @@ body.secret-mode .crosshair { display: none; }
 <div class="ticker-sticky" id="ticker-sticky">
   <div class="ticker-sticky-inner">
     <div class="ticker-sticky-dot"></div>
-    <div class="ticker-sticky-item"><span class="lbl">BTC</span><span class="val amber" id="sk-btc">——</span></div>
-    <div class="ticker-sticky-item"><span class="lbl">EUR/USD</span><span class="val" id="sk-eur">——</span></div>
-    <div class="ticker-sticky-item"><span class="lbl">GOLD</span><span class="val" id="sk-gold">——</span></div>
-    <div class="ticker-sticky-item"><span class="lbl">OIL</span><span class="val" id="sk-oil">——</span></div>
-    <div class="ticker-sticky-item"><span class="lbl">SPX</span><span class="val" id="sk-spx">——</span></div>
+    <div class="ticker-sticky-item"><span class="lbl" id="sk-cat-1">CRYPTO</span><span class="val amber" id="sk-sym-1">BTC / USD</span></div>
+    <div class="ticker-sticky-item"><span class="lbl" id="sk-cat-2">FOREX</span><span class="val" id="sk-sym-2">EUR / USD</span></div>
+    <div class="ticker-sticky-item"><span class="lbl" id="sk-cat-3">EQUITIES</span><span class="val" id="sk-sym-3">AAPL</span></div>
+    <div class="ticker-sticky-item"><span class="lbl" id="sk-cat-4">COMMODITY</span><span class="val" id="sk-sym-4">GOLD</span></div>
+    <div class="ticker-sticky-item"><span class="lbl" id="sk-cat-5">INDEX</span><span class="val" id="sk-sym-5">S&amp;P 500</span></div>
   </div>
 </div>
 
@@ -1961,27 +1961,27 @@ body.secret-mode .crosshair { display: none; }
       </div>
     </div>
 
-    <!-- LIVE TICKER STRIP -->
+    <!-- ROTATING SYMBOL TICKER — 5 cards, hundreds of symbols cycling -->
     <div class="ticker-strip">
-      <div class="ticker-item">
-        <div class="ticker-label">BTC</div>
-        <div class="ticker-price live mono" id="px-btc">$ ——</div>
+      <div class="ticker-item" data-class="crypto">
+        <div class="ticker-label" id="tk-cat-1">CRYPTO</div>
+        <div class="ticker-price live mono" id="tk-sym-1">BTC / USD</div>
       </div>
-      <div class="ticker-item">
-        <div class="ticker-label">EUR / USD</div>
-        <div class="ticker-price mono" id="px-eur">—.————</div>
+      <div class="ticker-item" data-class="forex">
+        <div class="ticker-label" id="tk-cat-2">FOREX</div>
+        <div class="ticker-price mono" id="tk-sym-2">EUR / USD</div>
       </div>
-      <div class="ticker-item">
-        <div class="ticker-label">GOLD</div>
-        <div class="ticker-price mono" id="px-gold">$ ——</div>
+      <div class="ticker-item" data-class="stock">
+        <div class="ticker-label" id="tk-cat-3">EQUITIES</div>
+        <div class="ticker-price mono" id="tk-sym-3">AAPL</div>
       </div>
-      <div class="ticker-item">
-        <div class="ticker-label">OIL · WTI</div>
-        <div class="ticker-price mono" id="px-oil">$ ——</div>
+      <div class="ticker-item" data-class="commodity">
+        <div class="ticker-label" id="tk-cat-4">COMMODITY</div>
+        <div class="ticker-price mono" id="tk-sym-4">GOLD</div>
       </div>
-      <div class="ticker-item">
-        <div class="ticker-label">SPX</div>
-        <div class="ticker-price mono" id="px-spx">— LIVE</div>
+      <div class="ticker-item" data-class="index">
+        <div class="ticker-label" id="tk-cat-5">INDEX</div>
+        <div class="ticker-price mono" id="tk-sym-5">S&amp;P 500</div>
       </div>
     </div>
   </div>
@@ -2514,65 +2514,130 @@ body.secret-mode .crosshair { display: none; }
 </div>
 
 <script>
-// ─── Live ticker prices (all via allorigins CORS proxy where needed) ────────
-async function loadTicker() {
-  // BTC — Yahoo Finance BTC-USD via allorigins proxy
-  try {
-    const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/BTC-USD?interval=1m&range=1d');
-    const r = await fetch('https://api.allorigins.win/get?url=' + yahooUrl);
-    const wrapper = await r.json();
-    const d = JSON.parse(wrapper.contents);
-    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price) {
-      document.getElementById('px-btc').textContent = '$' + Math.round(price).toLocaleString();
-    }
-  } catch(e) { console.log('BTC fetch failed', e); }
+// ─── ROTATING SYMBOL TICKER (no API needed, looks alive) ────────
+const symbolPools = {
+  crypto: [
+    'BTC / USD', 'ETH / USD', 'SOL / USD', 'BNB / USD', 'XRP / USD',
+    'DOGE / USD', 'ADA / USD', 'AVAX / USD', 'LINK / USD', 'DOT / USD',
+    'MATIC / USD', 'ATOM / USD', 'UNI / USD', 'LTC / USD', 'NEAR / USD',
+    'APT / USD', 'OP / USD', 'ARB / USD', 'INJ / USD', 'SUI / USD',
+    'TIA / USD', 'SEI / USD', 'WLD / USD', 'PEPE / USD', 'SHIB / USD',
+    'TRX / USD', 'TON / USD', 'ICP / USD', 'FIL / USD', 'STX / USD'
+  ],
+  forex: [
+    'EUR / USD', 'GBP / USD', 'USD / JPY', 'USD / CHF', 'AUD / USD',
+    'USD / CAD', 'NZD / USD', 'EUR / JPY', 'GBP / JPY', 'EUR / GBP',
+    'USD / CNH', 'USD / MXN', 'USD / INR', 'USD / SEK', 'USD / NOK',
+    'USD / DKK', 'USD / SGD', 'USD / HKD', 'USD / ZAR', 'USD / TRY',
+    'EUR / CHF', 'AUD / JPY', 'CAD / JPY', 'EUR / AUD', 'GBP / CHF'
+  ],
+  stock: [
+    'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'TSLA', 'BRK.B',
+    'JPM', 'V', 'UNH', 'WMT', 'MA', 'JNJ', 'PG', 'HD', 'CVX', 'LLY',
+    'ABBV', 'KO', 'MRK', 'PEP', 'BAC', 'DIS', 'ADBE', 'NFLX', 'CRM',
+    'CSCO', 'INTC', 'AMD', 'QCOM', 'ORCL', 'NKE', 'MCD', 'IBM', 'GS',
+    'PFE', 'BA', 'CAT', 'UPS', 'GE', 'HON', 'COIN', 'PYPL', 'SHOP', 'UBER'
+  ],
+  etf: [
+    'SPY', 'QQQ', 'VOO', 'IVV', 'VTI', 'DIA', 'IWM', 'EFA', 'EEM',
+    'GLD', 'SLV', 'IAU', 'USO', 'UNG', 'TLT', 'LQD', 'HYG', 'VNQ',
+    'ARKK', 'ARKW', 'XLK', 'XLF', 'XLV', 'XLE', 'XLY', 'XLP', 'XLI',
+    'XLB', 'XLU', 'XLRE', 'XLC', 'VXUS', 'BND', 'AGG', 'VEA', 'VWO'
+  ],
+  commodity: [
+    'GOLD', 'SILVER', 'PLATINUM', 'PALLADIUM', 'COPPER',
+    'WTI CRUDE', 'BRENT', 'NAT GAS', 'HEATING OIL', 'GASOLINE',
+    'CORN', 'WHEAT', 'SOYBEAN', 'COTTON', 'COFFEE',
+    'SUGAR', 'COCOA', 'CATTLE', 'HOGS', 'LUMBER'
+  ],
+  index: [
+    'S&P 500', 'NASDAQ', 'DOW JONES', 'RUSSELL 2000', 'VIX',
+    'FTSE 100', 'DAX', 'CAC 40', 'EURO STOXX 50', 'NIKKEI 225',
+    'HANG SENG', 'SSE COMPOSITE', 'KOSPI', 'TSX', 'BOVESPA',
+    'IBEX 35', 'AEX', 'SMI', 'ASX 200', 'NSE NIFTY 50'
+  ],
+  bond: [
+    'US 10Y', 'US 2Y', 'US 30Y', 'BUND 10Y', 'GILT 10Y',
+    'JGB 10Y', 'BTP 10Y', 'OAT 10Y', 'BONO 10Y', 'BOBL 5Y'
+  ],
+  futures: [
+    'ES MAR26', 'NQ MAR26', 'YM MAR26', 'RTY MAR26', 'CL MAY26',
+    'GC JUN26', 'SI MAY26', 'NG MAY26', 'ZB MAR26', 'ZN MAR26',
+    'ZC MAY26', 'ZW MAY26', 'ZS MAY26', '6E MAR26', '6J MAR26'
+  ]
+};
 
-  // EUR/USD — Frankfurter (ECB official rates, CORS-friendly, no key)
-  try {
-    const r = await fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD');
-    const d = await r.json();
-    if (d.rates?.USD) {
-      document.getElementById('px-eur').textContent = d.rates.USD.toFixed(5);
-    }
-  } catch(e) { console.log('EUR fetch failed', e); }
+// 5 slots, each cycles through its own asset class
+const tickerSlots = [
+  { id: 1, category: 'CRYPTO',    pool: 'crypto',    idx: 0 },
+  { id: 2, category: 'FOREX',     pool: 'forex',     idx: 0 },
+  { id: 3, category: 'EQUITIES',  pool: 'stock',     idx: 0 },
+  { id: 4, category: 'COMMODITY', pool: 'commodity', idx: 0 },
+  { id: 5, category: 'INDEX',     pool: 'index',     idx: 0 }
+];
 
-  // GOLD — gold-api.com (CORS-enabled)
-  try {
-    const r = await fetch('https://api.gold-api.com/price/XAU');
-    const d = await r.json();
-    if (d.price) {
-      document.getElementById('px-gold').textContent = '$' + Math.round(d.price).toLocaleString();
-    }
-  } catch(e) { console.log('GOLD fetch failed', e); }
+// Rotate which CATEGORY each slot shows every 12 seconds (so they don't all change at once)
+const allCategories = [
+  ['CRYPTO', 'crypto'],
+  ['FOREX', 'forex'],
+  ['EQUITIES', 'stock'],
+  ['ETF', 'etf'],
+  ['COMMODITY', 'commodity'],
+  ['INDEX', 'index'],
+  ['BONDS', 'bond'],
+  ['FUTURES', 'futures']
+];
 
-  // OIL — Yahoo Finance via allorigins CORS proxy (real WTI Crude Oil)
-  try {
-    const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/CL=F?interval=1m&range=1d');
-    const r = await fetch('https://api.allorigins.win/get?url=' + yahooUrl);
-    const wrapper = await r.json();
-    const d = JSON.parse(wrapper.contents);
-    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price) {
-      document.getElementById('px-oil').textContent = '$' + price.toFixed(2);
-    }
-  } catch(e) { console.log('OIL fetch failed', e); }
+let rotationCounter = 0;
 
-  // SPX — Yahoo Finance ^GSPC via allorigins CORS proxy (real S&P 500)
-  try {
-    const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/^GSPC?interval=1m&range=1d');
-    const r = await fetch('https://api.allorigins.win/get?url=' + yahooUrl);
-    const wrapper = await r.json();
-    const d = JSON.parse(wrapper.contents);
-    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price) {
-      document.getElementById('px-spx').textContent = Math.round(price).toLocaleString();
+function rotateSymbols() {
+  tickerSlots.forEach((slot, i) => {
+    const symEl = document.getElementById('tk-sym-' + slot.id);
+    const catEl = document.getElementById('tk-cat-' + slot.id);
+    if (!symEl || !catEl) return;
+
+    // Move to next symbol in current pool
+    const pool = symbolPools[slot.pool];
+    slot.idx = (slot.idx + 1) % pool.length;
+
+    // Fade out, swap, fade in
+    symEl.style.transition = 'opacity 0.3s ease';
+    symEl.style.opacity = '0';
+    setTimeout(() => {
+      symEl.textContent = pool[slot.idx];
+      symEl.style.opacity = '1';
+    }, 300);
+  });
+
+  // Every 4 rotations (~12 sec), swap one slot to a different asset class
+  rotationCounter++;
+  if (rotationCounter % 4 === 0) {
+    const slotToSwap = (rotationCounter / 4) % 5;
+    const newCategoryIdx = Math.floor(rotationCounter / 4) % allCategories.length;
+    const [newCat, newPool] = allCategories[newCategoryIdx];
+
+    const slot = tickerSlots[slotToSwap];
+    slot.category = newCat;
+    slot.pool = newPool;
+    slot.idx = 0;
+
+    const catEl = document.getElementById('tk-cat-' + slot.id);
+    if (catEl) {
+      catEl.style.transition = 'opacity 0.4s ease';
+      catEl.style.opacity = '0';
+      setTimeout(() => {
+        catEl.textContent = newCat;
+        catEl.style.opacity = '1';
+      }, 400);
     }
-  } catch(e) { console.log('SPX fetch failed', e); }
+  }
 }
 
-loadTicker();
-setInterval(loadTicker, 30000); // refresh every 30s
+// Start rotating after boot
+setTimeout(() => {
+  rotateSymbols();
+  setInterval(rotateSymbols, 3500);
+}, 3000);
 
 // ─── FAQ toggle ───────────────────────────
 function toggleFaq(btn) {
@@ -2742,20 +2807,16 @@ const heroObserver = new IntersectionObserver((entries) => {
 
 if (heroSection) heroObserver.observe(heroSection);
 
-// Mirror live ticker prices into sticky bar
+// Mirror rotating ticker into sticky bar
 function mirrorTicker() {
-  const map = [
-    ['px-btc', 'sk-btc'],
-    ['px-eur', 'sk-eur'],
-    ['px-gold', 'sk-gold'],
-    ['px-oil', 'sk-oil'],
-    ['px-spx', 'sk-spx']
-  ];
-  map.forEach(([from, to]) => {
-    const src = document.getElementById(from);
-    const dst = document.getElementById(to);
-    if (src && dst) dst.textContent = src.textContent;
-  });
+  for (let i = 1; i <= 5; i++) {
+    const sym = document.getElementById('tk-sym-' + i);
+    const cat = document.getElementById('tk-cat-' + i);
+    const skSym = document.getElementById('sk-sym-' + i);
+    const skCat = document.getElementById('sk-cat-' + i);
+    if (sym && skSym) skSym.textContent = sym.textContent;
+    if (cat && skCat) skCat.textContent = cat.textContent;
+  }
 }
 setInterval(mirrorTicker, 1000);
 
@@ -3000,27 +3061,8 @@ setInterval(() => {
   setTimeout(() => devicesNum.style.color = '', 400);
 }, 4500);
 
-// ─── PRICE TICK FLASH (when ticker prices change) ───────────────────────────
-const priceIds = ['px-btc', 'px-eur', 'px-gold', 'px-oil', 'px-spx'];
-const lastPrices = {};
-
-function checkPriceTicks() {
-  priceIds.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const text = el.textContent.replace(/[^0-9.]/g, '');
-    const value = parseFloat(text);
-    if (isNaN(value)) return;
-
-    if (lastPrices[id] !== undefined && lastPrices[id] !== value) {
-      const cls = value > lastPrices[id] ? 'tick-up' : 'tick-down';
-      el.classList.add(cls);
-      setTimeout(() => el.classList.remove(cls), 600);
-    }
-    lastPrices[id] = value;
-  });
-}
-setInterval(checkPriceTicks, 2000);
+// ─── PRICE TICK FLASH removed (we show symbols now, not prices)
+// Symbols rotate via rotateSymbols() — no tick comparison needed
 
 // ─── EDITION SERIAL ROULETTE (counts up as you scroll) ───────────────────────────
 const editionNumberEl = document.querySelector('.edition-number em');
