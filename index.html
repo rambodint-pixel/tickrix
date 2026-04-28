@@ -1776,37 +1776,60 @@ footer {
 </div>
 
 <script>
-// ─── Live ticker prices ───────────────────────────
+// ─── Live ticker prices (CORS-friendly APIs) ───────────────────────────
 async function loadTicker() {
+  // BTC — CoinGecko (CORS-enabled, no API key)
   try {
-    // BTC from MEXC
-    const btc = await fetch('https://api.mexc.com/api/v3/ticker/price?symbol=BTCUSDT').then(r => r.json());
-    if (btc.price) document.getElementById('px-btc').textContent = '$' + Math.round(parseFloat(btc.price)).toLocaleString();
-  } catch(e) {}
+    const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const d = await r.json();
+    if (d.bitcoin?.usd) {
+      document.getElementById('px-btc').textContent = '$' + Math.round(d.bitcoin.usd).toLocaleString();
+    }
+  } catch(e) { console.log('BTC fetch failed', e); }
 
+  // EUR/USD — Frankfurter (ECB official rates, CORS-friendly, no key)
   try {
-    // EUR/USD via MEXC stablecoin pair
-    const eur = await fetch('https://api.mexc.com/api/v3/ticker/price?symbol=EURUSDT').then(r => r.json());
-    if (eur.price) document.getElementById('px-eur').textContent = parseFloat(eur.price).toFixed(5);
-  } catch(e) {}
+    const r = await fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD');
+    const d = await r.json();
+    if (d.rates?.USD) {
+      document.getElementById('px-eur').textContent = d.rates.USD.toFixed(5);
+    }
+  } catch(e) { console.log('EUR fetch failed', e); }
 
+  // GOLD — gold-api.com (CORS-enabled)
   try {
-    // GOLD
-    const gold = await fetch('https://api.gold-api.com/price/XAU').then(r => r.json());
-    if (gold.price) document.getElementById('px-gold').textContent = '$' + Math.round(gold.price).toLocaleString();
-  } catch(e) {}
+    const r = await fetch('https://api.gold-api.com/price/XAU');
+    const d = await r.json();
+    if (d.price) {
+      document.getElementById('px-gold').textContent = '$' + Math.round(d.price).toLocaleString();
+    }
+  } catch(e) { console.log('GOLD fetch failed', e); }
 
+  // OIL — Yahoo Finance CL=F (WTI Crude Oil)
   try {
-    // OIL — Yahoo Finance WTI
-    const oil = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/CL=F?interval=1m&range=1d').then(r => r.json());
-    const oilPrice = oil?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (oilPrice) document.getElementById('px-oil').textContent = '$' + oilPrice.toFixed(2);
+    const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/CL=F?interval=1m&range=1d');
+    const d = await r.json();
+    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price) {
+      document.getElementById('px-oil').textContent = '$' + price.toFixed(2);
+    }
   } catch(e) {
     document.getElementById('px-oil').textContent = '$98.97';
   }
 
-  // SPX placeholder
-  document.getElementById('px-spx').textContent = 'LIVE';
+  // SPX — Yahoo Finance ^GSPC (S&P 500)
+  try {
+    const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1m&range=1d');
+    const d = await r.json();
+    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+    if (price) {
+      document.getElementById('px-spx').textContent = Math.round(price).toLocaleString();
+    } else {
+      document.getElementById('px-spx').textContent = 'LIVE';
+    }
+  } catch(e) {
+    document.getElementById('px-spx').textContent = 'LIVE';
+  }
 }
 
 loadTicker();
