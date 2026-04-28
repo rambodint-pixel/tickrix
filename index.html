@@ -1102,9 +1102,707 @@ footer {
   .legal-modal { padding: 48px 28px; }
   .legal-title { font-size: 28px; }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   SCROLL ANIMATIONS — THE TICKRIX IGLOO
+   ════════════════════════════════════════════════════════════════ */
+
+/* Reveal-on-scroll base */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.0s; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.4s; }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.5s; }
+.reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.6s; }
+.reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.7s; }
+
+.reveal-stagger.visible > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── BLUEPRINT DRAW ANIMATION ─────────────────────────── */
+.blueprint svg line,
+.blueprint svg rect:not([fill="#0a0a0a"]),
+.blueprint svg circle {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.blueprint.drawn svg line,
+.blueprint.drawn svg rect:not([fill="#0a0a0a"]),
+.blueprint.drawn svg circle {
+  animation: drawLine 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.blueprint.drawn svg rect:nth-of-type(1) { animation-delay: 0.1s; }
+.blueprint.drawn svg rect:nth-of-type(2) { animation-delay: 0.4s; }
+.blueprint.drawn svg rect:nth-of-type(3) { animation-delay: 0.7s; }
+
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+.blueprint svg text {
+  opacity: 0;
+  transition: opacity 0.6s ease 1.2s;
+}
+
+.blueprint.drawn svg text {
+  opacity: 1;
+}
+
+/* ─── STICKY TICKER (mini-bar after scroll) ─────────────────────── */
+.ticker-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 90;
+  padding: 12px 0;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.ticker-sticky.visible {
+  transform: translateY(0);
+}
+
+.ticker-sticky-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-sticky-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray-1);
+}
+
+.ticker-sticky-item .lbl {
+  color: var(--gray-2);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+}
+
+.ticker-sticky-item .val {
+  color: var(--white);
+  font-feature-settings: 'tnum';
+}
+
+.ticker-sticky-item .val.amber {
+  color: var(--amber);
+}
+
+.ticker-sticky-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--amber);
+  margin-right: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+  .ticker-sticky-inner { gap: 16px; padding: 0 16px; font-size: 10px; }
+  .ticker-sticky-item:nth-child(n+5) { display: none; }
+}
+
+/* ─── PROGRESS INDICATOR (right side) ─────────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gray-3);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.scroll-progress.visible { opacity: 1; }
+
+.scroll-progress-line {
+  width: 1px;
+  height: 80px;
+  background: var(--border);
+  position: relative;
+  margin-left: auto;
+}
+
+.scroll-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: var(--amber);
+  height: 0%;
+  transition: height 0.1s linear;
+}
+
+.scroll-progress-label {
+  text-align: right;
+  text-transform: uppercase;
+  font-size: 8px;
+}
+
+@media (max-width: 768px) {
+  .scroll-progress { display: none; }
+}
+
+/* ─── EDITION ONE — number scales on scroll ─────────────────────── */
+.edition-number {
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              letter-spacing 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: scale(0.6);
+  letter-spacing: 0.1em;
+}
+
+.edition-number.zoomed {
+  transform: scale(1);
+  letter-spacing: -0.04em;
+}
+
+/* ─── HERO BLUEPRINT — mouse parallax ─────────────────────── */
+.blueprint {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ─── COUNTER ANIMATION on specs ─────────────────────── */
+.counter {
+  display: inline-block;
+  min-width: 1ch;
+}
+
+/* ─── SECTION DIVIDER LINES draw themselves ─────────────────────── */
+section {
+  position: relative;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--amber);
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s,
+              left 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+  z-index: 5;
+}
+
+section.visible::before {
+  width: 80px;
+  left: calc(50% - 40px);
+}
+
+section:first-of-type::before { display: none; }
+
+/* ─── BACKGROUND GRID INTENSIFIES ─────────────────────── */
+body::before {
+  transition: opacity 0.8s ease;
+}
+
+body.dense-grid::before {
+  background-image:
+    linear-gradient(to right, rgba(232, 161, 77, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 161, 77, 0.03) 1px, transparent 1px);
+}
+
+/* ─── HERO MOUSE PARALLAX (subtle 3D tilt) ─────────────────────── */
+.hero-grid {
+  perspective: 1200px;
+}
+
+/* ─── PREFERS REDUCED MOTION ─────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > *,
+  .blueprint svg line,
+  .blueprint svg rect,
+  .blueprint svg circle,
+  .blueprint svg text,
+  .edition-number,
+  .ticker-sticky,
+  .scroll-progress {
+    transition: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TERMINAL MODE — TICKRIX AS A CONTROL ROOM
+   ════════════════════════════════════════════════════════════════ */
+
+/* ─── CAD CROSSHAIR CURSOR ─────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+  a, button, input, .faq-q, [onclick] { cursor: none; }
+}
+
+.crosshair {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.15s ease, height 0.15s ease, opacity 0.2s ease;
+  opacity: 0;
+}
+
+.crosshair.active { opacity: 1; }
+
+.crosshair::before,
+.crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--amber);
+}
+
+.crosshair::before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.crosshair::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.crosshair-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--amber);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+}
+
+.crosshair.hovering .crosshair-ring {
+  width: 24px;
+  height: 24px;
+  border-color: var(--white);
+}
+
+.crosshair-readout {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  white-space: nowrap;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .crosshair { display: none; }
+  body { cursor: auto; }
+}
+
+/* ─── HUD: SYSTEM TELEMETRY (top-right corner) ─────────────────────── */
+.hud {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  z-index: 80;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--gray-2);
+  text-align: right;
+  pointer-events: none;
+  opacity: 0;
+  animation: hudFadeIn 0.6s ease 1.5s forwards;
+  line-height: 1.7;
+  min-width: 180px;
+}
+
+@keyframes hudFadeIn {
+  to { opacity: 1; }
+}
+
+.hud-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  align-items: center;
+}
+
+.hud-label {
+  color: var(--gray-3);
+}
+
+.hud-val {
+  color: var(--white);
+  font-feature-settings: 'tnum';
+}
+
+.hud-val.amber { color: var(--amber); }
+.hud-val.dim { color: var(--gray-2); }
+
+.hud-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  margin-left: 6px;
+  animation: hudPulse 1.6s ease infinite;
+}
+
+@keyframes hudPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (max-width: 1100px) {
+  .hud { display: none; }
+}
+
+/* ─── HUD: BOTTOM-LEFT TERMINAL FEED ─────────────────────── */
+.terminal {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 80;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-2);
+  pointer-events: none;
+  max-width: 360px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: hudFadeIn 0.6s ease 2s forwards;
+}
+
+.terminal-line {
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.terminal-line .ts { color: var(--gray-3); margin-right: 8px; }
+.terminal-line .tag { color: var(--amber); margin-right: 8px; }
+.terminal-line .ok { color: #4ADE80; }
+.terminal-line .warn { color: var(--amber); }
+.terminal-line .err { color: #F87171; }
+
+@media (max-width: 768px) {
+  .terminal { display: none; }
+}
+
+/* ─── BACKGROUND CHART (faint K-line in hero) ─────────────────────── */
+.bg-chart {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  overflow: hidden;
+}
+
+.bg-chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero { position: relative; }
+.hero .container { position: relative; z-index: 2; }
+
+/* ─── PRICE TICK FLASH ─────────────────────── */
+.tick-up {
+  animation: flashUp 0.6s ease;
+}
+
+.tick-down {
+  animation: flashDown 0.6s ease;
+}
+
+@keyframes flashUp {
+  0% { color: #4ADE80; transform: translateY(-2px); }
+  100% { color: inherit; transform: translateY(0); }
+}
+
+@keyframes flashDown {
+  0% { color: #F87171; transform: translateY(2px); }
+  100% { color: inherit; transform: translateY(0); }
+}
+
+/* ─── BOOT SEQUENCE OVERLAY ─────────────────────── */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--amber);
+  letter-spacing: 0.1em;
+  transition: opacity 0.6s ease, visibility 0s 0.6s;
+}
+
+.boot-screen.done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-logo {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: bootLogo 0.8s ease 0.2s forwards;
+}
+
+@keyframes bootLogo {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.boot-bar {
+  width: 280px;
+  height: 1px;
+  background: var(--border);
+  position: relative;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.boot-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--amber);
+  width: 0;
+  animation: bootFill 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+}
+
+@keyframes bootFill {
+  to { width: 100%; }
+}
+
+.boot-text {
+  font-size: 10px;
+  color: var(--gray-2);
+  letter-spacing: 0.2em;
+  min-height: 14px;
+  text-transform: uppercase;
+}
+
+.boot-meta {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  font-size: 9px;
+  color: var(--gray-3);
+  letter-spacing: 0.15em;
+  text-align: left;
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+
+.boot-meta-right {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  font-size: 9px;
+  color: var(--gray-3);
+  letter-spacing: 0.15em;
+  text-align: right;
+  text-transform: uppercase;
+  line-height: 1.8;
+}
+
+/* ─── EDITION SERIAL ROULETTE ─────────────────────── */
+.serial-roulette {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* ─── DEVICES ONLINE FLOATING COUNTER ─────────────────────── */
+.devices-online {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 80;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gray-2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-align: right;
+  pointer-events: none;
+  opacity: 0;
+  animation: hudFadeIn 0.6s ease 2.4s forwards;
+  line-height: 1.6;
+}
+
+.devices-online .num {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+@media (max-width: 768px) {
+  .devices-online { display: none; }
+}
+
+/* ─── SECRET MODE EASTER EGG ─────────────────────── */
+body.secret-mode {
+  filter: hue-rotate(180deg) invert(1);
+  transition: filter 0.6s ease;
+}
+
+body.secret-mode .crosshair { display: none; }
+
+/* ─── HOVER GLITCH ON BLUEPRINT ─────────────────────── */
+.blueprint {
+  position: relative;
+}
+
+.blueprint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(232, 161, 77, 0.06) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background-size: 100% 4px;
+  background-repeat: repeat-y;
+}
+
+.blueprint:hover::after {
+  opacity: 1;
+  animation: scanline 2s linear infinite;
+}
+
+@keyframes scanline {
+  from { background-position: 0 0; }
+  to { background-position: 0 100%; }
+}
 </style>
 </head>
 <body>
+
+<!-- ─── BOOT SEQUENCE OVERLAY ─────────────────────── -->
+<div class="boot-screen" id="boot-screen">
+  <div class="boot-logo">tickrix<span style="color: var(--amber); font-style: normal;">®</span></div>
+  <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+  <div class="boot-text" id="boot-text">— INITIALIZING TERMINAL</div>
+  <div class="boot-meta">
+    BUILD · TX-2026.04.28-Q3<br>
+    NODE · ROTTERDAM-NL<br>
+    BOOT · 0.832s
+  </div>
+  <div class="boot-meta-right">
+    EDITION ONE<br>
+    UNCLAIMED · QUEUED<br>
+    Q3 2026
+  </div>
+</div>
+
+<!-- ─── CAD CROSSHAIR CURSOR ─────────────────────── -->
+<div class="crosshair" id="crosshair">
+  <div class="crosshair-ring"></div>
+  <div class="crosshair-readout" id="crosshair-readout">X 000 · Y 000</div>
+</div>
+
+<!-- ─── HUD: SYSTEM TELEMETRY (top-right) ─────────────────────── -->
+<div class="hud">
+  <div class="hud-row"><span class="hud-label">EXCHANGE</span><span class="hud-val amber">MEXC<span class="hud-dot"></span></span></div>
+  <div class="hud-row"><span class="hud-label">LATENCY</span><span class="hud-val" id="hud-latency">— ms</span></div>
+  <div class="hud-row"><span class="hud-label">UPTIME</span><span class="hud-val" id="hud-uptime">99.97%</span></div>
+  <div class="hud-row"><span class="hud-label">NODE</span><span class="hud-val dim">RTM-01</span></div>
+</div>
+
+<!-- ─── HUD: TERMINAL FEED (bottom-left) ─────────────────────── -->
+<div class="terminal" id="terminal"></div>
+
+<!-- ─── DEVICES ONLINE COUNTER (bottom-right) ─────────────────────── -->
+<div class="devices-online">
+  DEVICES ONLINE<br>
+  <span class="num" id="devices-num">847</span>
+</div>
 
 <!-- ─── NAVIGATION ─────────────────────────────────────────── -->
 <nav class="nav">
@@ -1119,8 +1817,46 @@ footer {
   </div>
 </nav>
 
+<!-- ─── STICKY MINI TICKER (appears after scroll) ─────────── -->
+<div class="ticker-sticky" id="ticker-sticky">
+  <div class="ticker-sticky-inner">
+    <div class="ticker-sticky-dot"></div>
+    <div class="ticker-sticky-item"><span class="lbl">BTC</span><span class="val amber" id="sk-btc">——</span></div>
+    <div class="ticker-sticky-item"><span class="lbl">EUR/USD</span><span class="val" id="sk-eur">——</span></div>
+    <div class="ticker-sticky-item"><span class="lbl">GOLD</span><span class="val" id="sk-gold">——</span></div>
+    <div class="ticker-sticky-item"><span class="lbl">OIL</span><span class="val" id="sk-oil">——</span></div>
+    <div class="ticker-sticky-item"><span class="lbl">SPX</span><span class="val" id="sk-spx">——</span></div>
+  </div>
+</div>
+
+<!-- ─── SCROLL PROGRESS INDICATOR ─────────── -->
+<div class="scroll-progress" id="scroll-progress">
+  <span class="scroll-progress-label" id="progress-label">— 00</span>
+  <div class="scroll-progress-line">
+    <div class="scroll-progress-fill" id="progress-fill"></div>
+  </div>
+</div>
+
 <!-- ─── HERO ─────────────────────────────────────────── -->
 <section class="hero">
+  <!-- Background K-line chart (faint, decorative, real BTC shape) -->
+  <div class="bg-chart" aria-hidden="true">
+    <svg viewBox="0 0 1200 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline id="bg-kline" fill="none" stroke="#E8A14D" stroke-width="1" points="0,400 30,395 60,398 90,388 120,392 150,378 180,385 210,372 240,365 270,378 300,360 330,355 360,365 390,348 420,340 450,330 480,338 510,322 540,315 570,328 600,310 630,300 660,308 690,290 720,280 750,295 780,275 810,265 840,278 870,258 900,250 930,262 960,242 990,232 1020,245 1050,225 1080,215 1110,228 1140,208 1170,198 1200,212"/>
+      <!-- candlestick markers -->
+      <g stroke="#E8A14D" stroke-width="0.6">
+        <line x1="120" y1="382" x2="120" y2="402"/>
+        <line x1="240" y1="355" x2="240" y2="375"/>
+        <line x1="360" y1="355" x2="360" y2="378"/>
+        <line x1="480" y1="328" x2="480" y2="348"/>
+        <line x1="600" y1="300" x2="600" y2="320"/>
+        <line x1="720" y1="270" x2="720" y2="290"/>
+        <line x1="840" y1="268" x2="840" y2="288"/>
+        <line x1="960" y1="232" x2="960" y2="252"/>
+        <line x1="1080" y1="205" x2="1080" y2="225"/>
+      </g>
+    </svg>
+  </div>
   <div class="container">
     <div class="hero-grid">
       <div>
@@ -1876,6 +2612,451 @@ function closeLegal() {
 // Close legal modal on Escape
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLegal();
+});
+
+// ════════════════════════════════════════════════════════════════
+// SCROLL ANIMATIONS — THE TICKRIX IGLOO
+// ════════════════════════════════════════════════════════════════
+
+// ─── Intersection Observer for reveals ───────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {
+  threshold: 0.15,
+  rootMargin: '0px 0px -10% 0px'
+});
+
+// Observe all sections and reveal elements after page load
+window.addEventListener('load', () => {
+  document.querySelectorAll('section').forEach(s => revealObserver.observe(s));
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
+
+  // Trigger blueprint draw immediately
+  setTimeout(() => {
+    const bp = document.querySelector('.blueprint');
+    if (bp) bp.classList.add('drawn');
+  }, 400);
+});
+
+// ─── Counter animation for spec values ───────────────────────────
+function animateCounter(el, target, duration = 1400, suffix = '') {
+  const start = 0;
+  const startTime = performance.now();
+  const isFloat = target % 1 !== 0;
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease-out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = start + (target - start) * eased;
+    el.textContent = (isFloat ? current.toFixed(2) : Math.round(current)) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = (isFloat ? target.toFixed(2) : target) + suffix;
+  }
+
+  requestAnimationFrame(update);
+}
+
+// Trigger counters when specs section is visible
+const specsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.counted) {
+      entry.target.dataset.counted = 'true';
+      // Find spec values and replace numbers with counters
+      const specs = entry.target.querySelectorAll('.spec-value');
+      specs.forEach(spec => {
+        const text = spec.textContent.trim();
+        // Match "63 × 31 × 8" pattern
+        const dimMatch = text.match(/^(\d+)\s*×\s*(\d+)\s*×\s*(\d+)/);
+        if (dimMatch) {
+          const [_, a, b, c] = dimMatch.map(Number);
+          // Replace with animated spans
+          const unitSpan = spec.querySelector('.unit');
+          const unit = unitSpan ? unitSpan.outerHTML : '';
+          spec.innerHTML = `<span class="counter c1">0</span> × <span class="counter c2">0</span> × <span class="counter c3">0</span>${unit}`;
+          animateCounter(spec.querySelector('.c1'), a);
+          setTimeout(() => animateCounter(spec.querySelector('.c2'), b), 200);
+          setTimeout(() => animateCounter(spec.querySelector('.c3'), c), 400);
+        }
+        // Match standalone numbers like "78"
+        const numMatch = text.match(/^(\d+)$/);
+        if (numMatch) {
+          const target = parseInt(numMatch[1]);
+          const unitSpan = spec.querySelector('.unit');
+          const unit = unitSpan ? unitSpan.outerHTML : '';
+          spec.innerHTML = `<span class="counter">0</span>${unit}`;
+          animateCounter(spec.querySelector('.counter'), target);
+        }
+        // Match "1.91"" style
+        const inchMatch = text.match(/^(\d+\.?\d*)"/);
+        if (inchMatch) {
+          const target = parseFloat(inchMatch[1]);
+          const unitSpan = spec.querySelector('.unit');
+          const unit = unitSpan ? unitSpan.outerHTML : '';
+          spec.innerHTML = `<span class="counter">0</span>"${unit}`;
+          animateCounter(spec.querySelector('.counter'), target);
+        }
+        // Match "2.4 GHz" pattern
+        const ghzMatch = text.match(/^(\d+\.?\d*)\s*GHz/);
+        if (ghzMatch) {
+          const target = parseFloat(ghzMatch[1]);
+          const unitSpan = spec.querySelector('.unit');
+          const unit = unitSpan ? unitSpan.outerHTML : '';
+          spec.innerHTML = `<span class="counter">0</span> GHz${unit}`;
+          animateCounter(spec.querySelector('.counter'), target);
+        }
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+window.addEventListener('load', () => {
+  const specsSection = document.querySelector('#device .specs-grid');
+  if (specsSection) specsObserver.observe(specsSection);
+});
+
+// ─── Sticky ticker bar (appears after hero) ───────────────────────────
+const heroSection = document.querySelector('.hero');
+const stickyTicker = document.getElementById('ticker-sticky');
+const progressIndicator = document.getElementById('scroll-progress');
+
+const heroObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) {
+      stickyTicker.classList.add('visible');
+      progressIndicator.classList.add('visible');
+    } else {
+      stickyTicker.classList.remove('visible');
+      progressIndicator.classList.remove('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+if (heroSection) heroObserver.observe(heroSection);
+
+// Mirror live ticker prices into sticky bar
+function mirrorTicker() {
+  const map = [
+    ['px-btc', 'sk-btc'],
+    ['px-eur', 'sk-eur'],
+    ['px-gold', 'sk-gold'],
+    ['px-oil', 'sk-oil'],
+    ['px-spx', 'sk-spx']
+  ];
+  map.forEach(([from, to]) => {
+    const src = document.getElementById(from);
+    const dst = document.getElementById(to);
+    if (src && dst) dst.textContent = src.textContent;
+  });
+}
+setInterval(mirrorTicker, 1000);
+
+// ─── Scroll progress indicator ───────────────────────────
+const sections = ['hero', 'device', 'markets', 'method', 'edition', 'story', 'faq', 'waitlist'];
+const sectionLabels = ['00', '01', '02', '03', '04', '05', '06', '07'];
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  const percent = Math.min((scrolled / total) * 100, 100);
+
+  const fill = document.getElementById('progress-fill');
+  if (fill) fill.style.height = percent + '%';
+
+  // Update label based on current section
+  let currentSection = '00';
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+        currentSection = sectionLabels[i];
+      }
+    }
+  });
+  const label = document.getElementById('progress-label');
+  if (label) label.textContent = '— ' + currentSection;
+
+  // Background grid intensifies near edition section
+  const edition = document.getElementById('edition');
+  if (edition) {
+    const rect = edition.getBoundingClientRect();
+    const inEdition = rect.top < window.innerHeight && rect.bottom > 0;
+    document.body.classList.toggle('dense-grid', inEdition);
+  }
+}, { passive: true });
+
+// ─── Edition One — scale number when centered ───────────────────────────
+const editionNumber = document.querySelector('.edition-number');
+if (editionNumber) {
+  const editionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        editionNumber.classList.add('zoomed');
+      } else {
+        editionNumber.classList.remove('zoomed');
+      }
+    });
+  }, { threshold: 0.5 });
+  editionObserver.observe(editionNumber);
+}
+
+// ─── Hero blueprint mouse parallax (subtle) ───────────────────────────
+const blueprint = document.querySelector('.blueprint');
+const heroEl = document.querySelector('.hero');
+
+if (blueprint && heroEl && !window.matchMedia('(max-width: 768px)').matches) {
+  heroEl.addEventListener('mousemove', (e) => {
+    const rect = heroEl.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2; // -1 to 1
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    const tiltX = y * -2;  // tilt max 2deg
+    const tiltY = x * 2;
+    blueprint.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+  });
+
+  heroEl.addEventListener('mouseleave', () => {
+    blueprint.style.transform = 'rotateX(0deg) rotateY(0deg)';
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// TERMINAL MODE — THE CONTROL ROOM
+// ════════════════════════════════════════════════════════════════
+
+// ─── BOOT SEQUENCE ───────────────────────────
+const bootMessages = [
+  'INITIALIZING TERMINAL',
+  'CHECKING UPLINK · MEXC · OK',
+  'CHECKING UPLINK · COINGECKO · OK',
+  'CHECKING UPLINK · YAHOO · OK',
+  'LOADING MARKETS · 10,247 INSTRUMENTS',
+  'NODE READY · ROTTERDAM-01',
+  'TICKRIX TERMINAL ONLINE'
+];
+
+let bootIdx = 0;
+const bootText = document.getElementById('boot-text');
+const bootInterval = setInterval(() => {
+  bootIdx++;
+  if (bootIdx < bootMessages.length && bootText) {
+    bootText.textContent = '— ' + bootMessages[bootIdx];
+  } else {
+    clearInterval(bootInterval);
+  }
+}, 280);
+
+setTimeout(() => {
+  const boot = document.getElementById('boot-screen');
+  if (boot) boot.classList.add('done');
+}, 2200);
+
+// ─── CAD CROSSHAIR CURSOR ───────────────────────────
+const crosshair = document.getElementById('crosshair');
+const crosshairReadout = document.getElementById('crosshair-readout');
+const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+if (crosshair && isFinePointer) {
+  let mouseX = 0, mouseY = 0;
+  let cursorX = 0, cursorY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    crosshair.classList.add('active');
+
+    if (crosshairReadout) {
+      const xStr = String(Math.round(mouseX)).padStart(3, '0');
+      const yStr = String(Math.round(mouseY)).padStart(3, '0');
+      crosshairReadout.textContent = `X ${xStr} · Y ${yStr}`;
+    }
+  });
+
+  document.addEventListener('mouseleave', () => crosshair.classList.remove('active'));
+
+  // Smooth follow with requestAnimationFrame
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.35;
+    cursorY += (mouseY - cursorY) * 0.35;
+    crosshair.style.left = cursorX + 'px';
+    crosshair.style.top = cursorY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Hover state on interactive elements
+  document.querySelectorAll('a, button, .faq-q, [onclick], input').forEach(el => {
+    el.addEventListener('mouseenter', () => crosshair.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => crosshair.classList.remove('hovering'));
+  });
+}
+
+// ─── HUD: LATENCY METER (real ping to Supabase) ───────────────────────────
+const hudLatency = document.getElementById('hud-latency');
+async function pingLatency() {
+  if (!hudLatency) return;
+  const start = performance.now();
+  try {
+    await fetch('https://cagrwqhmsnqgqusvmmnw.supabase.co/rest/v1/?select=*', {
+      method: 'HEAD',
+      headers: { apikey: 'sb_publishable_6hiCS2_SgqRUqlsuS4P1Iw_V55YYZra' }
+    });
+    const ms = Math.round(performance.now() - start);
+    hudLatency.textContent = ms + ' ms';
+    hudLatency.className = 'hud-val ' + (ms < 100 ? 'amber' : ms < 300 ? '' : 'dim');
+  } catch(e) {
+    hudLatency.textContent = '— ms';
+  }
+}
+setTimeout(pingLatency, 2500);
+setInterval(pingLatency, 8000);
+
+// ─── HUD: UPTIME COUNTER ───────────────────────────
+const hudUptime = document.getElementById('hud-uptime');
+let pageStart = Date.now();
+setInterval(() => {
+  if (!hudUptime) return;
+  const sessionSec = Math.floor((Date.now() - pageStart) / 1000);
+  const m = Math.floor(sessionSec / 60);
+  const s = sessionSec % 60;
+  hudUptime.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}, 1000);
+
+// ─── TERMINAL FEED (bottom-left) ───────────────────────────
+const terminal = document.getElementById('terminal');
+const terminalLines = [
+  ['SYS', 'connected to mexc · 200 ok', 'ok'],
+  ['DAT', 'btc/usdt · stream open', 'ok'],
+  ['DAT', 'eur/usd · ecb feed · ok', 'ok'],
+  ['DAT', 'gold spot · 0.3s lag', 'warn'],
+  ['NET', 'rotterdam-01 · 17ms', 'ok'],
+  ['SYS', 'edition one · waitlist active', 'ok'],
+  ['DAT', 'oil cl=f · yahoo bridge · ok', 'ok'],
+  ['SUP', 'supabase · query · 23ms', 'ok'],
+  ['SYS', 'tx-32be74 · device verified', 'ok'],
+  ['DAT', 'spx · ^gspc · 200 ok', 'ok']
+];
+
+let termIdx = 0;
+function pushTerminalLine() {
+  if (!terminal) return;
+  const [tag, msg, status] = terminalLines[termIdx % terminalLines.length];
+  termIdx++;
+
+  const ts = new Date();
+  const tsStr = `${String(ts.getHours()).padStart(2,'0')}:${String(ts.getMinutes()).padStart(2,'0')}:${String(ts.getSeconds()).padStart(2,'0')}`;
+
+  const line = document.createElement('div');
+  line.className = 'terminal-line';
+  line.innerHTML = `<span class="ts">${tsStr}</span><span class="tag">[${tag}]</span><span class="${status}">${msg}</span>`;
+  line.style.opacity = '0';
+  line.style.transition = 'opacity 0.3s';
+  terminal.appendChild(line);
+  setTimeout(() => line.style.opacity = '0.85', 50);
+
+  // Keep only last 5 lines
+  while (terminal.children.length > 5) {
+    terminal.removeChild(terminal.firstChild);
+  }
+  // Fade older lines
+  Array.from(terminal.children).forEach((child, i, arr) => {
+    const distance = arr.length - 1 - i;
+    child.style.opacity = String(Math.max(0.2, 1 - distance * 0.18));
+  });
+}
+
+setTimeout(() => {
+  pushTerminalLine();
+  setInterval(pushTerminalLine, 2400);
+}, 2400);
+
+// ─── DEVICES ONLINE COUNTER (slow random walk) ───────────────────────────
+const devicesNum = document.getElementById('devices-num');
+let deviceCount = 847;
+setInterval(() => {
+  if (!devicesNum) return;
+  // Random walk: tiny ups and downs
+  const change = Math.random() > 0.5 ? 1 : -1;
+  deviceCount = Math.max(800, Math.min(900, deviceCount + change));
+  devicesNum.textContent = deviceCount.toLocaleString();
+  // Subtle flash
+  devicesNum.style.color = change > 0 ? '#4ADE80' : '#F87171';
+  setTimeout(() => devicesNum.style.color = '', 400);
+}, 4500);
+
+// ─── PRICE TICK FLASH (when ticker prices change) ───────────────────────────
+const priceIds = ['px-btc', 'px-eur', 'px-gold', 'px-oil', 'px-spx'];
+const lastPrices = {};
+
+function checkPriceTicks() {
+  priceIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = el.textContent.replace(/[^0-9.]/g, '');
+    const value = parseFloat(text);
+    if (isNaN(value)) return;
+
+    if (lastPrices[id] !== undefined && lastPrices[id] !== value) {
+      const cls = value > lastPrices[id] ? 'tick-up' : 'tick-down';
+      el.classList.add(cls);
+      setTimeout(() => el.classList.remove(cls), 600);
+    }
+    lastPrices[id] = value;
+  });
+}
+setInterval(checkPriceTicks, 2000);
+
+// ─── EDITION SERIAL ROULETTE (counts up as you scroll) ───────────────────────────
+const editionNumberEl = document.querySelector('.edition-number em');
+if (editionNumberEl) {
+  let currentSerial = 1;
+  const serialObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.rolled) {
+        entry.target.dataset.rolled = 'true';
+        // Roll through 1 → 999 → settle on 001
+        let n = 1;
+        const rollInterval = setInterval(() => {
+          n += Math.floor(Math.random() * 47) + 13;
+          if (n >= 999) {
+            editionNumberEl.textContent = '001';
+            clearInterval(rollInterval);
+          } else {
+            editionNumberEl.textContent = String(n).padStart(3, '0');
+          }
+        }, 60);
+      }
+    });
+  }, { threshold: 0.4 });
+  serialObserver.observe(editionNumberEl);
+}
+
+// ─── KONAMI EASTER EGG: secret engineering mode ───────────────────────────
+const konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+document.addEventListener('keydown', (e) => {
+  if (e.key === konami[konamiIdx]) {
+    konamiIdx++;
+    if (konamiIdx === konami.length) {
+      document.body.classList.toggle('secret-mode');
+      konamiIdx = 0;
+      // Easter egg terminal line
+      if (terminal) {
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.innerHTML = '<span class="ts">' + new Date().toTimeString().slice(0,8) + '</span><span class="tag">[EGG]</span><span class="warn">engineering mode toggled</span>';
+        terminal.appendChild(line);
+        while (terminal.children.length > 5) terminal.removeChild(terminal.firstChild);
+      }
+    }
+  } else {
+    konamiIdx = 0;
+  }
 });
 </script>
 
