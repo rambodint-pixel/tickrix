@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tickrix Legacy Promise</title>
+<meta name="description" content="If Tickrix ever shuts down, the firmware becomes open-source. Your device keeps working. You own what you bought.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #14130F;
+    --bg-card: #1F1E1A;
+    --border: #2C2B27;
+    --text: #FAFAF8;
+    --text-dim: #888;
+    --text-faint: #555;
+    --amber: #E8A14D;
+    --green: #00CC66;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 24px 120px;
+  }
+
+  /* ── Top nav ─────────────────────── */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(20, 19, 15, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav-brand {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .nav-brand:hover { color: var(--amber); }
+
+  .nav-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-link:hover { color: var(--amber); }
+
+  /* ── Container ──────────────────── */
+  .container {
+    max-width: 640px;
+    width: 100%;
+    margin-top: 60px;
+  }
+
+  /* ── Hero ──────────────────────── */
+  .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .title {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-style: italic;
+    font-size: 56px;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 80px;
+  }
+
+  /* ── Section ───────────────────── */
+  .section {
+    margin-bottom: 80px;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 0 48px 0;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .section p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .section p.dim {
+    color: var(--text-dim);
+  }
+
+  .section p.tight {
+    margin-bottom: 8px;
+  }
+
+  .promise-final {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--text);
+    margin-top: 32px;
+    margin-bottom: 0;
+  }
+
+  /* ── Pillars (The Contingency) ──── */
+  .pillar {
+    margin-bottom: 40px;
+    padding-left: 24px;
+    border-left: 2px solid var(--border);
+  }
+
+  .pillar:hover {
+    border-left-color: var(--amber);
+  }
+
+  .pillar-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--text);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .pillar-body {
+    font-size: 15px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ── Graveyard names ────────────── */
+  .graveyard {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--text-faint);
+    margin-bottom: 32px;
+    line-height: 2.2;
+  }
+
+  /* ── Signature block ────────────── */
+  .signature {
+    margin-top: 100px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .sig-name {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-style: italic;
+    font-size: 38px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .sig-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    line-height: 2;
+  }
+
+  /* ── Footer ─────────────────────── */
+  .footer {
+    margin-top: 120px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+  }
+
+  .footer a {
+    color: var(--text-dim);
+    text-decoration: none;
+    margin: 0 16px;
+  }
+
+  .footer a:hover {
+    color: var(--amber);
+  }
+
+  /* ── Responsive ─────────────────── */
+  @media (max-width: 640px) {
+    body { padding: 60px 20px 80px; }
+    .nav { padding: 18px 24px; }
+    .title { font-size: 36px; margin-bottom: 60px; }
+    .section { margin-bottom: 60px; }
+    .section p { font-size: 16px; }
+    .sig-name { font-size: 30px; }
+    .pillar { padding-left: 18px; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/" class="nav-brand">TICKRIX</a>
+    <a href="/" class="nav-link">← BACK</a>
+  </nav>
+
+  <main class="container">
+
+    <!-- ── HERO ─────────────────────────────────── -->
+    <div class="label">— OUR PLEDGE —</div>
+    <h1 class="title">The Tickrix<br>Legacy Promise.</h1>
+
+    <!-- ── PROMISE ──────────────────────────────── -->
+    <section class="section">
+      <p>You are buying hardware.</p>
+      <p>You should own it. Forever.</p>
+
+      <p style="margin-top: 32px;">If Tickrix ever shuts down — for any reason — the firmware becomes open-source. The hardware specs become public. Your device keeps working.</p>
+
+      <p class="dim" style="margin-top: 32px;">No paywalls. No bricked screens. No "service discontinued" emails.</p>
+
+      <p class="promise-final">The promise is simple: you own what you bought.</p>
+    </section>
+
+    <!-- ── THE CONTINGENCY ──────────────────────── -->
+    <section class="section">
+      <hr class="section-divider">
+      <div class="section-label">— The Contingency —</div>
+
+      <p style="margin-bottom: 40px;">To ensure this isn't just a verbal promise, we've automated the hand-off:</p>
+
+      <div class="pillar">
+        <div class="pillar-title">Public Escrow</div>
+        <div class="pillar-body">The complete firmware source is mirrored to a private repository, synced daily.</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-title">The Dead Man's Switch</div>
+        <div class="pillar-body">If the company goes silent for 6 months — no commits, no check-ins, no heartbeats — the repository auto-publishes to GitHub under the MIT license.</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-title">Open Hardware</div>
+        <div class="pillar-body">The full schematics and Bill of Materials release alongside the code.</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-title">Sovereign Data</div>
+        <div class="pillar-body">The final firmware release ships with user-provided API keys for CoinGecko, Yahoo Finance, and direct exchange feeds. Your data path never depends on us.</div>
+      </div>
+
+      <div class="pillar">
+        <div class="pillar-title">Community Ready</div>
+        <div class="pillar-body">Fork it. Modify it. Run your own relays. Indefinitely.</div>
+      </div>
+    </section>
+
+    <!-- ── WHY THIS EXISTS ──────────────────────── -->
+    <section class="section">
+      <hr class="section-divider">
+      <div class="section-label">— Why This Exists —</div>
+
+      <div class="graveyard">
+        Pebble. &nbsp; Jibo. &nbsp; Revolv. &nbsp; Cozmo.
+      </div>
+
+      <p>Beautiful hardware that became expensive paperweights when a server was switched off in a boardroom.</p>
+
+      <p style="margin-top: 24px;"><em>Tickrix will not be that company.</em></p>
+
+      <p class="dim" style="margin-top: 32px;">We are building for the long haul. But we respect your investment enough to plan for the "what if."</p>
+
+      <p style="margin-top: 24px;">If the worst happens, you keep your device. You keep your data. You keep your control.</p>
+
+      <p class="promise-final">That is the promise.</p>
+    </section>
+
+    <!-- ── SIGNATURE ────────────────────────────── -->
+    <div class="signature">
+      <div class="sig-name">— AK</div>
+      <div class="sig-meta">
+        Founder, Tickrix<br>
+        Rotterdam, 2026
+      </div>
+    </div>
+
+    <!-- ── FOOTER ───────────────────────────────── -->
+    <div class="footer">
+      <a href="/">HOME</a>
+      <a href="/legacy">LEGACY</a>
+      <a href="https://x.com/tickrix" target="_blank">X</a>
+    </div>
+
+  </main>
+
+</body>
+</html>
