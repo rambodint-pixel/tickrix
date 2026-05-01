@@ -11,42 +11,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=JetBrains+Mono:wght@300;400;500&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-/* ════════════════════════════════════════════════════════════════
-   TICKRIX — THE DESIGN SYSTEM
-   6 colors. 4 type sizes. 160px sections. Forever.
-   ════════════════════════════════════════════════════════════════ */
-
 :root {
-  /* COLOR PALETTE */
   --black:        #000000;
   --black-1:      #050505;
   --surface:      #0E0E0D;
   --border:       #1F1E1B;
   --border-soft:  #131312;
-
   --white:        #FFFFFF;
   --gray-1:       #B5B3AC;
   --gray-2:       #6E6C66;
   --gray-3:       #45433E;
-
   --amber:        #E8A14D;
   --amber-dim:    #8C6131;
-
-  /* TYPOGRAPHY */
   --font-display: 'Fraunces', 'Times New Roman', serif;
   --font-body:    'Inter Tight', system-ui, sans-serif;
   --font-mono:    'JetBrains Mono', 'SF Mono', monospace;
-
-  /* SPACING */
   --section:      160px;
   --container:    1200px;
   --reading:      640px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
-
 body {
   background: var(--black);
   color: var(--white);
@@ -59,16 +45,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 ::selection { background: var(--amber); color: var(--black); }
-
 a { color: inherit; text-decoration: none; }
-
 img, svg { display: block; max-width: 100%; }
 
-/* ════════════════════════════════════════════════════════════════
-   GRID OVERLAY (subtle blueprint feel on body)
-   ════════════════════════════════════════════════════════════════ */
 body::before {
   content: '';
   position: fixed;
@@ -81,10 +61,6 @@ body::before {
   z-index: 1;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   TYPOGRAPHY — 4 SIZES
-   ════════════════════════════════════════════════════════════════ */
-
 .label {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -94,7 +70,6 @@ body::before {
   color: var(--gray-2);
   display: inline-block;
 }
-
 .label-amber { color: var(--amber); }
 
 .h-hero {
@@ -105,12 +80,7 @@ body::before {
   letter-spacing: -0.035em;
   font-variation-settings: 'opsz' 144;
 }
-
-.h-hero em {
-  font-style: italic;
-  font-weight: 400;
-  color: var(--amber);
-}
+.h-hero em { font-style: italic; font-weight: 400; color: var(--amber); }
 
 .h-section {
   font-family: var(--font-display);
@@ -120,11 +90,7 @@ body::before {
   letter-spacing: -0.025em;
   font-variation-settings: 'opsz' 96;
 }
-
-.h-section em {
-  font-style: italic;
-  font-weight: 400;
-}
+.h-section em { font-style: italic; font-weight: 400; }
 
 .body-lg {
   font-size: 19px;
@@ -133,22 +99,8 @@ body::before {
   font-weight: 400;
   max-width: var(--reading);
 }
-
-.body {
-  font-size: 16px;
-  line-height: 1.65;
-  color: var(--gray-1);
-  font-weight: 400;
-}
-
-.mono {
-  font-family: var(--font-mono);
-  font-feature-settings: 'tnum';
-}
-
-/* ════════════════════════════════════════════════════════════════
-   LAYOUT
-   ════════════════════════════════════════════════════════════════ */
+.body { font-size: 16px; line-height: 1.65; color: var(--gray-1); font-weight: 400; }
+.mono { font-family: var(--font-mono); font-feature-settings: 'tnum'; }
 
 .container {
   max-width: var(--container);
@@ -163,7 +115,6 @@ section {
   position: relative;
   border-top: 1px solid var(--border-soft);
 }
-
 section:first-of-type { border-top: none; }
 
 .section-head {
@@ -175,23 +126,13 @@ section:first-of-type { border-top: none; }
 }
 
 @media (max-width: 768px) {
-  .section-head {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    margin-bottom: 56px;
-  }
+  .section-head { grid-template-columns: 1fr; gap: 24px; margin-bottom: 56px; }
   section { padding: 96px 0; }
 }
 
-/* ════════════════════════════════════════════════════════════════
-   NAVIGATION
-   ════════════════════════════════════════════════════════════════ */
-
 .nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 100;
   padding: 24px 32px;
   background: rgba(0, 0, 0, 0.7);
@@ -199,7 +140,6 @@ section:first-of-type { border-top: none; }
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-soft);
 }
-
 .nav-inner {
   max-width: var(--container);
   margin: 0 auto;
@@ -207,7 +147,6 @@ section:first-of-type { border-top: none; }
   justify-content: space-between;
   align-items: center;
 }
-
 .nav-logo {
   font-family: var(--font-body);
   font-weight: 600;
@@ -215,13 +154,7 @@ section:first-of-type { border-top: none; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
-
-.nav-links {
-  display: flex;
-  gap: 40px;
-  list-style: none;
-}
-
+.nav-links { display: flex; gap: 40px; list-style: none; }
 .nav-links a {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -230,16 +163,8 @@ section:first-of-type { border-top: none; }
   color: var(--gray-1);
   transition: color 0.3s;
 }
-
 .nav-links a:hover { color: var(--amber); }
-
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   HERO
-   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) { .nav-links { display: none; } }
 
 .hero {
   min-height: 100vh;
@@ -249,17 +174,13 @@ section:first-of-type { border-top: none; }
   position: relative;
   border-top: none;
 }
-
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: center;
 }
-
-@media (max-width: 968px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 64px; }
-}
+@media (max-width: 968px) { .hero-grid { grid-template-columns: 1fr; gap: 64px; } }
 
 .hero-meta {
   display: flex;
@@ -267,7 +188,6 @@ section:first-of-type { border-top: none; }
   margin-bottom: 48px;
   align-items: center;
 }
-
 .hero-meta .dot {
   width: 6px;
   height: 6px;
@@ -275,20 +195,13 @@ section:first-of-type { border-top: none; }
   background: var(--amber);
   animation: pulse 2s ease-in-out infinite;
 }
-
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-.hero-title {
-  margin-bottom: 40px;
-}
-
-.hero-sub {
-  margin-bottom: 56px;
-  max-width: 520px;
-}
+.hero-title { margin-bottom: 40px; }
+.hero-sub { margin-bottom: 56px; max-width: 520px; }
 
 .hero-cta {
   display: inline-flex;
@@ -307,20 +220,8 @@ section:first-of-type { border-top: none; }
   transition: all 0.3s;
   border-radius: 0;
 }
-
-.hero-cta:hover {
-  background: var(--white);
-  transform: translateY(-2px);
-}
-
-.hero-cta-arrow {
-  font-family: var(--font-mono);
-  font-size: 14px;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   BLUEPRINT (the technical drawing in hero)
-   ════════════════════════════════════════════════════════════════ */
+.hero-cta:hover { background: var(--white); transform: translateY(-2px); }
+.hero-cta-arrow { font-family: var(--font-mono); font-size: 14px; }
 
 .blueprint {
   position: relative;
@@ -329,15 +230,7 @@ section:first-of-type { border-top: none; }
   max-width: 540px;
   margin: 0 auto;
 }
-
-.blueprint svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   LIVE TICKER
-   ════════════════════════════════════════════════════════════════ */
+.blueprint svg { width: 100%; height: 100%; }
 
 .ticker-strip {
   display: flex;
@@ -347,7 +240,6 @@ section:first-of-type { border-top: none; }
   margin-top: 96px;
   overflow: hidden;
 }
-
 .ticker-item {
   flex: 1;
   padding: 24px 32px;
@@ -356,9 +248,7 @@ section:first-of-type { border-top: none; }
   flex-direction: column;
   gap: 8px;
 }
-
 .ticker-item:last-child { border-right: none; }
-
 .ticker-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -366,7 +256,6 @@ section:first-of-type { border-top: none; }
   color: var(--gray-2);
   text-transform: uppercase;
 }
-
 .ticker-price {
   font-family: var(--font-mono);
   font-size: 18px;
@@ -374,17 +263,11 @@ section:first-of-type { border-top: none; }
   color: var(--white);
   font-feature-settings: 'tnum';
 }
-
 .ticker-price.live { color: var(--amber); }
-
 @media (max-width: 768px) {
   .ticker-strip { flex-wrap: wrap; }
   .ticker-item { flex: 1 1 50%; border-bottom: 1px solid var(--border); }
 }
-
-/* ════════════════════════════════════════════════════════════════
-   SPECS — engineering callouts
-   ════════════════════════════════════════════════════════════════ */
 
 .specs-grid {
   display: grid;
@@ -393,7 +276,6 @@ section:first-of-type { border-top: none; }
   background: var(--border-soft);
   border: 1px solid var(--border-soft);
 }
-
 .spec {
   background: var(--black);
   padding: 56px 48px;
@@ -403,7 +285,6 @@ section:first-of-type { border-top: none; }
   flex-direction: column;
   justify-content: space-between;
 }
-
 .spec-num {
   position: absolute;
   top: 24px;
@@ -413,7 +294,6 @@ section:first-of-type { border-top: none; }
   letter-spacing: 0.2em;
   color: var(--gray-3);
 }
-
 .spec-value {
   font-family: var(--font-display);
   font-size: 40px;
@@ -423,7 +303,6 @@ section:first-of-type { border-top: none; }
   color: var(--white);
   margin-bottom: 16px;
 }
-
 .spec-value .unit {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -432,7 +311,6 @@ section:first-of-type { border-top: none; }
   margin-left: 8px;
   letter-spacing: 0.1em;
 }
-
 .spec-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -441,23 +319,17 @@ section:first-of-type { border-top: none; }
   color: var(--amber);
   margin-bottom: 12px;
 }
-
 .spec-desc {
   font-size: 14px;
   color: var(--gray-1);
   line-height: 1.6;
   margin-top: auto;
 }
-
 @media (max-width: 768px) {
   .specs-grid { grid-template-columns: 1fr; }
   .spec { padding: 40px 24px; min-height: 220px; }
   .spec-value { font-size: 32px; }
 }
-
-/* ════════════════════════════════════════════════════════════════
-   MARKETS GRID
-   ════════════════════════════════════════════════════════════════ */
 
 .markets-grid {
   display: grid;
@@ -466,15 +338,12 @@ section:first-of-type { border-top: none; }
   background: var(--border-soft);
   border: 1px solid var(--border-soft);
 }
-
 .market {
   background: var(--black);
   padding: 40px 32px;
   transition: background 0.3s;
 }
-
 .market:hover { background: var(--surface); }
-
 .market-icon {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -482,7 +351,6 @@ section:first-of-type { border-top: none; }
   letter-spacing: 0.2em;
   margin-bottom: 16px;
 }
-
 .market-name {
   font-family: var(--font-display);
   font-size: 22px;
@@ -491,20 +359,13 @@ section:first-of-type { border-top: none; }
   margin-bottom: 8px;
   color: var(--white);
 }
-
-.market-desc {
-  font-size: 13px;
-  color: var(--gray-2);
-  margin-bottom: 16px;
-}
-
+.market-desc { font-size: 13px; color: var(--gray-2); margin-bottom: 16px; }
 .market-ex {
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--amber);
   letter-spacing: 0.1em;
 }
-
 .market-count {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -512,18 +373,8 @@ section:first-of-type { border-top: none; }
   margin-top: 8px;
   letter-spacing: 0.1em;
 }
-
-@media (max-width: 968px) {
-  .markets-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-  .markets-grid { grid-template-columns: 1fr; }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   METHOD STEPS
-   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 968px) { .markets-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .markets-grid { grid-template-columns: 1fr; } }
 
 .method-grid {
   display: grid;
@@ -531,22 +382,15 @@ section:first-of-type { border-top: none; }
   gap: 64px;
   margin-top: 40px;
 }
-
-.method-step {
-  position: relative;
-  padding-top: 32px;
-}
-
+.method-step { position: relative; padding-top: 32px; }
 .method-step::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 24px;
   height: 1px;
   background: var(--amber);
 }
-
 .method-num {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -554,7 +398,6 @@ section:first-of-type { border-top: none; }
   letter-spacing: 0.3em;
   margin-bottom: 24px;
 }
-
 .method-title {
   font-family: var(--font-display);
   font-size: 26px;
@@ -563,20 +406,8 @@ section:first-of-type { border-top: none; }
   letter-spacing: -0.02em;
   color: var(--white);
 }
-
-.method-desc {
-  font-size: 15px;
-  color: var(--gray-1);
-  line-height: 1.65;
-}
-
-@media (max-width: 768px) {
-  .method-grid { grid-template-columns: 1fr; gap: 48px; }
-}
-
-/* ════════════════════════════════════════════════════════════════
-   EDITION ONE
-   ════════════════════════════════════════════════════════════════ */
+.method-desc { font-size: 15px; color: var(--gray-1); line-height: 1.65; }
+@media (max-width: 768px) { .method-grid { grid-template-columns: 1fr; gap: 48px; } }
 
 .edition {
   border: 1px solid var(--border);
@@ -584,29 +415,24 @@ section:first-of-type { border-top: none; }
   position: relative;
   background: linear-gradient(180deg, var(--black) 0%, var(--surface) 100%);
 }
-
 .edition::before {
   content: '';
   position: absolute;
-  top: 16px;
-  left: 16px;
+  top: 16px; left: 16px;
   width: 24px;
   height: 24px;
   border-top: 1px solid var(--amber);
   border-left: 1px solid var(--amber);
 }
-
 .edition::after {
   content: '';
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: 16px; right: 16px;
   width: 24px;
   height: 24px;
   border-bottom: 1px solid var(--amber);
   border-right: 1px solid var(--amber);
 }
-
 .edition-number {
   font-family: var(--font-display);
   font-size: clamp(72px, 12vw, 144px);
@@ -617,14 +443,7 @@ section:first-of-type { border-top: none; }
   color: var(--white);
   margin: 24px 0;
 }
-
-.edition-number .ne {
-  font-style: normal;
-  color: var(--amber);
-  font-size: 0.7em;
-  margin-right: 12px;
-}
-
+.edition-number .ne { font-style: normal; color: var(--amber); font-size: 0.7em; margin-right: 12px; }
 .edition-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -633,13 +452,7 @@ section:first-of-type { border-top: none; }
   padding-top: 48px;
   border-top: 1px solid var(--border);
 }
-
-.edition-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
+.edition-detail { display: flex; flex-direction: column; gap: 12px; }
 .edition-detail-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -647,7 +460,6 @@ section:first-of-type { border-top: none; }
   color: var(--gray-2);
   text-transform: uppercase;
 }
-
 .edition-detail-value {
   font-family: var(--font-display);
   font-size: 24px;
@@ -655,22 +467,12 @@ section:first-of-type { border-top: none; }
   letter-spacing: -0.015em;
   color: var(--white);
 }
-
 @media (max-width: 768px) {
   .edition { padding: 48px 32px; }
   .edition-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
-/* ════════════════════════════════════════════════════════════════
-   FOUNDER NOTE
-   ════════════════════════════════════════════════════════════════ */
-
-.founder {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 0 32px;
-}
-
+.founder { max-width: 720px; margin: 0 auto; padding: 0 32px; }
 .founder-quote {
   font-family: var(--font-display);
   font-size: clamp(24px, 3.5vw, 32px);
@@ -680,7 +482,6 @@ section:first-of-type { border-top: none; }
   color: var(--white);
   font-style: italic;
 }
-
 .founder-quote::before {
   content: '"';
   font-size: 1.4em;
@@ -689,13 +490,7 @@ section:first-of-type { border-top: none; }
   line-height: 0.5;
   margin-bottom: 24px;
 }
-
-.founder-sig {
-  margin-top: 48px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-}
-
+.founder-sig { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); }
 .founder-name {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -704,7 +499,6 @@ section:first-of-type { border-top: none; }
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-
 .founder-place {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -713,19 +507,8 @@ section:first-of-type { border-top: none; }
   text-transform: uppercase;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   FAQ
-   ════════════════════════════════════════════════════════════════ */
-
-.faq-list {
-  border-top: 1px solid var(--border);
-  margin-top: 40px;
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--border);
-}
-
+.faq-list { border-top: 1px solid var(--border); margin-top: 40px; }
+.faq-item { border-bottom: 1px solid var(--border); }
 .faq-q {
   width: 100%;
   background: none;
@@ -744,9 +527,7 @@ section:first-of-type { border-top: none; }
   letter-spacing: -0.015em;
   transition: color 0.3s;
 }
-
 .faq-q:hover { color: var(--amber); }
-
 .faq-toggle {
   font-family: var(--font-mono);
   font-size: 16px;
@@ -754,9 +535,7 @@ section:first-of-type { border-top: none; }
   flex-shrink: 0;
   transition: transform 0.3s;
 }
-
 .faq-item.open .faq-toggle { transform: rotate(45deg); }
-
 .faq-a {
   max-height: 0;
   overflow: hidden;
@@ -765,22 +544,10 @@ section:first-of-type { border-top: none; }
   line-height: 1.7;
   color: var(--gray-1);
 }
-
-.faq-item.open .faq-a {
-  max-height: 400px;
-  padding-bottom: 32px;
-}
-
+.faq-item.open .faq-a { max-height: 500px; padding-bottom: 32px; }
 .faq-a-inner { max-width: var(--reading); }
 
-/* ════════════════════════════════════════════════════════════════
-   WAITLIST
-   ════════════════════════════════════════════════════════════════ */
-
-.waitlist {
-  text-align: center;
-}
-
+.waitlist { text-align: center; }
 .waitlist-perks {
   display: flex;
   gap: 32px;
@@ -788,7 +555,6 @@ section:first-of-type { border-top: none; }
   margin: 48px 0;
   flex-wrap: wrap;
 }
-
 .perk {
   display: flex;
   align-items: center;
@@ -799,12 +565,7 @@ section:first-of-type { border-top: none; }
   color: var(--gray-1);
   text-transform: uppercase;
 }
-
-.perk-mark {
-  color: var(--amber);
-  font-size: 14px;
-}
-
+.perk-mark { color: var(--amber); font-size: 14px; }
 .waitlist-form {
   max-width: 480px;
   margin: 48px auto 0;
@@ -812,7 +573,6 @@ section:first-of-type { border-top: none; }
   gap: 0;
   border: 1px solid var(--border);
 }
-
 .waitlist-input {
   flex: 1;
   background: transparent;
@@ -824,9 +584,7 @@ section:first-of-type { border-top: none; }
   outline: none;
   letter-spacing: 0.05em;
 }
-
 .waitlist-input::placeholder { color: var(--gray-3); }
-
 .waitlist-submit {
   background: var(--amber);
   color: var(--black);
@@ -840,9 +598,8 @@ section:first-of-type { border-top: none; }
   font-weight: 500;
   transition: background 0.3s;
 }
-
-.waitlist-submit:hover { background: var(--white); }
-
+.waitlist-submit:hover:not(:disabled) { background: var(--white); }
+.waitlist-submit:disabled { opacity: 0.6; cursor: wait; }
 .waitlist-count {
   margin-top: 32px;
   font-family: var(--font-mono);
@@ -851,9 +608,7 @@ section:first-of-type { border-top: none; }
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
-
 .waitlist-count b { color: var(--amber); font-weight: 500; }
-
 .waitlist-success {
   display: none;
   margin-top: 24px;
@@ -864,31 +619,23 @@ section:first-of-type { border-top: none; }
   font-size: 13px;
   letter-spacing: 0.1em;
 }
-
 .waitlist-success.show { display: block; }
-
 @media (max-width: 480px) {
   .waitlist-form { flex-direction: column; }
   .waitlist-submit { padding: 18px; }
 }
-
-/* ════════════════════════════════════════════════════════════════
-   FOOTER
-   ════════════════════════════════════════════════════════════════ */
 
 footer {
   border-top: 1px solid var(--border-soft);
   padding: 80px 0 40px;
   margin-top: var(--section);
 }
-
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 48px;
   margin-bottom: 64px;
 }
-
 .footer-brand {
   font-family: var(--font-display);
   font-size: 28px;
@@ -897,13 +644,7 @@ footer {
   margin-bottom: 12px;
   color: var(--white);
 }
-
-.footer-tagline {
-  font-size: 14px;
-  color: var(--gray-2);
-  max-width: 320px;
-}
-
+.footer-tagline { font-size: 14px; color: var(--gray-2); max-width: 320px; }
 .footer-col h4 {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -913,22 +654,14 @@ footer {
   margin-bottom: 20px;
   font-weight: 400;
 }
-
-.footer-col ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .footer-col a {
   font-size: 14px;
   color: var(--gray-1);
   transition: color 0.3s;
+  cursor: pointer;
 }
-
 .footer-col a:hover { color: var(--amber); }
-
 .footer-bottom {
   padding-top: 32px;
   border-top: 1px solid var(--border-soft);
@@ -940,15 +673,10 @@ footer {
   color: var(--gray-3);
   letter-spacing: 0.1em;
 }
-
 @media (max-width: 768px) {
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
   .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
 }
-
-/* ════════════════════════════════════════════════════════════════
-   LEGAL MODAL OVERLAYS
-   ════════════════════════════════════════════════════════════════ */
 
 .legal-overlay {
   position: fixed;
@@ -964,14 +692,8 @@ footer {
   overflow-y: auto;
   animation: fadeIn 0.3s ease;
 }
-
 .legal-overlay.show { display: flex; }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .legal-modal {
   background: var(--black);
   border: 1px solid var(--border);
@@ -981,38 +703,29 @@ footer {
   position: relative;
   animation: slideUp 0.4s ease;
 }
-
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-
 .legal-modal::before {
   content: '';
   position: absolute;
-  top: 12px;
-  left: 12px;
-  width: 24px;
-  height: 24px;
+  top: 12px; left: 12px;
+  width: 24px; height: 24px;
   border-top: 1px solid var(--amber);
   border-left: 1px solid var(--amber);
 }
-
 .legal-modal::after {
   content: '';
   position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 24px;
-  height: 24px;
+  bottom: 12px; right: 12px;
+  width: 24px; height: 24px;
   border-bottom: 1px solid var(--amber);
   border-right: 1px solid var(--amber);
 }
-
 .legal-close {
   position: absolute;
-  top: 24px;
-  right: 32px;
+  top: 24px; right: 32px;
   background: none;
   border: none;
   color: var(--gray-1);
@@ -1024,9 +737,7 @@ footer {
   padding: 8px 12px;
   transition: color 0.3s;
 }
-
 .legal-close:hover { color: var(--amber); }
-
 .legal-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -1036,7 +747,6 @@ footer {
   margin-bottom: 16px;
   display: block;
 }
-
 .legal-title {
   font-family: var(--font-display);
   font-size: 36px;
@@ -1046,7 +756,6 @@ footer {
   margin-bottom: 8px;
   line-height: 1.1;
 }
-
 .legal-updated {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -1056,7 +765,6 @@ footer {
   padding-bottom: 32px;
   border-bottom: 1px solid var(--border);
 }
-
 .legal-body h3 {
   font-family: var(--font-display);
   font-size: 18px;
@@ -1066,37 +774,18 @@ footer {
   margin-bottom: 12px;
   letter-spacing: -0.01em;
 }
-
 .legal-body h3:first-child { margin-top: 0; }
-
 .legal-body p, .legal-body li {
   font-size: 14px;
   line-height: 1.7;
   color: var(--gray-1);
   margin-bottom: 12px;
 }
-
-.legal-body ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.legal-body li {
-  padding-left: 20px;
-  position: relative;
-}
-
-.legal-body li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: var(--amber);
-}
-
+.legal-body ul { list-style: none; padding-left: 0; }
+.legal-body li { padding-left: 20px; position: relative; }
+.legal-body li::before { content: '—'; position: absolute; left: 0; color: var(--amber); }
 .legal-body strong { color: var(--white); font-weight: 500; }
-
 .legal-body a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
-
 @media (max-width: 768px) {
   .legal-overlay { padding: 60px 16px 24px; }
   .legal-modal { padding: 48px 28px; }
@@ -1106,7 +795,6 @@ footer {
 </head>
 <body>
 
-<!-- ─── NAVIGATION ─────────────────────────────────────────── -->
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo">Tickrix<span style="color: var(--amber);">®</span></div>
@@ -1120,7 +808,6 @@ footer {
   </div>
 </nav>
 
-<!-- ─── HERO ─────────────────────────────────────────── -->
 <section class="hero">
   <div class="container">
     <div class="hero-grid">
@@ -1129,25 +816,20 @@ footer {
           <div class="dot"></div>
           <span class="label label-amber">Edition One · Q3 2026</span>
         </div>
-
         <h1 class="hero-title h-hero">The market.<br><em>On your desk.</em></h1>
-
         <p class="hero-sub body-lg">
           A WiFi-connected display, milled from solid aluminum.
           Every market — crypto, forex, stocks, ETFs, indices, commodities,
           bonds, futures — quietly, on your desk.
         </p>
-
         <a href="#waitlist" class="hero-cta">
           Reserve Edition One
           <span class="hero-cta-arrow">→</span>
         </a>
       </div>
 
-      <!-- TECHNICAL BLUEPRINT -->
       <div class="blueprint">
         <svg viewBox="0 0 540 540" xmlns="http://www.w3.org/2000/svg">
-          <!-- Crosshair grid -->
           <defs>
             <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
               <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
@@ -1158,73 +840,45 @@ footer {
           </defs>
           <rect width="540" height="540" fill="url(#grid)"/>
           <rect width="540" height="540" fill="url(#majorgrid)"/>
-
-          <!-- Center crosshair -->
           <line x1="270" y1="0" x2="270" y2="540" stroke="rgba(232,161,77,0.2)" stroke-width="0.5" stroke-dasharray="2,4"/>
           <line x1="0" y1="270" x2="540" y2="270" stroke="rgba(232,161,77,0.2)" stroke-width="0.5" stroke-dasharray="2,4"/>
-
-          <!-- Device main body -->
           <g transform="translate(120, 200)">
-            <!-- Top dimension line -->
             <line x1="0" y1="-30" x2="300" y2="-30" stroke="#E8A14D" stroke-width="0.75"/>
             <line x1="0" y1="-35" x2="0" y2="-25" stroke="#E8A14D" stroke-width="0.75"/>
             <line x1="300" y1="-35" x2="300" y2="-25" stroke="#E8A14D" stroke-width="0.75"/>
             <text x="150" y="-40" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2">63 mm</text>
-
-            <!-- Side dimension line -->
             <line x1="-30" y1="0" x2="-30" y2="140" stroke="#E8A14D" stroke-width="0.75"/>
             <line x1="-35" y1="0" x2="-25" y2="0" stroke="#E8A14D" stroke-width="0.75"/>
             <line x1="-35" y1="140" x2="-25" y2="140" stroke="#E8A14D" stroke-width="0.75"/>
             <text x="-45" y="75" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="2" transform="rotate(-90, -45, 75)">31 mm</text>
-
-            <!-- Outer aluminum body -->
             <rect x="0" y="0" width="300" height="140" fill="none" stroke="#FFFFFF" stroke-width="1.5" rx="14"/>
-
-            <!-- Inner bezel -->
             <rect x="20" y="20" width="260" height="100" fill="none" stroke="#FFFFFF" stroke-width="0.5" rx="6"/>
-
-            <!-- AMOLED screen area -->
             <rect x="35" y="32" width="230" height="76" fill="#0a0a0a" stroke="#E8A14D" stroke-width="0.5" rx="2"/>
-
-            <!-- Screen content (price preview) -->
             <text x="50" y="58" fill="#888780" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2">BTC</text>
             <text x="150" y="78" text-anchor="middle" fill="#E8A14D" font-family="Fraunces, serif" font-size="22" font-weight="500">$67,234</text>
             <text x="150" y="98" text-anchor="middle" fill="#888780" font-family="JetBrains Mono, monospace" font-size="6" letter-spacing="2">TICKRIX | LIVE</text>
-
-            <!-- USB-C port indicator -->
             <line x1="135" y1="140" x2="165" y2="140" stroke="#E8A14D" stroke-width="2"/>
             <text x="150" y="160" text-anchor="middle" fill="#E8A14D" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">USB-C</text>
-
-            <!-- Corner reference markers -->
             <circle cx="0" cy="0" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
             <circle cx="300" cy="0" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
             <circle cx="0" cy="140" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
             <circle cx="300" cy="140" r="3" fill="none" stroke="#E8A14D" stroke-width="0.5"/>
-
-            <!-- Callout: AMOLED -->
             <line x1="280" y1="50" x2="340" y2="20" stroke="#FFFFFF" stroke-width="0.4"/>
             <circle cx="340" cy="20" r="2" fill="#FFFFFF"/>
             <text x="346" y="20" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">A — AMOLED</text>
             <text x="346" y="32" fill="#6E6C66" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">536 × 240 px</text>
-
-            <!-- Callout: Aluminum body -->
             <line x1="20" y1="170" x2="20" y2="200" stroke="#FFFFFF" stroke-width="0.4"/>
             <circle cx="20" cy="200" r="2" fill="#FFFFFF"/>
             <text x="28" y="204" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">B — CNC ALUMINUM</text>
             <text x="28" y="216" fill="#6E6C66" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">6061-T6 · matte black</text>
           </g>
-
-          <!-- Top-left coordinate label -->
           <text x="12" y="20" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="2">FIG. 01 / TOP VIEW</text>
           <text x="12" y="33" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">SCALE 1:2</text>
-
-          <!-- Bottom-right meta -->
           <text x="528" y="528" text-anchor="end" fill="#45433E" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">TX-DWG-001 · ROTTERDAM · 2026</text>
         </svg>
       </div>
     </div>
 
-    <!-- LIVE TICKER STRIP -->
     <div class="ticker-strip">
       <div class="ticker-item">
         <div class="ticker-label">BTC</div>
@@ -1238,30 +892,16 @@ footer {
         <div class="ticker-label">GOLD</div>
         <div class="ticker-price mono" id="px-gold">$ ——</div>
       </div>
-      <div class="ticker-item">
-        <div class="ticker-label">OIL · WTI</div>
-        <div class="ticker-price mono" id="px-oil">$ ——</div>
-      </div>
-      <div class="ticker-item">
-        <div class="ticker-label">SPX</div>
-        <div class="ticker-price mono" id="px-spx">— LIVE</div>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- ─── 01 / THE DEVICE ─────────────────────────────────────────── -->
 <section id="device">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label">01 / Specifications</span>
-      </div>
-      <div>
-        <h2 class="h-section">Built like an instrument.<br><em>Not a toy.</em></h2>
-      </div>
+      <div><span class="label">01 / Specifications</span></div>
+      <div><h2 class="h-section">Built like an instrument.<br><em>Not a toy.</em></h2></div>
     </div>
-
     <div class="specs-grid">
       <div class="spec">
         <span class="spec-num">— A</span>
@@ -1271,7 +911,6 @@ footer {
         </div>
         <p class="spec-desc">Engineered to disappear into any desk. Smaller than a credit card.</p>
       </div>
-
       <div class="spec">
         <span class="spec-num">— B</span>
         <div>
@@ -1280,7 +919,6 @@ footer {
         </div>
         <p class="spec-desc">536 × 240 px. True blacks. 1000 nits peak. Auto-dim for night use.</p>
       </div>
-
       <div class="spec">
         <span class="spec-num">— C</span>
         <div>
@@ -1289,7 +927,6 @@ footer {
         </div>
         <p class="spec-desc">Aerospace-grade billet. Matte black anodized. Hand-finished bezel.</p>
       </div>
-
       <div class="spec">
         <span class="spec-num">— D</span>
         <div>
@@ -1298,7 +935,6 @@ footer {
         </div>
         <p class="spec-desc">Universal connection. Or 4–6 hours on optional battery cell.</p>
       </div>
-
       <div class="spec">
         <span class="spec-num">— E</span>
         <div>
@@ -1307,7 +943,6 @@ footer {
         </div>
         <p class="spec-desc">Captive portal setup in 60 seconds. No app. No subscription. Ever.</p>
       </div>
-
       <div class="spec">
         <span class="spec-num">— F</span>
         <div>
@@ -1320,94 +955,34 @@ footer {
   </div>
 </section>
 
-<!-- ─── 02 / MARKETS COVERED ─────────────────────────────────────────── -->
 <section id="markets">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label">02 / Markets Covered</span>
-      </div>
+      <div><span class="label">02 / Markets Covered</span></div>
       <div>
         <h2 class="h-section">Every market.<br><em>Yours to follow.</em></h2>
-        <p class="body-lg" style="margin-top: 24px;">
-          10,000+ instruments across 8 asset classes. Updated live. Direct from exchanges.
-        </p>
+        <p class="body-lg" style="margin-top: 24px;">10,000+ instruments across 8 asset classes. Updated live. Direct from exchanges.</p>
       </div>
     </div>
-
     <div class="markets-grid">
-      <div class="market">
-        <div class="market-icon">— 01</div>
-        <div class="market-name">Crypto</div>
-        <div class="market-desc">Digital assets</div>
-        <div class="market-ex">BTC · ETH · SOL</div>
-        <div class="market-count">5,000+ pairs</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 02</div>
-        <div class="market-name">Forex</div>
-        <div class="market-desc">Currency pairs</div>
-        <div class="market-ex">EUR/USD · GBP/JPY</div>
-        <div class="market-count">5-decimal pip · 180+</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 03</div>
-        <div class="market-name">Stocks</div>
-        <div class="market-desc">Global equities</div>
-        <div class="market-ex">AAPL · TSLA · NVDA</div>
-        <div class="market-count">US · EU · UK · 8,000+</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 04</div>
-        <div class="market-name">ETFs</div>
-        <div class="market-desc">Exchange-traded funds</div>
-        <div class="market-ex">SPY · QQQ · VOO</div>
-        <div class="market-count">2,500+ funds</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 05</div>
-        <div class="market-name">Indices</div>
-        <div class="market-desc">Market benchmarks</div>
-        <div class="market-ex">SPX · NDX · DAX</div>
-        <div class="market-count">Global coverage</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 06</div>
-        <div class="market-name">Commodities</div>
-        <div class="market-desc">Hard assets</div>
-        <div class="market-ex">Gold · Oil · Silver</div>
-        <div class="market-count">Spot &amp; futures</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 07</div>
-        <div class="market-name">Bonds</div>
-        <div class="market-desc">Fixed income</div>
-        <div class="market-ex">US10Y · Bund · JGB</div>
-        <div class="market-count">Yields &amp; spreads</div>
-      </div>
-      <div class="market">
-        <div class="market-icon">— 08</div>
-        <div class="market-name">Futures</div>
-        <div class="market-desc">Derivatives</div>
-        <div class="market-ex">ES · CL · GC</div>
-        <div class="market-count">Index · Energy · Metals</div>
-      </div>
+      <div class="market"><div class="market-icon">— 01</div><div class="market-name">Crypto</div><div class="market-desc">Digital assets</div><div class="market-ex">BTC · ETH · SOL</div><div class="market-count">5,000+ pairs</div></div>
+      <div class="market"><div class="market-icon">— 02</div><div class="market-name">Forex</div><div class="market-desc">Currency pairs</div><div class="market-ex">EUR/USD · GBP/JPY</div><div class="market-count">5-decimal pip · 180+</div></div>
+      <div class="market"><div class="market-icon">— 03</div><div class="market-name">Stocks</div><div class="market-desc">Global equities</div><div class="market-ex">AAPL · TSLA · NVDA</div><div class="market-count">US · EU · UK · 8,000+</div></div>
+      <div class="market"><div class="market-icon">— 04</div><div class="market-name">ETFs</div><div class="market-desc">Exchange-traded funds</div><div class="market-ex">SPY · QQQ · VOO</div><div class="market-count">2,500+ funds</div></div>
+      <div class="market"><div class="market-icon">— 05</div><div class="market-name">Indices</div><div class="market-desc">Market benchmarks</div><div class="market-ex">SPX · NDX · DAX</div><div class="market-count">Global coverage</div></div>
+      <div class="market"><div class="market-icon">— 06</div><div class="market-name">Commodities</div><div class="market-desc">Hard assets</div><div class="market-ex">Gold · Oil · Silver</div><div class="market-count">Spot &amp; futures</div></div>
+      <div class="market"><div class="market-icon">— 07</div><div class="market-name">Bonds</div><div class="market-desc">Fixed income</div><div class="market-ex">US10Y · Bund · JGB</div><div class="market-count">Yields &amp; spreads</div></div>
+      <div class="market"><div class="market-icon">— 08</div><div class="market-name">Futures</div><div class="market-desc">Derivatives</div><div class="market-ex">ES · CL · GC</div><div class="market-count">Index · Energy · Metals</div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── 03 / THE METHOD ─────────────────────────────────────────── -->
 <section id="method">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label">03 / The Method</span>
-      </div>
-      <div>
-        <h2 class="h-section">Three steps.<br><em>Sixty seconds.</em></h2>
-      </div>
+      <div><span class="label">03 / The Method</span></div>
+      <div><h2 class="h-section">Three steps.<br><em>Sixty seconds.</em></h2></div>
     </div>
-
     <div class="method-grid">
       <div class="method-step">
         <div class="method-num">— Step 01</div>
@@ -1428,67 +1003,34 @@ footer {
   </div>
 </section>
 
-<!-- ─── 04 / EDITION ONE ─────────────────────────────────────────── -->
 <section id="edition">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label label-amber">04 / Edition One</span>
-      </div>
-      <div>
-        <h2 class="h-section">A limited first run.<br><em>Numbered. Engraved.</em></h2>
-      </div>
+      <div><span class="label label-amber">04 / Edition One</span></div>
+      <div><h2 class="h-section">A limited first run.<br><em>Numbered. Engraved.</em></h2></div>
     </div>
-
     <div class="edition">
       <span class="label label-amber">First Production Run</span>
       <div class="edition-number"><span class="ne">№</span><em>001</em></div>
-      <p class="body-lg" style="max-width: 540px;">
-        Each Edition One device is individually numbered and engraved on the back.
-        Limited initial production. Once Edition One ships, it never returns.
-      </p>
-
+      <p class="body-lg" style="max-width: 540px;">Each Edition One device is individually numbered and engraved on the back. Limited initial production. Once Edition One ships, it never returns.</p>
       <div class="edition-grid">
-        <div class="edition-detail">
-          <span class="edition-detail-label">Production</span>
-          <span class="edition-detail-value">Limited initial run</span>
-        </div>
-        <div class="edition-detail">
-          <span class="edition-detail-label">Ships</span>
-          <span class="edition-detail-value">Q3 2026</span>
-        </div>
-        <div class="edition-detail">
-          <span class="edition-detail-label">Engraving</span>
-          <span class="edition-detail-value">№001 onward</span>
-        </div>
-        <div class="edition-detail">
-          <span class="edition-detail-label">Designed in</span>
-          <span class="edition-detail-value">Rotterdam, NL</span>
-        </div>
+        <div class="edition-detail"><span class="edition-detail-label">Production</span><span class="edition-detail-value">Limited initial run</span></div>
+        <div class="edition-detail"><span class="edition-detail-label">Ships</span><span class="edition-detail-value">Q3 2026</span></div>
+        <div class="edition-detail"><span class="edition-detail-label">Engraving</span><span class="edition-detail-value">№001 onward</span></div>
+        <div class="edition-detail"><span class="edition-detail-label">Designed in</span><span class="edition-detail-value">Rotterdam, NL</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── 05 / FOUNDER NOTE ─────────────────────────────────────────── -->
 <section id="story">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label">05 / The Note</span>
-      </div>
-      <div>
-        <h2 class="h-section">Why we built it.</h2>
-      </div>
+      <div><span class="label">05 / The Note</span></div>
+      <div><h2 class="h-section">Why we built it.</h2></div>
     </div>
-
     <div class="founder">
-      <p class="founder-quote">
-        Most traders stare at screens all day. We wanted one quiet thing on the desk —
-        the markets we care about, beautifully, without effort. No app to open.
-        No tab to refresh. No subscription. Just the data. Glance, see, move on.
-        We built Tickrix because we wanted one ourselves.
-      </p>
+      <p class="founder-quote">Most traders stare at screens all day. We wanted one quiet thing on the desk — the markets we care about, beautifully, without effort. No app to open. No tab to refresh. No subscription. Just the data. Glance, see, move on. We built Tickrix because we wanted one ourselves.</p>
       <div class="founder-sig">
         <div class="founder-name">— The Tickrix Team</div>
         <div class="founder-place">Rotterdam, Netherlands</div>
@@ -1497,137 +1039,70 @@ footer {
   </div>
 </section>
 
-<!-- ─── 06 / FAQ ─────────────────────────────────────────── -->
 <section id="faq">
   <div class="container">
     <div class="section-head">
-      <div>
-        <span class="label">06 / Questions</span>
-      </div>
-      <div>
-        <h2 class="h-section">Answered.</h2>
-      </div>
+      <div><span class="label">06 / Questions</span></div>
+      <div><h2 class="h-section">Answered.</h2></div>
     </div>
-
     <div class="faq-list">
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Will Tickrix work with my exchange?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Yes. Tickrix supports MEXC, Binance, Bybit, LBank, Kraken, and Coinbase out of the box.
-          For any exchange we don't support yet, the Custom API option lets you connect any worldwide
-          data source — exchange, broker, or your own endpoint.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Will Tickrix work with my exchange?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Yes. Tickrix supports MEXC, Binance, Bybit, LBank, Kraken, and Coinbase out of the box. For any exchange we don't support yet, the Custom API option lets you connect any worldwide data source — exchange, broker, or your own endpoint.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What if my Wi-Fi password changes?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Hold the BOOT button on the back for 5 seconds. The screen counts down 5 → 4 → 3 → 2 → 1.
-          Tickrix wipes the saved Wi-Fi and restarts in setup mode. Reconnect in 60 seconds.
-          Your tickers and exchange settings are preserved.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>What if my Wi-Fi password changes?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Hold the BOOT button on the back for 5 seconds. The screen counts down 5 → 4 → 3 → 2 → 1. Tickrix wipes the saved Wi-Fi and restarts in setup mode. Reconnect in 60 seconds. Your tickers and exchange settings are preserved.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Can I change which tickers it shows?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Anytime. Open the dashboard at tickrix.com/app from any browser, enter your Device ID,
-          pick what you want to track. Changes appear on your Tickrix within 5 seconds — no app required.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Can I change which tickers it shows?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Anytime. Open the dashboard at tickrix.com/app from any browser, enter your Device ID, pick what you want to track. Changes appear on your Tickrix within 5 seconds — no app required.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Why is there no app?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Because apps are how distraction wins. Tickrix is the opposite — a quiet object on your desk.
-          Setup happens once in your browser. After that, you just look at the device.
-          That's the whole point.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Why is there no app?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Because apps are how distraction wins. Tickrix is the opposite — a quiet object on your desk. Setup happens once in your browser. After that, you just look at the device. That's the whole point.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>Does it work outside the EU?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Yes. Tickrix ships worldwide. The hardware is Wi-Fi standard (2.4 GHz universal),
-          USB-C universal power. Works on any home or office network globally.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>Does it work outside the EU?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Yes. Tickrix ships worldwide. The hardware is Wi-Fi standard (2.4 GHz universal), USB-C universal power. Works on any home or office network globally.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>When does Edition One ship?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Q3 2026. Waitlist members get priority — first production run goes out before
-          general availability. Reserve your unit to lock in launch pricing.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>When does Edition One ship?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Q3 2026. Waitlist members get priority — first production run goes out before general availability. Reserve your unit to lock in launch pricing.</div></div>
       </div>
-
       <div class="faq-item">
-        <button class="faq-q" onclick="toggleFaq(this)">
-          <span>What if it breaks?</span>
-          <span class="faq-toggle">+</span>
-        </button>
-        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">
-          Every Tickrix ships with a 2-year hardware warranty. Firmware updates are free for life,
-          delivered over Wi-Fi. We handle returns through our Rotterdam workshop.
-        </div></div>
+        <button class="faq-q" onclick="toggleFaq(this)"><span>What if Tickrix shuts down one day?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Your device keeps working. We've made a public commitment called the <a href="/legacy" style="color: var(--amber); text-decoration: underline;">Legacy Promise</a> — if Tickrix ever ceases operations, the firmware automatically becomes open-source, the hardware schematics become public, and your Edition One continues running indefinitely. You buy hardware. You own it. Forever.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)"><span>What if it breaks?</span><span class="faq-toggle">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner" style="padding-right: 32px;">Every Tickrix ships with a 2-year hardware warranty. Firmware updates are free for life, delivered over Wi-Fi. We handle returns through our Rotterdam workshop.</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── 07 / WAITLIST ─────────────────────────────────────────── -->
 <section id="waitlist">
   <div class="container">
     <div class="waitlist">
       <span class="label label-amber">07 / Reserve</span>
       <h2 class="h-section" style="margin-top: 24px;">Be first.<br><em>When we ship.</em></h2>
-
       <div class="waitlist-perks">
         <div class="perk"><span class="perk-mark">→</span> 5% off launch price</div>
         <div class="perk"><span class="perk-mark">→</span> Price locked forever</div>
         <div class="perk"><span class="perk-mark">→</span> First production batch</div>
       </div>
-
-      <p class="body" style="max-width: 520px; margin: 0 auto;">
-        Reserve your Tickrix Edition One. Waitlist members get the launch price —
-        and that price never goes up, even after we ship. Free to join. Unsubscribe anytime.
-      </p>
-
+      <p class="body" style="max-width: 520px; margin: 0 auto;">Reserve your Tickrix Edition One. Waitlist members get the launch price — and that price never goes up, even after we ship. Free to join. Unsubscribe anytime.</p>
       <form class="waitlist-form" onsubmit="submitWaitlist(event)">
         <input type="email" class="waitlist-input" placeholder="your@email.com" required id="email-input">
         <button type="submit" class="waitlist-submit">Reserve</button>
       </form>
-
-      <div class="waitlist-success" id="waitlist-success">
-        Reserved. You're locked in at launch price. We'll email you Q3 2026.
-      </div>
-
-      <div class="waitlist-count">
-        <b id="waitlist-num">847</b> traders on the waitlist
-      </div>
+      <div class="waitlist-success" id="waitlist-success">Reserved. You're locked in at launch price. We'll email you Q3 2026.</div>
+      <div class="waitlist-count"><b id="waitlist-num">—</b> traders on the waitlist</div>
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ─────────────────────────────────────────── -->
 <footer>
   <div class="container">
     <div class="footer-grid">
@@ -1635,7 +1110,6 @@ footer {
         <div class="footer-brand">Tickrix<span style="color: var(--amber);">®</span></div>
         <p class="footer-tagline">For traders who take it seriously. Designed and assembled in Rotterdam, Netherlands.</p>
       </div>
-
       <div class="footer-col">
         <h4>Product</h4>
         <ul>
@@ -1646,7 +1120,6 @@ footer {
           <li><a href="#faq">FAQ</a></li>
         </ul>
       </div>
-
       <div class="footer-col">
         <h4>Connect</h4>
         <ul>
@@ -1655,17 +1128,15 @@ footer {
           <li><a href="https://x.com/tickrix" target="_blank" rel="noopener">X / Twitter</a></li>
         </ul>
       </div>
-
       <div class="footer-col">
         <h4>Legal</h4>
         <ul>
-          <li><a href="#" onclick="openLegal('privacy'); return false;">Privacy Policy</a></li>
-          <li><a href="#" onclick="openLegal('terms'); return false;">Terms of Service</a></li>
-          <li><a href="#" onclick="openLegal('cookies'); return false;">Cookies</a></li>
+          <li><a onclick="openLegal('privacy'); return false;">Privacy Policy</a></li>
+          <li><a onclick="openLegal('terms'); return false;">Terms of Service</a></li>
+          <li><a onclick="openLegal('cookies'); return false;">Cookies</a></li>
         </ul>
       </div>
     </div>
-
     <div class="footer-bottom">
       <div>© 2026 Tickrix® · Rotterdam, Netherlands</div>
       <div>Built with care · Shipped worldwide</div>
@@ -1673,37 +1144,30 @@ footer {
   </div>
 </footer>
 
-<!-- ─── LEGAL MODALS ─────────────────────────────────────────── -->
 <div class="legal-overlay" id="legal-privacy" onclick="if(event.target===this) closeLegal()">
   <div class="legal-modal">
     <button class="legal-close" onclick="closeLegal()">Close ×</button>
     <span class="legal-label">— Legal · 01</span>
     <h2 class="legal-title">Privacy Policy</h2>
     <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
-
     <div class="legal-body">
       <p>This Privacy Policy explains what data Tickrix® B.V. ("Tickrix", "we", "us") collects when you visit tickrix.com, join our waitlist, or use a Tickrix device. We are based in Rotterdam, Netherlands and comply with the EU General Data Protection Regulation (GDPR).</p>
-
       <h3>What we collect</h3>
       <ul>
         <li><strong>Email address</strong> — only if you join the waitlist or contact us. Used to notify you about Edition One launch and product updates.</li>
         <li><strong>Device configuration</strong> — your selected exchange and tickers, stored under a random Device ID. This is the only data your Tickrix sends to our servers.</li>
         <li><strong>Anonymous analytics</strong> — page views, country (not city), browser type. No personal identifiers, no tracking across sites.</li>
       </ul>
-
       <h3>What we never collect</h3>
       <ul>
         <li>Your Wi-Fi password — it stays on the device, never on our servers.</li>
         <li>Your trading account credentials, wallets, or balances.</li>
         <li>Your real name, address, or location data unless you explicitly provide it.</li>
       </ul>
-
       <h3>Your rights under GDPR</h3>
       <p>You have the right to access, correct, export, or delete any personal data we hold about you. To exercise these rights, email <a href="mailto:hello@tickrix.com">hello@tickrix.com</a>. We respond within 30 days.</p>
-
       <h3>Data sharing</h3>
       <p>We do not sell your data. We do not share it with third parties for advertising. We use Supabase (EU servers) for backend storage and Vercel for hosting — both GDPR-compliant. We do not use Google Analytics, Meta Pixel, or similar tracking tools.</p>
-
       <h3>Contact</h3>
       <p>Questions about your data: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
     </div>
@@ -1716,28 +1180,20 @@ footer {
     <span class="legal-label">— Legal · 02</span>
     <h2 class="legal-title">Terms of Service</h2>
     <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
-
     <div class="legal-body">
       <p>By using tickrix.com, joining our waitlist, or operating a Tickrix device, you agree to these Terms. They apply to everyone who interacts with Tickrix products and services.</p>
-
       <h3>The Tickrix device</h3>
       <p>Tickrix is a Wi-Fi connected market display intended for personal informational use. Prices shown are sourced from public exchanges (MEXC, Binance, Bybit, LBank, Kraken, Coinbase, Yahoo Finance, and others). Data may be delayed or incorrect — Tickrix is not a financial instrument and must not be used as the sole basis for trading decisions.</p>
-
       <h3>Waitlist</h3>
       <p>Joining the waitlist secures your place in line for Edition One — it does not guarantee a unit, as production is limited. Waitlist members get 5% off launch price, locked in even if pricing rises later. You can unsubscribe at any time.</p>
-
       <h3>Warranty</h3>
       <p>Edition One ships with a 2-year hardware warranty against manufacturing defects. Firmware updates are free for life. Damage from misuse, water, or unauthorized modification is not covered.</p>
-
       <h3>Returns</h3>
       <p>Under EU consumer law, you have a 14-day right of withdrawal from delivery date for any reason. The device must be returned in original condition. Original shipping costs are non-refundable; return shipping is the customer's responsibility.</p>
-
       <h3>Liability</h3>
       <p>Tickrix is provided "as is" for informational purposes. We are not liable for trading losses, missed opportunities, or financial decisions based on data displayed by the device. Maximum liability is limited to the purchase price of the device.</p>
-
       <h3>Governing law</h3>
       <p>These Terms are governed by the laws of the Netherlands. Disputes will be resolved by courts in Rotterdam.</p>
-
       <h3>Contact</h3>
       <p>Questions about these terms: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
     </div>
@@ -1750,16 +1206,13 @@ footer {
     <span class="legal-label">— Legal · 03</span>
     <h2 class="legal-title">Cookies Policy</h2>
     <p class="legal-updated">Last updated: April 2026 · Tickrix® B.V. · Rotterdam, NL</p>
-
     <div class="legal-body">
       <p>Tickrix uses cookies sparingly. We do not use advertising cookies, tracking pixels, or third-party analytics that profile you across the web.</p>
-
       <h3>What cookies we use</h3>
       <ul>
         <li><strong>Strictly necessary</strong> — session cookies to remember your waitlist status during your visit. Cannot be disabled.</li>
         <li><strong>Functional</strong> — remembers your selected tickers in the dashboard so you don't re-enter them. Stored in your browser only.</li>
       </ul>
-
       <h3>What we don't use</h3>
       <ul>
         <li>Google Analytics</li>
@@ -1767,10 +1220,8 @@ footer {
         <li>Advertising or remarketing cookies</li>
         <li>Cross-site tracking of any kind</li>
       </ul>
-
       <h3>Your control</h3>
       <p>You can clear cookies anytime through your browser settings. The site will continue to work — you'll just need to re-enter your Device ID in the dashboard next visit.</p>
-
       <h3>Contact</h3>
       <p>Questions about cookies: <a href="mailto:hello@tickrix.com">hello@tickrix.com</a></p>
     </div>
@@ -1778,9 +1229,10 @@ footer {
 </div>
 
 <script>
-// ─── Live ticker prices (CORS-friendly APIs) ───────────────────────────
+const SB_URL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZ3J3cWhtc25xZ3F1c3ZtbW53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTI0MDMsImV4cCI6MjA5MjM2ODQwM30.K_y6m2FrNcGn6qM2voOUEzft8T9f_KwbCpNXZRFDpx8';
+
 async function loadTicker() {
-  // BTC — CoinGecko (CORS-enabled, no API key)
   try {
     const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
     const d = await r.json();
@@ -1789,7 +1241,6 @@ async function loadTicker() {
     }
   } catch(e) { console.log('BTC fetch failed', e); }
 
-  // EUR/USD — Frankfurter (ECB official rates, CORS-friendly, no key)
   try {
     const r = await fetch('https://api.frankfurter.dev/v1/latest?base=EUR&symbols=USD');
     const d = await r.json();
@@ -1798,7 +1249,6 @@ async function loadTicker() {
     }
   } catch(e) { console.log('EUR fetch failed', e); }
 
-  // GOLD — gold-api.com (CORS-enabled)
   try {
     const r = await fetch('https://api.gold-api.com/price/XAU');
     const d = await r.json();
@@ -1806,62 +1256,79 @@ async function loadTicker() {
       document.getElementById('px-gold').textContent = '$' + Math.round(d.price).toLocaleString();
     }
   } catch(e) { console.log('GOLD fetch failed', e); }
+}
+loadTicker();
+setInterval(loadTicker, 30000);
 
-  // OIL — Yahoo Finance CL=F (WTI Crude Oil)
+async function loadWaitlistCount() {
   try {
-    const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/CL=F?interval=1m&range=1d');
-    const d = await r.json();
-    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price) {
-      document.getElementById('px-oil').textContent = '$' + price.toFixed(2);
+    const r = await fetch(SB_URL + '/rest/v1/waitlist?select=id', {
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Prefer': 'count=exact',
+        'Range': '0-0'
+      }
+    });
+    const total = r.headers.get('content-range')?.split('/')[1];
+    if (total) {
+      document.getElementById('waitlist-num').textContent = total;
     }
-  } catch(e) {
-    document.getElementById('px-oil').textContent = '$98.97';
-  }
+  } catch(e) { console.log('Waitlist count fetch failed', e); }
+}
+loadWaitlistCount();
 
-  // SPX — Yahoo Finance ^GSPC (S&P 500)
+async function submitWaitlist(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value.trim().toLowerCase();
+  if (!email) return;
+
+  const submitBtn = document.querySelector('.waitlist-submit');
+  submitBtn.textContent = 'Reserving...';
+  submitBtn.disabled = true;
+
   try {
-    const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/%5EGSPC?interval=1m&range=1d');
-    const d = await r.json();
-    const price = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    if (price) {
-      document.getElementById('px-spx').textContent = Math.round(price).toLocaleString();
+    const r = await fetch(SB_URL + '/rest/v1/waitlist', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify({ email: email, source: 'website' })
+    });
+
+    if (r.ok) {
+      const counter = document.getElementById('waitlist-num');
+      const current = parseInt(counter.textContent) || 0;
+      counter.textContent = (current + 1).toString();
+      document.querySelector('.waitlist-form').style.display = 'none';
+      document.getElementById('waitlist-success').classList.add('show');
     } else {
-      document.getElementById('px-spx').textContent = 'LIVE';
+      const errText = await r.text();
+      const successEl = document.getElementById('waitlist-success');
+      if (errText.includes('duplicate') || errText.includes('unique')) {
+        successEl.textContent = "You're already reserved. We'll email you Q3 2026.";
+      } else {
+        successEl.textContent = "Something went wrong. Email hello@tickrix.com and we'll add you manually.";
+      }
+      document.querySelector('.waitlist-form').style.display = 'none';
+      successEl.classList.add('show');
     }
-  } catch(e) {
-    document.getElementById('px-spx').textContent = 'LIVE';
+  } catch(err) {
+    console.error('Waitlist error:', err);
+    submitBtn.textContent = 'Reserve';
+    submitBtn.disabled = false;
+    alert('Network error. Please try again.');
   }
 }
 
-loadTicker();
-setInterval(loadTicker, 30000); // refresh every 30s
-
-// ─── FAQ toggle ───────────────────────────
 function toggleFaq(btn) {
   const item = btn.parentElement;
   item.classList.toggle('open');
 }
 
-// ─── Waitlist submit ───────────────────────────
-function submitWaitlist(e) {
-  e.preventDefault();
-  const email = document.getElementById('email-input').value;
-  if (!email) return;
-
-  // Increment counter visually
-  const counter = document.getElementById('waitlist-num');
-  counter.textContent = (parseInt(counter.textContent) + 1).toString();
-
-  // Show success, hide form
-  document.querySelector('.waitlist-form').style.display = 'none';
-  document.getElementById('waitlist-success').classList.add('show');
-
-  // TODO: Send to backend (Supabase or Mailchimp)
-  console.log('Waitlist signup:', email);
-}
-
-// ─── Legal modals ───────────────────────────
 function openLegal(type) {
   const overlay = document.getElementById('legal-' + type);
   if (overlay) {
@@ -1875,7 +1342,6 @@ function closeLegal() {
   document.body.style.overflow = '';
 }
 
-// Close legal modal on Escape
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLegal();
 });
