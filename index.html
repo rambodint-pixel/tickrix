@@ -534,39 +534,23 @@ async function submitWaitlist(e) {
   submitBtn.disabled = true;
 
   try {
-    const r = await fetch(SB_URL + '/rest/v1/waitlist', {
+    const r = await fetch('/api/waitlist', {
       method: 'POST',
-      headers: {
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer ' + SB_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify({ name: name, email: email, source: 'website' })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email })
     });
 
-    if (r.ok) {
-      const data = await r.json();
-      const row = data[0];
-      const position = row.position || 0;
+    const data = await r.json();
+
+    if (r.ok && data.success) {
       const counter = document.getElementById('waitlist-num');
-      counter.textContent = (parseInt(counter.textContent) + 1).toString();
-      showCertificate(name, position, new Date());
-    } else {
-      const errText = await r.text();
-      if (errText.includes('duplicate') || errText.includes('unique')) {
-        const lookup = await fetch(SB_URL + '/rest/v1/waitlist?email=eq.' + encodeURIComponent(email) + '&select=name,position,signed_up_at', {
-          headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
-        });
-        const existing = await lookup.json();
-        if (existing && existing[0]) {
-          showCertificate(existing[0].name || name, existing[0].position, new Date(existing[0].signed_up_at));
-        } else {
-          alert("You're already reserved. Check your email for your certificate.");
-        }
-      } else {
-        alert("Something went wrong. Email hello@tickrix.com and we'll add you manually.");
+      if (!data.existing) {
+        counter.textContent = (parseInt(counter.textContent) + 1).toString();
       }
+      const dateObj = data.signed_up_at ? new Date(data.signed_up_at) : new Date();
+      showCertificate(data.name, data.position, dateObj);
+    } else {
+      alert(data.error || "Something went wrong. Email hello@tickrix.com and we'll add you manually.");
       submitBtn.textContent = 'Reserve my number';
       submitBtn.disabled = false;
     }
