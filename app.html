@@ -77,6 +77,39 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 .home-btn-sub{font-size:9px;letter-spacing:2px;color:#555;margin-top:6px;font-weight:400;}
 .home-btn.primary{background:#fff;color:#000;border-color:#fff;}
 .home-btn.primary .home-btn-sub{color:#555;}
+
+/* ═══ NEW: Search feature styles ═══ */
+.search-box{border:1px solid #333;padding:14px;margin-bottom:16px;}
+.search-title{font-size:9px;letter-spacing:3px;color:#E8A14D;margin-bottom:10px;}
+.search-hint{font-size:10px;color:#555;letter-spacing:1px;line-height:1.7;margin-bottom:10px;}
+.search-row{display:flex;gap:8px;align-items:stretch;}
+.search-inp{flex:1;background:#000;border:1px solid #333;padding:12px;font-family:'Courier New',monospace;font-size:13px;color:#fff;outline:none;-webkit-appearance:none;}
+.search-inp:focus{border-color:#E8A14D;}
+.search-inp::placeholder{color:#444;}
+.search-btn{padding:0 18px;background:#fff;color:#000;font-family:'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:2px;border:none;cursor:pointer;}
+.search-btn:active{opacity:0.8;}
+.search-btn:disabled{background:#222;color:#555;cursor:not-allowed;}
+.search-results{margin-top:10px;}
+.sr-empty{font-size:10px;color:#444;padding:14px 4px;text-align:center;letter-spacing:1px;}
+.sr-loading{font-size:10px;color:#E8A14D;padding:14px 4px;text-align:center;letter-spacing:1px;}
+.sr-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid #1a1a1a;margin-bottom:6px;cursor:pointer;}
+.sr-item:hover{border-color:#333;}
+.sr-item.added{border-color:#00e676;background:rgba(0,230,118,0.04);}
+.sr-sym{font-size:12px;font-weight:700;letter-spacing:1px;color:#fff;}
+.sr-name{font-size:10px;color:#777;letter-spacing:0.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sr-type{font-size:8px;letter-spacing:2px;padding:3px 7px;border:1px solid #333;color:#888;}
+.sr-type.crypto{border-color:#E8A14D;color:#E8A14D;}
+.sr-type.stock{border-color:#3399ff;color:#3399ff;}
+.sr-type.index{border-color:#a855f7;color:#a855f7;}
+.sr-type.future{border-color:#facc15;color:#facc15;}
+.sr-type.forex{border-color:#22c55e;color:#22c55e;}
+.sr-add{font-size:14px;color:#333;font-weight:700;}
+.sr-item.added .sr-add{color:#00e676;}
+/* Custom asset row in main table (added via search) */
+.a-row.custom{background:rgba(232,161,77,0.02);}
+.a-row.custom .a-s::before{content:'+ ';color:#E8A14D;font-size:10px;}
+.a-row .a-rm{cursor:pointer;color:#444;font-size:14px;justify-self:end;padding:0 4px;}
+.a-row .a-rm:hover{color:#ff1744;}
 </style>
 </head>
 <body>
@@ -180,7 +213,19 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
   <div class="tag">ASSET CONFIGURATION</div>
   <div class="title">Select Assets</div>
   <div class="hint">Select which assets rotate on your display.</div>
-  <div class="a-table">
+
+  <!-- ═══ NEW: Search section ═══ -->
+  <div class="search-box">
+    <div class="search-title">SEARCH ANY MARKET</div>
+    <div class="search-hint">Find any crypto, stock, index, or commodity. Examples: <b style="color:#888">apple</b>, <b style="color:#888">s&p 500</b>, <b style="color:#888">dot</b>, <b style="color:#888">gold</b>.</div>
+    <div class="search-row">
+      <input type="text" class="search-inp" id="s-inp" placeholder="search by name or ticker..." autocomplete="off" spellcheck="false" onkeypress="if(event.key==='Enter')doSearch()">
+      <button class="search-btn" id="s-btn" onclick="doSearch()">SEARCH</button>
+    </div>
+    <div class="search-results" id="s-results"></div>
+  </div>
+
+  <div class="a-table" id="a-table">
     <div class="a-head"><span>SYMBOL</span><span>PRICE</span><span>STATUS</span><span></span></div>
     <div class="a-row on" id="ar-BTC" onclick="togA('BTC')"><span class="a-s">BTC</span><span class="a-p" id="ap-BTC">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
     <div class="a-row on" id="ar-ETH" onclick="togA('ETH')"><span class="a-s">ETH</span><span class="a-p" id="ap-ETH">$--</span><span class="a-c up">LIVE</span><div class="a-t">+</div></div>
@@ -225,12 +270,17 @@ body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:1
 var SURL = 'https://cagrwqhmsnqgqusvmmnw.supabase.co';
 var SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZ3J3cWhtc25xZ3F1c3ZtbW53Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3OTI0MDMsImV4cCI6MjA5MjM2ODQwM30.K_y6m2FrNcGn6qM2voOUEzft8T9f_KwbCpNXZRFDpx8';
 
+// Default symbols already in the table (built-in)
+var DEFAULT_SYMS = ['BTC','ETH','SOL','BNB','XRP','DOGE','GOLD','OIL','EURUSD','AAPL','TSLA','NVDA'];
+
 var state = {
   mode: 'new',
   devId: '',
   ex: 'mexc',
   custom: false,
-  assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
+  assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD']),
+  // NEW: Track custom assets added via search (so we can render them in the table)
+  customAssets: []   // array of {symbol, name, type}
 };
 
 var progMap = {p0:0, p1:20, p2m:50, p2:60, p3:80, p4:100};
@@ -249,10 +299,16 @@ function goHome() {
     devId: '',
     ex: 'mexc',
     custom: false,
-    assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD'])
+    assets: new Set(['BTC','ETH','SOL','GOLD','OIL','EURUSD']),
+    customAssets: []
   };
   document.getElementById('dev-id').value = '';
   document.getElementById('prog').style.width = '0%';
+  // Clear search results & input
+  var si = document.getElementById('s-inp'); if (si) si.value = '';
+  var sr = document.getElementById('s-results'); if (sr) sr.innerHTML = '';
+  // Remove any custom rows from table
+  document.querySelectorAll('.a-row.custom').forEach(function(r){ r.remove(); });
   show('p0');
 }
 
@@ -333,9 +389,20 @@ function loadCurrentConfig(devId, callback) {
     }
 
     document.querySelectorAll('.a-row').forEach(function(r){ r.classList.remove('on'); });
+    // Remove any old custom rows from previous load
+    document.querySelectorAll('.a-row.custom').forEach(function(r){ r.remove(); });
+    state.customAssets = [];
+
     state.assets.forEach(function(sym){
       var row = document.getElementById('ar-' + sym);
-      if (row) row.classList.add('on');
+      if (row) {
+        // Default asset
+        row.classList.add('on');
+      } else {
+        // Custom asset (added via search previously) — re-render its row
+        var typ = detectSymbolType(sym);
+        addCustomRow(sym, sym, typ, true);
+      }
     });
     document.getElementById('acnt').textContent = state.assets.size;
 
@@ -417,8 +484,185 @@ function loadPrices() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-//  FIXED sendConfig() — properly checks Supabase response, PATCH-then-POST
-//  Replaces old version that always showed success even when save failed.
+//  NEW: SEARCH FEATURE
+//  Searches Yahoo Finance for any market by name or ticker.
+//  Yahoo covers: stocks, ETFs, indices, futures, forex, AND many cryptos.
+//  Results auto-classified by symbol pattern.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Detect type from a symbol string (used both for search results and reload)
+function detectSymbolType(sym) {
+  if (!sym) return 'other';
+  if (sym.indexOf('-USD') !== -1) return 'crypto';   // BTC-USD, ETH-USD
+  if (sym.charAt(0) === '^') return 'index';         // ^GSPC
+  if (sym.indexOf('=F') !== -1) return 'future';     // CL=F, GC=F
+  if (sym.indexOf('=X') !== -1) return 'forex';      // EURUSD=X
+  // Stock-like (1-5 letters, possibly with dots for ADRs)
+  if (/^[A-Z][A-Z0-9.\-]{0,9}$/.test(sym)) return 'stock';
+  return 'other';
+}
+
+// Yahoo search endpoint — returns matching stocks, indices, futures, forex, cryptos
+function doSearch() {
+  var q = document.getElementById('s-inp').value.trim();
+  var resBox = document.getElementById('s-results');
+  var btn = document.getElementById('s-btn');
+
+  if (!q) {
+    resBox.innerHTML = '<div class="sr-empty">TYPE SOMETHING TO SEARCH</div>';
+    return;
+  }
+
+  resBox.innerHTML = '<div class="sr-loading">> SEARCHING...</div>';
+  btn.disabled = true;
+
+  // Yahoo search API — public, no key needed
+  var url = 'https://query2.finance.yahoo.com/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=10&newsCount=0';
+
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      btn.disabled = false;
+      var quotes = (d && d.quotes) ? d.quotes : [];
+      if (quotes.length === 0) {
+        resBox.innerHTML = '<div class="sr-empty">NO RESULTS FOR "' + escapeHtml(q) + '"</div>';
+        return;
+      }
+
+      // Render results
+      var html = '';
+      quotes.slice(0, 10).forEach(function(item){
+        var sym = item.symbol || '';
+        if (!sym) return;
+
+        // Get a friendly name
+        var name = item.longname || item.shortname || item.name || sym;
+
+        // Skip if it's already a default symbol (already in table)
+        if (DEFAULT_SYMS.indexOf(sym) !== -1) return;
+
+        // Determine type
+        var qt = (item.quoteType || '').toLowerCase();
+        var typ = 'other';
+        if (qt === 'cryptocurrency' || sym.indexOf('-USD') !== -1) typ = 'crypto';
+        else if (qt === 'equity' || qt === 'etf') typ = 'stock';
+        else if (qt === 'index') typ = 'index';
+        else if (qt === 'future') typ = 'future';
+        else if (qt === 'currency') typ = 'forex';
+        else typ = detectSymbolType(sym);
+
+        var added = state.assets.has(sym);
+        var safeSym = escapeHtml(sym);
+        var safeName = escapeHtml(name).substring(0, 60);
+
+        html += '<div class="sr-item' + (added ? ' added' : '') + '" id="sri-' + safeSym + '" '
+              + 'onclick="addCustom(\'' + safeSym.replace(/'/g, "\\'") + '\', \'' + safeName.replace(/'/g, "\\'") + '\', \'' + typ + '\')">'
+              + '<span class="sr-sym">' + safeSym + '</span>'
+              + '<span class="sr-name">' + safeName + '</span>'
+              + '<span class="sr-type ' + typ + '">' + typ.toUpperCase() + '</span>'
+              + '</div>';
+      });
+
+      if (!html) {
+        resBox.innerHTML = '<div class="sr-empty">NO NEW RESULTS — ALL ALREADY IN TABLE</div>';
+      } else {
+        resBox.innerHTML = html;
+      }
+    })
+    .catch(function(e){
+      btn.disabled = false;
+      console.log('Search error:', e);
+      resBox.innerHTML = '<div class="sr-empty" style="color:#ff1744">SEARCH ERROR — TRY AGAIN</div>';
+    });
+}
+
+// Helper — escape HTML to prevent injection
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+// Add a custom asset to the table (from search result OR reload)
+function addCustom(sym, name, type) {
+  if (state.assets.has(sym)) {
+    // Already added — toggle off (remove from selection but keep row)
+    state.assets.delete(sym);
+    var existingRow = document.getElementById('ar-' + sym);
+    if (existingRow) existingRow.classList.remove('on');
+    var sri = document.getElementById('sri-' + sym);
+    if (sri) sri.classList.remove('added');
+    document.getElementById('acnt').textContent = state.assets.size;
+    return;
+  }
+
+  // Add to selection
+  state.assets.add(sym);
+
+  // If row already exists in table, just turn it on
+  var row = document.getElementById('ar-' + sym);
+  if (row) {
+    row.classList.add('on');
+  } else {
+    // Create new row
+    addCustomRow(sym, name, type, true);
+    state.customAssets.push({symbol: sym, name: name, type: type});
+  }
+
+  // Mark search result as added
+  var sri = document.getElementById('sri-' + sym);
+  if (sri) sri.classList.add('added');
+
+  document.getElementById('acnt').textContent = state.assets.size;
+}
+
+// Create a new row in the asset table for a custom symbol
+function addCustomRow(sym, name, type, selected) {
+  var table = document.getElementById('a-table');
+  if (!table) return;
+  var row = document.createElement('div');
+  row.className = 'a-row custom' + (selected ? ' on' : '');
+  row.id = 'ar-' + sym;
+  // Use textContent to safely include user data
+  var sSpan = document.createElement('span');
+  sSpan.className = 'a-s';
+  sSpan.textContent = sym;
+  var pSpan = document.createElement('span');
+  pSpan.className = 'a-p';
+  pSpan.id = 'ap-' + sym;
+  pSpan.textContent = '$--';
+  var cSpan = document.createElement('span');
+  cSpan.className = 'a-c up';
+  cSpan.textContent = type.toUpperCase();
+  var rmSpan = document.createElement('div');
+  rmSpan.className = 'a-rm';
+  rmSpan.textContent = '×';
+  rmSpan.title = 'Remove from list';
+  rmSpan.onclick = function(ev){ ev.stopPropagation(); removeCustom(sym); };
+  row.appendChild(sSpan);
+  row.appendChild(pSpan);
+  row.appendChild(cSpan);
+  row.appendChild(rmSpan);
+  // Click on row toggles selection
+  row.onclick = function(){ togA(sym); };
+  table.appendChild(row);
+}
+
+// Remove a custom asset entirely from the table
+function removeCustom(sym) {
+  state.assets.delete(sym);
+  state.customAssets = state.customAssets.filter(function(a){ return a.symbol !== sym; });
+  var row = document.getElementById('ar-' + sym);
+  if (row) row.remove();
+  // Update search result indicator if visible
+  var sri = document.getElementById('sri-' + sym);
+  if (sri) sri.classList.remove('added');
+  document.getElementById('acnt').textContent = state.assets.size;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  sendConfig — same logic as before, just saves whatever is in state.assets.
+//  Custom symbols (DOT, AAPL, ^GSPC, etc.) ride along in the same comma-list.
 // ═══════════════════════════════════════════════════════════════════════════
 async function sendConfig() {
   show('p4');
@@ -454,7 +698,7 @@ async function sendConfig() {
   var saved = false;
   var lastErr = '';
 
-  // ── Step 1: try PATCH (update existing row) ─────────────────────────
+  // Step 1: try PATCH (update existing row)
   try {
     var patchUrl = SURL + '/rest/v1/device_config?device_id=eq.' + encodeURIComponent(state.devId);
     var r = await fetch(patchUrl, {
@@ -479,7 +723,7 @@ async function sendConfig() {
     console.log(lastErr);
   }
 
-  // ── Step 2: if PATCH didn't update anything, POST new row ──────────
+  // Step 2: if PATCH didn't update, POST new row
   if (!saved) {
     try {
       var postUrl = SURL + '/rest/v1/device_config';
@@ -504,7 +748,7 @@ async function sendConfig() {
     }
   }
 
-  // ── Step 3: branch on actual save result ──────────────────────────
+  // Step 3: branch on save result
   spin.style.display = 'none';
 
   if (saved) {
