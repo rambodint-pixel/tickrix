@@ -516,8 +516,9 @@ function doSearch() {
   resBox.innerHTML = '<div class="sr-loading">> SEARCHING...</div>';
   btn.disabled = true;
 
-  // Yahoo search API — public, no key needed
-  var url = 'https://query2.finance.yahoo.com/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=10&newsCount=0';
+  // ═══ FIXED: Use our own Vercel proxy at /api/search ═══
+  // (Yahoo blocks direct browser requests via CORS, so we proxy through Vercel)
+  var url = '/api/search?q=' + encodeURIComponent(q);
 
   fetch(url)
     .then(function(r){ return r.json(); })
