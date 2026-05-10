@@ -532,15 +532,15 @@ function doSearch() {
 
       // Render results
       var html = '';
+      var allInDefaults = true; // track if every result is already a default
+      var totalShown = 0;
+
       quotes.slice(0, 10).forEach(function(item){
         var sym = item.symbol || '';
         if (!sym) return;
 
         // Get a friendly name
         var name = item.longname || item.shortname || item.name || sym;
-
-        // Skip if it's already a default symbol (already in table)
-        if (DEFAULT_SYMS.indexOf(sym) !== -1) return;
 
         // Determine type
         var qt = (item.quoteType || '').toLowerCase();
@@ -552,20 +552,31 @@ function doSearch() {
         else if (qt === 'currency') typ = 'forex';
         else typ = detectSymbolType(sym);
 
-        var added = state.assets.has(sym);
+        // Check if symbol is already in user's selection (either as default or custom)
+        var isDefault = DEFAULT_SYMS.indexOf(sym) !== -1;
+        var added = state.assets.has(sym) || isDefault;
+        if (!isDefault) allInDefaults = false;
+
         var safeSym = escapeHtml(sym);
         var safeName = escapeHtml(name).substring(0, 60);
 
+        // Add a hint if it's a default symbol
+        var defaultBadge = isDefault ? '<span class="sr-type" style="border-color:#555;color:#888;margin-right:4px">IN LIST</span>' : '';
+
         html += '<div class="sr-item' + (added ? ' added' : '') + '" id="sri-' + safeSym + '" '
-              + 'onclick="addCustom(\'' + safeSym.replace(/'/g, "\\'") + '\', \'' + safeName.replace(/'/g, "\\'") + '\', \'' + typ + '\')">'
+              + 'onclick="' + (isDefault ? 'scrollToAsset(\'' + safeSym.replace(/'/g, "\\'") + '\')' : 'addCustom(\'' + safeSym.replace(/'/g, "\\'") + '\', \'' + safeName.replace(/'/g, "\\'") + '\', \'' + typ + '\')') + '">'
               + '<span class="sr-sym">' + safeSym + '</span>'
               + '<span class="sr-name">' + safeName + '</span>'
+              + '<span style="display:flex;gap:4px;align-items:center">'
+              + defaultBadge
               + '<span class="sr-type ' + typ + '">' + typ.toUpperCase() + '</span>'
+              + '</span>'
               + '</div>';
+        totalShown++;
       });
 
-      if (!html) {
-        resBox.innerHTML = '<div class="sr-empty">NO NEW RESULTS — ALL ALREADY IN TABLE</div>';
+      if (totalShown === 0) {
+        resBox.innerHTML = '<div class="sr-empty">NO RESULTS FOR "' + escapeHtml(q) + '"</div>';
       } else {
         resBox.innerHTML = html;
       }
@@ -582,6 +593,28 @@ function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
   });
+}
+
+// When user clicks a search result that's already a default symbol,
+// just toggle it on/off (same as clicking it in the table) and scroll to it
+function scrollToAsset(sym) {
+  var row = document.getElementById('ar-' + sym);
+  if (!row) return;
+  // Toggle selection
+  togA(sym);
+  // Update search result indicator
+  var sri = document.getElementById('sri-' + sym);
+  if (sri) {
+    if (state.assets.has(sym)) sri.classList.add('added');
+    else sri.classList.remove('added');
+  }
+  // Smooth scroll to the row in the table
+  row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Brief highlight flash
+  row.style.transition = 'background 0.5s';
+  var oldBg = row.style.background;
+  row.style.background = 'rgba(232,161,77,0.2)';
+  setTimeout(function(){ row.style.background = oldBg; }, 800);
 }
 
 // Add a custom asset to the table (from search result OR reload)
